@@ -138,7 +138,6 @@ func initMySqlTables(db *gorm.DB) {
 
 // 数据库表初始化
 func initSqliteTables(db *gorm.DB) {
-	fmt.Println("初始化sqlite")
 	err := db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4").AutoMigrate(
 		models.User{},
 		models.ResourceItem{},

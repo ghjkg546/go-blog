@@ -118,7 +118,9 @@ func setupRouter() *gin.Engine {
 	})
 	router.LoadHTMLGlob("templates/*")
 	router.Static("/css", "static/css")
+	router.Static("/images", "static/images")
 	router.Static("/js", "static/js")
+	router.StaticFile("/sitemap.xml", "static/sitemap.xml")
 
 	ResController := app.ResController{}
 	router.GET("/", ResController.GetBlogItems)
@@ -126,10 +128,6 @@ func setupRouter() *gin.Engine {
 	router.GET("/category/:category_id/:page", ResController.GetBlogItems)
 	router.GET("/category/:category_id", ResController.GetBlogItems)
 	router.GET("/archives/:id", ResController.GetBlogDetail)
-	//router.GET("/archives/:id.html", func(c *gin.Context) {
-	//	idStr := c.Param("id")
-	//	c.String(http.StatusOK, "ID from URL: %s", idStr)
-	//})
 
 	userRoutes := NewResourceRoutes("/adminapi/users", router, &adminapi2.UserController{})
 	userRoutes.SetupRoutes()
@@ -226,6 +224,14 @@ func setupRouter() *gin.Engine {
 			func(ctx *gin.Context) {
 				hello := adminapi2.ResourceController{}
 				hello.BatchCreate(ctx)
+			},
+		)
+
+		adminapi.GET("resource/syncToSearch",
+			//middleware.CorsMiddleware(),
+			func(ctx *gin.Context) {
+				hello := adminapi2.ResourceController{}
+				hello.SyncToSearch(ctx)
 			},
 		)
 

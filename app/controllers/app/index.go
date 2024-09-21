@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jassue/jassue-gin/app/common/request"
@@ -8,10 +9,12 @@ import (
 	"github.com/jassue/jassue-gin/app/models"
 	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
+	client "github.com/zinclabs/sdk-go-zincsearch"
 	"gorm.io/gorm"
 	"html/template"
 	"math"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -32,6 +35,46 @@ func CateList(c *gin.Context) {
 	response.Success(c, res)
 }
 
+// 分类列表
+func ResSearch(c *gin.Context) {
+	keyword := c.DefaultQuery("keyword", "")
+	index := "resource_item"          // string | Index
+	query := *client.NewV1ZincQuery() // V1ZincQuery | Query
+	query.SetSearchType("match")
+	params := *client.NewV1QueryParams()
+	params.SetTerm(keyword)
+	params.SetField("title")
+	query.SetQuery(params)
+	query.SetSortFields([]string{"-@timestamp"})
+	query.SetMaxResults(20)
+	ctx := context.WithValue(context.Background(), client.ContextBasicAuth, client.BasicAuth{
+		UserName: global.App.Config.Search.UserName,
+		Password: global.App.Config.Search.Password,
+	})
+	configuration := client.NewConfiguration()
+	configuration.Servers = client.ServerConfigurations{
+		client.ServerConfiguration{
+			URL: global.App.Config.Search.Url,
+		},
+	}
+	apiClient := client.NewAPIClient(configuration)
+	resp, r, err := apiClient.Search.SearchV1(ctx, index).Query(query).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `SearchApi.SearchV1``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `SearchApi.SearchV1`: %v\n", resp)
+	var resList []interface{}
+	for _, data := range resp.Hits.Hits {
+		resList = append(resList, data.GetSource())
+	}
+	var res = gin.H{
+		"list":  resList,
+		"total": resp.Hits.Total.Value,
+	}
+	response.Success(c, res)
+}
+
 type ResController struct{}
 
 func seq(start, end int) []int {
@@ -47,10 +90,6 @@ func (bc *ResController) GetBlogItems(c *gin.Context) {
 	//categoryId := c.Param("category_id")
 	slug := c.Param("category_id")
 	keyword := c.Param("keyword")
-	//intCategoryId, err := strconv.Atoi(categoryId)
-	//if err != nil {
-	//	intCategoryId = 0
-	//}
 
 	err, cates, total := services.CategoryService.GetList()
 	if err != nil {
@@ -66,12 +105,16 @@ func (bc *ResController) GetBlogItems(c *gin.Context) {
 	}
 	var cate models.Category
 	global.App.DB.Where("slug=?", slug).First(&cate)
-	err, data, total := services.ResourceItemService.GetResList(page, pageSize, cate.ID, keyword)
+	var cid int32 = 0
+	if cate.ID > 0 {
+		cid = cate.ID
+	}
+	err, data, total := services.ResourceItemService.GetResList(page, pageSize, cid, keyword)
 	if err != nil {
 		response.BusinessFail(c, err.Error())
 		return
 	}
-	err, dataNew := services.ResourceItemService.GetNewResList(page, pageSize, cate.ID)
+	err, dataNew := services.ResourceItemService.GetNewResList(page, pageSize, cid)
 	if err != nil {
 		response.BusinessFail(c, err.Error())
 		return
@@ -84,13 +127,25 @@ func (bc *ResController) GetBlogItems(c *gin.Context) {
 		res.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
 		res.UpdateTimeStr = tm2.Format("2006-01-02 15:04:05")
 	}
-	fmt.Println(cates)
+	maxIndex := 10
+	var subItems []models.ResourceItem
+	var topItem models.ResourceItem
+	if len(data) < maxIndex {
+		maxIndex = len(data)
+
+	}
+
+	if len(data) >= 1 {
+		subItems = data[1:maxIndex]
+		topItem = data[0]
+	}
+
 	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
-	//totalPages = 100
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"CategoryId":     slug,
 		"Cates":          cates,
-		"blogItems":      data,
+		"blogItems":      subItems,
+		"topItem":        topItem,
 		"blogNew":        dataNew,
 		"CurrentPage":    page,
 		"TotalPages":     totalPages,

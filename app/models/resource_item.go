@@ -15,9 +15,10 @@ type ResourceItem struct {
 	CategoryId     uint          `json:"category_id" gorm:"comment:用户名称"`
 	Description    string        `json:"description" gorm:"size:255;not null;index;comment:用户手机号"`
 	CoverImg       string        `json:"cover_img" gorm:"size:255;comment:封面图"`
-	DiskItems      string        `json:"disk_items" gorm:"not null;default:'';comment:用户密码"`
+	DiskItems      string        `json:"disk_items" gorm:"not null;default:'';comment:网盘信息"`
 	DiskItemsArray []NetDiskItem ` json:"disk_items_array" gorm:"-"`
-	TagIds         string        `json:"tag_ids" gorm:"not null;default:'';comment:用户密码"`
+	TagIds         string        `json:"tag_ids" gorm:"not null;default:'';comment:tag"`
+	SearchId       string        `json:"search_id" gorm:"comment:搜索id"`
 	Status         uint          `json:"status" gorm:"comment:状态"`
 	Views          uint          `json:"views" gorm:"comment:阅读次数"`
 	CreatedAt      int64         `gorm:"autoCreateTime"` // 使用时间戳秒数填充创建时间

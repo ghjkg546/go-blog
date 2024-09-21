@@ -1,13 +1,16 @@
 package adminapi
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jassue/jassue-gin/app/common/request"
 	"github.com/jassue/jassue-gin/app/common/response"
 	"github.com/jassue/jassue-gin/app/models"
+	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
+	client "github.com/zinclabs/sdk-go-zincsearch"
 	"net/http"
 	"strconv"
 	"strings"
@@ -42,12 +45,46 @@ func (uc *ResourceController) GetList(c *gin.Context) {
 		query.Where("mobile LIKE ?", "%"+keyword+"%").Or("name LIKE ?", "%"+keyword+"%")
 	}
 
-	query.Count(&totalUsers).Limit(limit).Offset(offset).Find(&users)
+	query.Count(&totalUsers).Limit(limit).Offset(offset).Order("id desc").Find(&users)
 	var res = gin.H{
 		"list":  users,
 		"total": totalUsers,
 	}
 	response.Success(c, res)
+}
+
+func (uc *ResourceController) SyncToSearch(c *gin.Context) {
+	var users []models.ResourceItem
+	pageStr := c.DefaultQuery("pageNum", "1")
+	pageSizeStr := c.DefaultQuery("pageSize", "100000")
+	keyword := c.DefaultQuery("keyword", "")
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		fmt.Println(err)
+		page = 1
+	}
+	fmt.Println(page)
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil || pageSize < 1 {
+		pageSize = 10
+	}
+	// Calculate offset and limit
+	offset := (page - 1) * pageSize
+	limit := pageSize
+	db := global.App.DB
+
+	query := db.Model(models.ResourceItem{})
+	if keyword != "" {
+		query.Where("mobile LIKE ?", "%"+keyword+"%").Or("name LIKE ?", "%"+keyword+"%")
+	}
+
+	query.Limit(limit).Offset(offset).Find(&users)
+	err = services.SearchItemService.BatchSync(&users)
+	if err != nil {
+		response.BusinessFail(c, err.Error())
+	}
+	response.Success(c, "成功")
 }
 
 // GetDetail handles GET requests for user details
@@ -82,10 +119,50 @@ func (uc *ResourceController) Create(c *gin.Context) {
 
 		return
 	}
+	index := "resource_item" // string | Index
+	err1 := json.Unmarshal([]byte(input.DiskItems), &input.DiskItemsArray)
+	if err1 != nil {
+		fmt.Println("Error decoding JSON:", err1)
+		return
+	}
+
+	typeStr := ","
+	for i := range input.DiskItemsArray {
+		menu := input.DiskItemsArray[i]
+		typeStr = typeStr + strconv.Itoa(menu.Type)
+	}
+	typeStr = typeStr + ","
+	document := map[string]interface{}{
+		"_id":       input.GetUid(),
+		"disk_type": typeStr,
+		"title":     input.Title,
+		"url":       input.DiskItems,
+	}
+
+	ctx := context.WithValue(context.Background(), client.ContextBasicAuth, client.BasicAuth{
+		UserName: global.App.Config.Search.UserName,
+		Password: global.App.Config.Search.Password,
+	})
+
+	configuration := client.NewConfiguration()
+	configuration.Servers = client.ServerConfigurations{
+		client.ServerConfiguration{
+			URL: global.App.Config.Search.Url,
+		},
+	}
+
+	apiClient := client.NewAPIClient(configuration)
+	resp, _, err := apiClient.Document.Index(ctx, index).Document(document).Execute()
+	if err != nil {
+		fmt.Println(err)
+		response.BusinessFail(c, err.Error())
+	}
+
+	global.App.DB.Model(&models.ResourceItem{}).Where("id = ?", input.GetUid()).Update("search_id", resp.GetId())
 	response.Success(c, nil)
 }
 
-// Create handles POST requests to create a new user
+// Create handles POST requests to create a new reasouce
 func (uc *ResourceController) BatchCreate(c *gin.Context) {
 	var input request.BatchSave
 	db := global.App.DB

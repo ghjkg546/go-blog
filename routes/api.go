@@ -14,6 +14,7 @@ func SetApiGroupRoutes(router *gin.RouterGroup) {
 	router.POST("/auth/login", app.Login)
 
 	router.GET("/res/info", app.Info)
+	router.GET("/res/search", app.ResSearch)
 
 	router.GET("/category/list", app.CateList)
 
