@@ -12,7 +12,7 @@ import (
 func SetApiGroupRoutes(router *gin.RouterGroup) {
 	router.POST("/auth/register", app.Register)
 	router.POST("/auth/login", app.Login)
-
+	router.GET("/duanju/list", app.GetResList)
 	router.GET("/res/info", app.Info)
 	router.GET("/res/search", app.ResSearch)
 

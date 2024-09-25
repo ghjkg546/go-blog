@@ -34,9 +34,7 @@ func (resourceItemService *resourceItemService) GetResList(page int, pageSize in
 		var str string
 		str, _ = utils.TruncateString(data[i].Description, 100)
 		data[i].Description = str
-		fmt.Println(data[i].GetUid())
 		data[i].Url = fmt.Sprintf("/archives/%s.html", data[i].GetUid())
-		fmt.Println(data[i].Url)
 		err1 := json.Unmarshal([]byte(data[i].DiskItems), &items)
 		if err1 == nil {
 			data[i].DiskItemsArray = items

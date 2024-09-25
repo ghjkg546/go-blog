@@ -73,15 +73,16 @@ func (jwtService *jwtService) JoinBlackList(token *jwt.Token) (err error) {
 }
 
 func (jwtService *jwtService) IsInBlacklist(tokenStr string) bool {
-	joinUnixStr, err := global.App.Redis.Get(context.Background(), jwtService.getBlackListKey(tokenStr)).Result()
-	joinUnix, err := strconv.ParseInt(joinUnixStr, 10, 64)
-	if joinUnixStr == "" || err != nil {
-		return false
-	}
-	if time.Now().Unix()-joinUnix < global.App.Config.Jwt.JwtBlacklistGracePeriod {
-		return false
-	}
-	return true
+	return false
+	//joinUnixStr, err := global.App.Redis.Get(context.Background(), jwtService.getBlackListKey(tokenStr)).Result()
+	//joinUnix, err := strconv.ParseInt(joinUnixStr, 10, 64)
+	//if joinUnixStr == "" || err != nil {
+	//	return false
+	//}
+	//if time.Now().Unix()-joinUnix < global.App.Config.Jwt.JwtBlacklistGracePeriod {
+	//	return false
+	//}
+	//return true
 }
 
 func (jwtService *jwtService) GetUserInfo(GuardName string, id string) (err error, user JwtUser) {

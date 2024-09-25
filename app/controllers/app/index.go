@@ -35,6 +35,42 @@ func CateList(c *gin.Context) {
 	response.Success(c, res)
 }
 
+func GetResList(c *gin.Context) {
+	//categoryId := c.Param("category_id")
+
+	keyword := c.DefaultQuery("keyword", "1")
+
+	pageSize := 10 // Number of items per page
+	pageStr := c.DefaultQuery("page", "1")
+	page, err1 := strconv.Atoi(pageStr)
+	if err1 != nil {
+		page = 1
+	}
+	var cid int32 = 8
+
+	err, data, total := services.ResourceItemService.GetResList(page, pageSize, cid, keyword)
+	if err != nil {
+		response.BusinessFail(c, err.Error())
+		return
+	}
+
+	for i := range data {
+		res := &data[i]
+		tm1 := time.Unix(res.CreatedAt, 0)
+		tm2 := time.Unix(res.UpdatedAt, 0)
+		res.Description = ""
+		res.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
+		res.UpdateTimeStr = tm2.Format("2006-01-02 15:04:05")
+	}
+
+	//totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
+	var res = gin.H{
+		"list":  data,
+		"total": total,
+	}
+	response.Success(c, res)
+}
+
 // 分类列表
 func ResSearch(c *gin.Context) {
 	keyword := c.DefaultQuery("keyword", "")
@@ -87,7 +123,6 @@ func seq(start, end int) []int {
 
 // GetBlogItems returns the blog items
 func (bc *ResController) GetBlogItems(c *gin.Context) {
-	//categoryId := c.Param("category_id")
 	slug := c.Param("category_id")
 	keyword := c.Param("keyword")
 
@@ -106,8 +141,10 @@ func (bc *ResController) GetBlogItems(c *gin.Context) {
 	var cate models.Category
 	global.App.DB.Where("slug=?", slug).First(&cate)
 	var cid int32 = 0
+	cateName := ""
 	if cate.ID > 0 {
 		cid = cate.ID
+		cateName = cate.Name
 	}
 	err, data, total := services.ResourceItemService.GetResList(page, pageSize, cid, keyword)
 	if err != nil {
@@ -129,7 +166,6 @@ func (bc *ResController) GetBlogItems(c *gin.Context) {
 	}
 	maxIndex := 10
 	var subItems []models.ResourceItem
-	var topItem models.ResourceItem
 	if len(data) < maxIndex {
 		maxIndex = len(data)
 
@@ -137,7 +173,6 @@ func (bc *ResController) GetBlogItems(c *gin.Context) {
 
 	if len(data) >= 1 {
 		subItems = data[1:maxIndex]
-		topItem = data[0]
 	}
 
 	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
@@ -145,7 +180,7 @@ func (bc *ResController) GetBlogItems(c *gin.Context) {
 		"CategoryId":     slug,
 		"Cates":          cates,
 		"blogItems":      subItems,
-		"topItem":        topItem,
+		"cateName":       cateName,
 		"blogNew":        dataNew,
 		"CurrentPage":    page,
 		"TotalPages":     totalPages,

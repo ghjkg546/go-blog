@@ -1,0 +1,207 @@
+{{template "header.html" .}}
+
+
+
+<div class="content-body">
+    <div class="container">
+        <div class="row">
+            <section class="dark:bg-gray-100 dark:text-gray-800">
+
+                <div class="container max-w-6xl p-6 mx-auto space-y-6 sm:space-y-12">
+                    {{ if ne .topItem nil }}
+                    <a rel="noopener noreferrer" href="{{.topItem.Url}}" class="block max-w-sm gap-3 mx-auto sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 dark:bg-gray-50">
+
+                        {{ if eq .topItem.CoverImg "" }}
+                        <img src="/images/noimage.png" alt="" class="object-cover w-full h-64 rounded sm:h-96 lg:col-span-7 dark:bg-gray-500">
+
+                        {{ else }}
+                        <img src="{{ .topItem.CoverImg }}" alt="" class="object-cover w-full h-64 rounded sm:h-96 lg:col-span-7 dark:bg-gray-500">
+                        {{ end }}
+
+                        <div class="p-6 space-y-2 lg:col-span-5">
+                            <h3 class="text-2xl font-semibold sm:text-4xl group-hover:underline group-focus:underline">
+                                {{.topItem.Title}}</h3>
+                            <span class="text-xs dark:text-gray-600">{{.topItem.CreateTimeStr}}</span>
+                            <p>{{.Description}}</p>
+                        </div>
+                    </a>
+                    {{end}}
+
+                    <div class="grid justify-center grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {{range .blogItems}}
+                        <a rel="noopener noreferrer" href="{{.Url}}" class="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50">
+                            {{ if eq .CoverImg "" }}
+                            <img role="presentation" class="object-cover w-full rounded h-44 dark:bg-gray-500"
+                                 src="/images/noimage.png">
+                            {{ else }}
+                            <img role="presentation" class="object-cover w-full rounded h-44 dark:bg-gray-500"
+                                 src="{{ .CoverImg }}">
+                            {{ end }}
+
+                            <div class="p-6 space-y-2">
+                                <h3 class="text-2xl font-semibold group-hover:underline group-focus:underline">
+                                    {{.Title}}</h3>
+                                <span class="text-xs dark:text-gray-600">{{.CreateTimeStr}}</span>
+                                <p>{{.Description}}</p>
+                            </div>
+                        </a>
+                        {{end}}
+
+                    </div>
+                    <div class="flex justify-center">
+                    </div>
+                </div>
+
+
+
+
+
+            </section>
+            {{ $categoryId := .CategoryId }}
+            <main class="col-md-12">
+                <div class="flex justify-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="inline-flex -space-x-px text-base h-10">
+                        {{if gt .CurrentPage  1}}
+                        <li>
+                            <a href="/category/{{$categoryId}}/{{.PrevPage}}"
+                               class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">《</a>
+                        </li>
+                        {{end}}
+
+                        {{range $i := .TotalPageArray}}
+                        {{if eq $i  "..."}}
+                        <a href="javascript:void()"
+                           class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500
+                               bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700
+                                dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700
+                                dark:hover:text-white">{{ $i }}</a>
+                        {{end}}
+                        {{if ne $i  "..."}}
+                        <li>
+                            <a href="/category/{{$categoryId}}/{{ $i }}"
+                               class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500
+                               bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700
+                                dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700
+                                dark:hover:text-white">{{ $i }}</a>
+                        </li>
+
+                        {{end}}
+                        {{end}}
+
+                        {{if lt .CurrentPage  .TotalPages}}
+                        <li><a class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500
+                               bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700
+                                dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700
+                                dark:hover:text-white" href="/category/{{$categoryId}}/{{.NextPage}}"> 》 </a></li>
+                        {{end}}
+
+
+                    </ul>
+                </nav>
+
+                </div>
+
+            </main>
+            <aside class="col-md-4">
+                <div class="widget widget-recent-posts">
+                    <h3 class="widget-title">最新文章</h3>
+                    <ul>
+                        {{range .blogNew}}
+                        <li>
+                            <a href="{{.Url}}">{{.Title}}</a>
+                        </li>
+                        {{end}}
+
+                    </ul>
+                </div>
+                <div class="widget widget-archives">
+                    <h3 class="widget-title">归档</h3>
+                    <ul>
+<!--                        <li>-->
+<!--                            <a href="#">2017 年 5 月</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">2017 年 4 月</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">2017 年 3 月</a>-->
+<!--                        </li>-->
+                    </ul>
+                </div>
+
+<!--                <div class="widget widget-category">-->
+<!--                    <h3 class="widget-title">分类</h3>-->
+<!--                    <ul>-->
+<!--                        <li>-->
+<!--                            <a href="#">Django 博客教程 <span class="post-count">(13)</span></a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">Python 教程 <span class="post-count">(11)</span></a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">Django 用户认证 <span class="post-count">(8)</span></a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+
+                <div class="widget widget-tag-cloud">
+                    <h3 class="widget-title">标签云</h3>
+<!--                    <ul>-->
+<!--                        <li>-->
+<!--                            <a href="#">Django</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">Python</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">Java</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">笔记</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">文档</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">AngularJS</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">CSS</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">JavaScript</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">Snippet</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#">jQuery</a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+                </div>
+                <div class="rss">
+                    <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer id="site-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Mobile Menu -->
+{{template "menu.html" .}}
+
+
+<script src="/js/script.js"></script>
+
+</body>
+</html>

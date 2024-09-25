@@ -227,7 +227,25 @@ func (uc *ResourceController) Update(c *gin.Context) {
 
 // Delete handles DELETE requests to delete a user
 func (uc *ResourceController) Delete(c *gin.Context) {
-	id := c.Param("id")
-	global.App.DB.Delete(&models.ResourceItem{}, id)
+	idsString := c.Param("id")
+	// 拆分字符串为切片
+	idsSlice := strings.Split(idsString, ",")
+
+	// 遍历切片并将字符串转换为整数
+	var ids []int
+	for _, idStr := range idsSlice {
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			fmt.Printf("转换错误: %s\n", err)
+			continue
+		}
+		ids = append(ids, id)
+	}
+	// 使用 GORM 删除对应 ID 的记录
+	if len(ids) > 0 {
+		// 这里使用 IN 查询来批量删除这些 ID
+		global.App.DB.Where("id IN ?", ids).Delete(models.ResourceItem{})
+		fmt.Println("asdfasfdsaf")
+	}
 	response.Success(c, nil)
 }

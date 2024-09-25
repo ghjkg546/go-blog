@@ -163,6 +163,7 @@ func setupRouter() *gin.Engine {
 	authRouter := router.Group("/adminapi").Use(middleware.JWTAuth(services.AppGuardName))
 	{
 		authRouter.POST("/image_upload", common.ImageUpload)
+		authRouter.POST("/csv_upload", common.CsvUpload)
 		authRouter.POST("/user/password", func(ctx *gin.Context) {
 			hello := adminapi2.UserController{}
 			hello.ChangePass(ctx)

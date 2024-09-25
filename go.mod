@@ -9,6 +9,7 @@ require (
 	github.com/glebarez/sqlite v1.11.0
 	github.com/go-playground/validator/v10 v10.10.1
 	github.com/go-redis/redis/v8 v8.11.4
+	github.com/go-telegram/bot v1.8.2
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/jassue/go-storage v1.0.1
 	github.com/robfig/cron/v3 v3.0.0
@@ -17,6 +18,7 @@ require (
 	github.com/zinclabs/sdk-go-zincsearch v0.3.3
 	go.uber.org/zap v1.19.1
 	golang.org/x/crypto v0.27.0
+	golang.org/x/text v0.18.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gen v0.3.26
@@ -63,7 +65,6 @@ require (
 	golang.org/x/oauth2 v0.23.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
-	golang.org/x/text v0.18.0 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
