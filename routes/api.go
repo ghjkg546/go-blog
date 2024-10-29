@@ -13,10 +13,14 @@ func SetApiGroupRoutes(router *gin.RouterGroup) {
 	router.POST("/auth/register", app.Register)
 	router.POST("/auth/login", app.Login)
 	router.GET("/duanju/list", app.GetResList)
+
 	router.GET("/res/info", app.Info)
 	router.GET("/res/search", app.ResSearch)
 
 	router.GET("/category/list", app.CateList)
+
+	router.GET("/wx", app.WXCheckSignature)
+	router.POST("/wx", app.WXMsgReceive)
 
 	router.GET("/admin/user/loginOut", adminapi.LogOut)
 	authRouter := router.Group("").Use(middleware.JWTAuth(services.AppGuardName))

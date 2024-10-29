@@ -11,11 +11,12 @@ import (
 	"github.com/jassue/jassue-gin/utils"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 )
 
 type UserController struct{}
 
-// 分类列表
 func LogOut(c *gin.Context) {
 	fmt.Println("logout")
 	var res = gin.H{
@@ -42,15 +43,16 @@ func (t *UserController) Login(c *gin.Context) {
 			response.BusinessFail(c, err.Error())
 			return
 		}
+		currentTime := time.Now().Unix()
 		c.JSON(http.StatusOK, gin.H{
 			"code":    0,
 			"message": "",
 			"data": gin.H{
 				"accessToken":  tokenData.AccessToken,
 				"tokenType":    "Bearer",
+				"expireAt":     currentTime + int64(tokenData.ExpiresIn),
 				"refreshToken": nil,
 				"username":     "admin",
-				"password":     "admin",
 				"role":         "admin",
 				"roleId":       1,
 				"permissions":  []string{"*.*.*"},
@@ -121,11 +123,40 @@ func (t *UserController) RoleList(c *gin.Context) {
 	})
 }
 
-func (t *UserController) Me(c *gin.Context) {
+func getTokenFromHeader(c *gin.Context) string {
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		return ""
+	}
 
+	// The header should be in the format "Bearer <token>"
+	splitToken := strings.Split(authHeader, " ")
+	if len(splitToken) != 2 || splitToken[0] != "Bearer" {
+		return ""
+	}
+
+	return splitToken[1]
+}
+
+func (t *UserController) Me(c *gin.Context) {
+	tokenString := getTokenFromHeader(c)
+	if tokenString == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing or malformed token"})
+		return
+	}
+
+	//fmt.Println("JWT Token: %s", tokenString)
+	////tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcHAiLCJleHAiOjE3Mjk4MjYxOTgsIm5iZiI6MTcyOTgyNTEzOCwianRpIjoiOSJ9.EkpA17EczVghGuOFG4kqmzuKlUkSUjDHJAYZyEIkKaM"
+	//token, err := jwt.ParseWithClaims(tokenString, &services.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+	//	return []byte("AllYourBase"), nil
+	//})
+	//
+	//if claims, ok := token.Claims.(*services.CustomClaims); ok && token.Valid {
+	//	fmt.Printf("%v %v", claims.ExpiresAt, claims.RegisteredClaims.Issuer)
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"data": gin.H{
+			"expire":   "111",
 			"userId":   2,
 			"username": "admin",
 			"nickname": "系统管理员",
@@ -135,6 +166,17 @@ func (t *UserController) Me(c *gin.Context) {
 		},
 		"msg": "一切ok",
 	})
+	//} else {
+	//	fmt.Println(err)
+	//	c.JSON(http.StatusOK, gin.H{
+	//		"code": 500,
+	//		"data": gin.H{
+	//			"expire": "111",
+	//		},
+	//		"msg": "token过期",
+	//	})
+	//}
+
 }
 
 func (t *UserController) Logout(c *gin.Context) {

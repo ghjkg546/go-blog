@@ -94,57 +94,6 @@ func (uc *MenuController) GetList(c *gin.Context) {
 	response.Success(c, a)
 }
 
-func ListToTree(stuAll []models.SysMenu, pid uint, lev uint) []models.SysMenu {
-	var goodArr []models.SysMenu
-	for _, v := range stuAll {
-		if v.ParentID == pid {
-			// 这里可以理解为每次都从最原始的数据里面找出相对就的ID进行匹配，直到找不到就返回
-			child := ListToTree(stuAll, v.ID, lev+1)
-			if child == nil {
-				child = []models.SysMenu{}
-			}
-			node := models.SysMenu{
-				ID: v.ID,
-				//Path:      menu.RoutePath,
-				Component: v.Component,
-				Redirect:  v.Redirect,
-				Name:      v.Name,
-				ParentID:  v.ParentID,
-				Visible:   v.Visible,
-				Type:      v.Type,
-				Level:     lev,
-				Children:  child,
-			}
-
-			goodArr = append(goodArr, node)
-		}
-	}
-	return goodArr
-}
-
-func OptionListToTree(stuAll []models.MenuOption, pid uint, lev uint) []models.MenuOption {
-	var goodArr []models.MenuOption
-	for _, v := range stuAll {
-		if v.ParentId == pid {
-			// 这里可以理解为每次都从最原始的数据里面找出相对就的ID进行匹配，直到找不到就返回
-			child := OptionListToTree(stuAll, v.ID, lev+1)
-			if child == nil {
-				child = []models.MenuOption{}
-			}
-			node := models.MenuOption{
-				Value: v.ID,
-				//Path:      menu.RoutePath,
-				ParentId: v.ParentId,
-				Label:    v.Label,
-				Children: child,
-			}
-
-			goodArr = append(goodArr, node)
-		}
-	}
-	return goodArr
-}
-
 // GetDetail handles GET requests for user details
 func (uc *MenuController) GetDetail(c *gin.Context) {
 	id := c.Param("id")
@@ -207,4 +156,55 @@ func (uc *MenuController) Delete(c *gin.Context) {
 	}
 	db.Delete(&models.SysMenu{}, id)
 	response.Success(c, nil)
+}
+
+func ListToTree(stuAll []models.SysMenu, pid uint, lev uint) []models.SysMenu {
+	var goodArr []models.SysMenu
+	for _, v := range stuAll {
+		if v.ParentID == pid {
+			// 这里可以理解为每次都从最原始的数据里面找出相对就的ID进行匹配，直到找不到就返回
+			child := ListToTree(stuAll, v.ID, lev+1)
+			if child == nil {
+				child = []models.SysMenu{}
+			}
+			node := models.SysMenu{
+				ID: v.ID,
+				//Path:      menu.RoutePath,
+				Component: v.Component,
+				Redirect:  v.Redirect,
+				Name:      v.Name,
+				ParentID:  v.ParentID,
+				Visible:   v.Visible,
+				Type:      v.Type,
+				Level:     lev,
+				Children:  child,
+			}
+
+			goodArr = append(goodArr, node)
+		}
+	}
+	return goodArr
+}
+
+func OptionListToTree(stuAll []models.MenuOption, pid uint, lev uint) []models.MenuOption {
+	var goodArr []models.MenuOption
+	for _, v := range stuAll {
+		if v.ParentId == pid {
+			// 这里可以理解为每次都从最原始的数据里面找出相对就的ID进行匹配，直到找不到就返回
+			child := OptionListToTree(stuAll, v.ID, lev+1)
+			if child == nil {
+				child = []models.MenuOption{}
+			}
+			node := models.MenuOption{
+				Value: v.ID,
+				//Path:      menu.RoutePath,
+				ParentId: v.ParentId,
+				Label:    v.Label,
+				Children: child,
+			}
+
+			goodArr = append(goodArr, node)
+		}
+	}
+	return goodArr
 }

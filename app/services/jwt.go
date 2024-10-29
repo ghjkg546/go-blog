@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/jassue/jassue-gin/app/common/response"
@@ -108,8 +107,7 @@ func (jwtService *jwtService) GetUserId(c *gin.Context) int32 {
 		return 0
 	}
 	uidsInt, _ := stringToInt32(str)
-	fmt.Println("用户id")
-	fmt.Println(uidsStr)
+
 	return uidsInt
 
 }

@@ -29,7 +29,6 @@ func InitializeTele() {
 	opts := []bot.Option{
 		bot.WithDefaultHandler(handler),
 	}
-	fmt.Println(global.App.Config.Search.TeleToken)
 	b, err := bot.New(global.App.Config.Search.TeleToken, opts...)
 	if nil != err {
 		// panics for the sake of simplicity.

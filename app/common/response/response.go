@@ -2,6 +2,7 @@ package response
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jassue/jassue-gin/app/models"
 	"github.com/jassue/jassue-gin/global"
 	"net/http"
 	"os"
@@ -11,6 +12,13 @@ type Response struct {
 	ErrorCode int         `json:"code"`
 	Data      interface{} `json:"data"`
 	Message   string      `json:"msg"`
+}
+
+type DirResponse struct {
+	Status int               `json:"status"`
+	Code   int               `json:"code"`
+	Data   []models.FileInfo `json:"data"`
+	Total  int               `json:"total"`
 }
 
 func ServerError(c *gin.Context, err interface{}) {

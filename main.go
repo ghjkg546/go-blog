@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/jassue/jassue-gin/bootstrap"
 	"github.com/jassue/jassue-gin/global"
-	"sync"
 )
 
 func main() {
@@ -34,14 +33,14 @@ func main() {
 
 	// 初始化计划任务
 	bootstrap.InitializeCron()
-	var wg sync.WaitGroup
-
-	// Start the Telegram bot in a separate goroutine
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		bootstrap.InitializeTele()
-	}()
+	//var wg sync.WaitGroup
+	//
+	//// Start the Telegram bot in a separate goroutine
+	//wg.Add(1)
+	//go func() {
+	//	defer wg.Done()
+	//	bootstrap.InitializeTele()
+	//}()
 	// 启动服务器
 	bootstrap.RunServer()
 	//wg.Wait()

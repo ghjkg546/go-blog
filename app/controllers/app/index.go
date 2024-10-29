@@ -2,16 +2,20 @@ package app
 
 import (
 	"context"
+	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jassue/jassue-gin/app/common/request"
 	"github.com/jassue/jassue-gin/app/common/response"
+	"github.com/jassue/jassue-gin/app/controllers/common"
 	"github.com/jassue/jassue-gin/app/models"
 	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
 	client "github.com/zinclabs/sdk-go-zincsearch"
 	"gorm.io/gorm"
 	"html/template"
+	"log"
 	"math"
 	"net/http"
 	"os"
@@ -35,9 +39,85 @@ func CateList(c *gin.Context) {
 	response.Success(c, res)
 }
 
-func GetResList(c *gin.Context) {
-	//categoryId := c.Param("category_id")
+type ShareItem struct {
+	Fids string `json:"Fids" gorm:"size:200;not null;comment:用户名称"`
+	Name string `json:"Name" gorm:"comment:用户名称"`
+}
 
+func DoShare(c *gin.Context) {
+	var input ShareItem
+
+	// Bind JSON payload to input
+	if err := c.BindJSON(&input); err != nil {
+
+		response.BusinessFail(c, err.Error())
+
+		return
+	}
+
+	var data []models.ShareItem
+	if err := json.Unmarshal([]byte(input.Fids), &data); err != nil {
+		fmt.Println("Error parsing JSON:", err)
+		return
+	}
+	var ids []string
+	if len(data) > 0 {
+		for i := range data {
+			res := &data[i]
+			ids = append(ids, res.ID)
+
+		}
+
+	}
+
+	services.QuarkService.SaveResouceByUrl(ids, input.Name, data, 8)
+	//url := services.QuarkService.ShareItem(ids, input.Name)
+	//db := global.App.DB
+	//if url != "" {
+	//	fmt.Println(url)
+	//
+	//	if len(data) > 0 {
+	//		for i := range data {
+	//			res := &data[i]
+	//			ids = append(ids, res.ID)
+	//			//var tmp models.ResourceItem
+	//			var items []models.NetDiskItem
+	//
+	//			// Create a new NetDiskItem
+	//			newItem := models.NetDiskItem{
+	//				Type: 2,
+	//				Url:  url,
+	//			}
+	//
+	//			// Append the new item to the slice
+	//			items = append(items, newItem)
+	//
+	//			// Convert the slice to JSON
+	//			jsonData, err := json.MarshalIndent(items, "", "  ")
+	//			if err != nil {
+	//				continue
+	//
+	//			}
+	//
+	//			err1 := db.Create(&models.ResourceItem{Views: 0, Title: res.Name, DiskItems: string(jsonData), CategoryId: 8, Status: 1, CoverImg: ""})
+	//
+	//			if err1 != nil {
+	//				continue
+	//			}
+	//
+	//		}
+	//
+	//	}
+	//
+	//}
+
+	var res = gin.H{
+		"message": "分享成功",
+	}
+	response.Success(c, res)
+}
+
+func GetResList(c *gin.Context) {
 	keyword := c.DefaultQuery("keyword", "1")
 
 	pageSize := 10 // Number of items per page
@@ -121,8 +201,8 @@ func seq(start, end int) []int {
 	return numbers
 }
 
-// GetBlogItems returns the blog items
-func (bc *ResController) GetBlogItems(c *gin.Context) {
+// GetFrontReasouceItems returns the blog items
+func (bc *ResController) GetFrontReasouceItems(c *gin.Context) {
 	slug := c.Param("category_id")
 	keyword := c.Param("keyword")
 
@@ -312,4 +392,108 @@ func Info(c *gin.Context) {
 
 	data.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
 	response.Success(c, gin.H{"info": data, "comments": comments})
+}
+
+// WXTextMsg 微信文本消息结构体
+type WXTextMsg struct {
+	ToUserName   string
+	FromUserName string
+	CreateTime   int64
+	MsgType      string
+	Content      string
+	MsgId        int64
+}
+
+// WXMsgReceive 微信消息接收
+func WXMsgReceive(c *gin.Context) {
+	var textMsg WXTextMsg
+	err := c.ShouldBindXML(&textMsg)
+	if err != nil {
+		log.Printf("[消息接收] - XML数据包解析失败: %v\n", err)
+		return
+	}
+
+	log.Printf("[消息接收] - 收到消息, 消息类型为: %s, 消息内容为: %s\n", textMsg.MsgType, textMsg.Content)
+	fmt.Println(textMsg.Content)
+
+	keyword := textMsg.Content
+
+	db := global.App.DB
+	var items []models.ResourceItem
+	query := db.Model(models.ResourceItem{})
+	if keyword != "" {
+		query.Where("title LIKE ?", "%"+keyword+"%")
+	}
+
+	query.Limit(20).Order("id desc").Find(&items)
+	text := ""
+	for _, item := range items {
+		input := &item
+		err1 := json.Unmarshal([]byte(input.DiskItems), &input.DiskItemsArray)
+		if err1 != nil {
+			fmt.Println("Error decoding JSON:", err1)
+			return
+		}
+		typeStr := ""
+
+		for i := range input.DiskItemsArray {
+			menu := input.DiskItemsArray[i]
+			typeStr = typeStr + menu.Url
+		}
+		text += fmt.Sprintf("标题：%s\n网盘连接：%s\n", item.Title, typeStr)
+	}
+
+	if text != "" {
+		WXMsgReply(c, textMsg.ToUserName, textMsg.FromUserName, text)
+	} else {
+		WXMsgReply(c, textMsg.ToUserName, textMsg.FromUserName, "抱歉，暂未收录")
+	}
+}
+
+// WXRepTextMsg 微信回复文本消息结构体
+type WXRepTextMsg struct {
+	ToUserName   string
+	FromUserName string
+	CreateTime   int64
+	MsgType      string
+	Content      string
+	// 若不标记XMLName, 则解析后的xml名为该结构体的名称
+	XMLName xml.Name `xml:"xml"`
+}
+
+// WXMsgReply 微信消息回复
+func WXMsgReply(c *gin.Context, fromUser, toUser string, content string) {
+	repTextMsg := WXRepTextMsg{
+		ToUserName:   toUser,
+		FromUserName: fromUser,
+		CreateTime:   time.Now().Unix(),
+		MsgType:      "text",
+		Content:      content,
+	}
+
+	msg, err := xml.Marshal(&repTextMsg)
+	if err != nil {
+		log.Printf("[消息回复] - 将对象进行XML编码出错: %v\n", err)
+		return
+	}
+	_, _ = c.Writer.Write(msg)
+}
+
+// 与填写的服务器配置中的Token一致
+const Token = "ghg546"
+
+func WXCheckSignature(c *gin.Context) {
+	signature := c.Query("signature")
+	timestamp := c.Query("timestamp")
+	nonce := c.Query("nonce")
+	echostr := c.Query("echostr")
+
+	ok := common.CheckSignature(signature, timestamp, nonce, Token)
+	if !ok {
+		log.Println("微信公众号接入校验失败!")
+		return
+	}
+
+	log.Println("微信公众号接入校验成功!")
+	_, _ = c.Writer.WriteString(echostr)
 }

@@ -11,9 +11,11 @@ import (
 	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
 	client "github.com/zinclabs/sdk-go-zincsearch"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type ResourceController struct{}
@@ -192,12 +194,10 @@ func (uc *ResourceController) BatchCreate(c *gin.Context) {
 			continue
 
 		}
-
 		err1 := db.Create(&models.ResourceItem{Views: 0, Title: parts[0], DiskItems: string(jsonData), CategoryId: input.CategoryId, Status: 1, CoverImg: ""})
 
 		if err1.Error != nil {
 			response.Fail(c, 500, err1.Error.Error())
-
 			return
 		}
 
@@ -247,5 +247,87 @@ func (uc *ResourceController) Delete(c *gin.Context) {
 		global.App.DB.Where("id IN ?", ids).Delete(models.ResourceItem{})
 		fmt.Println("asdfasfdsaf")
 	}
+	response.Success(c, nil)
+}
+
+// 等待分享列表
+func (uc *ResourceController) WaitShareList(c *gin.Context) {
+	pageStr := c.DefaultQuery("pageNum", "1")
+	pageSizeStr := c.DefaultQuery("pageSize", "10")
+	fidStr := c.DefaultQuery("fid", "")
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		fmt.Println(err)
+		page = 1
+	}
+	fmt.Println(page)
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil || pageSize < 1 {
+		pageSize = 10
+	}
+	var dirResp response.DirResponse
+	dirResp = services.QuarkService.GetDirInfo(fidStr, page, pageSize)
+
+	var res = gin.H{
+		"list":  dirResp.Data,
+		"total": dirResp.Total,
+	}
+	response.Success(c, res)
+}
+
+func calculatePages(totalItems, itemsPerPage int) int {
+	return int(math.Ceil(float64(totalItems) / float64(itemsPerPage)))
+}
+
+// 批量分享
+func (uc *ResourceController) BatchShare(c *gin.Context) {
+	var input request.BatchShare
+
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	var dirResp response.DirResponse
+	dirResp = services.QuarkService.GetDirInfo(input.Fid, 1, 50)
+	fmt.Println("总数", dirResp.Total)
+	response.Success(c, nil)
+	var ids []string
+	if input.PageSize >= dirResp.Total {
+		var chunks []models.ShareItem
+		for _, item := range dirResp.Data {
+
+			ids = append(ids, item.Fid)
+
+			chunks = append(chunks, models.ShareItem{Name: item.FileName, ID: item.Fid})
+		}
+		services.QuarkService.SaveResouceByUrl(ids, "test", chunks, input.CategoryId)
+		ids = []string{} // Clear the ids slice
+		chunks = []models.ShareItem{}
+
+	} else {
+		pages := calculatePages(dirResp.Total, 50)
+		for i := 0; i < pages; i++ {
+			dirResp = services.QuarkService.GetDirInfo(input.Fid, i+1, 50)
+			fmt.Printf("Processing page %d\n", i+1)
+			var chunks []models.ShareItem
+			for _, item := range dirResp.Data {
+
+				ids = append(ids, item.Fid)
+
+				chunks = append(chunks, models.ShareItem{Name: item.FileName, ID: item.Fid})
+
+				if len(ids) >= input.PageSize {
+
+					services.QuarkService.SaveResouceByUrl(ids, item.FileName, chunks, input.CategoryId)
+					ids = []string{} // Clear the ids slice
+					chunks = []models.ShareItem{}
+					time.Sleep(5 * time.Second)
+				}
+			}
+		}
+
+	}
+
 	response.Success(c, nil)
 }

@@ -22,3 +22,11 @@ func (*User) TableName() string {
 func (user User) GetUid() string {
 	return strconv.Itoa(int(user.ID))
 }
+
+type File struct {
+	Category  int    `json:"category"`
+	FID       string `json:"fid"`
+	FileName  string `json:"file_name"`
+	FileType  int    `json:"file_type"`
+	PDirFID   string `json:"pdir_fid"`
+}

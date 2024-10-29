@@ -17,23 +17,23 @@ import (
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:      db,
-		Comment: newComment(db, opts...),
+		db:          db,
+		SysDictItem: newSysDictItem(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Comment comment
+	SysDictItem sysDictItem
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:      db,
-		Comment: q.Comment.clone(db),
+		db:          db,
+		SysDictItem: q.SysDictItem.clone(db),
 	}
 }
 
@@ -47,18 +47,18 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:      db,
-		Comment: q.Comment.replaceDB(db),
+		db:          db,
+		SysDictItem: q.SysDictItem.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Comment *commentDo
+	SysDictItem *sysDictItemDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Comment: q.Comment.WithContext(ctx),
+		SysDictItem: q.SysDictItem.WithContext(ctx),
 	}
 }
 

@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/jassue/jassue-gin/app/common/response"
@@ -54,7 +53,6 @@ func JWTAuth(GuardName string) gin.HandlerFunc {
 				}
 			}
 		}
-		fmt.Println("uid:" + claims.ID)
 		c.Set("token", token)
 		c.Set("id", claims.ID)
 	}

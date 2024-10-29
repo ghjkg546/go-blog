@@ -123,10 +123,10 @@ func setupRouter() *gin.Engine {
 	router.StaticFile("/sitemap.xml", "static/sitemap.xml")
 
 	ResController := app.ResController{}
-	router.GET("/", ResController.GetBlogItems)
-	router.GET("/:cateid", ResController.GetBlogItems)
-	router.GET("/category/:category_id/:page", ResController.GetBlogItems)
-	router.GET("/category/:category_id", ResController.GetBlogItems)
+	router.GET("/", ResController.GetFrontReasouceItems)
+	router.GET("/:cateid", ResController.GetFrontReasouceItems)
+	router.GET("/category/:category_id/:page", ResController.GetFrontReasouceItems)
+	router.GET("/category/:category_id", ResController.GetFrontReasouceItems)
 	router.GET("/archives/:id", ResController.GetBlogDetail)
 
 	userRoutes := NewResourceRoutes("/adminapi/users", router, &adminapi2.UserController{})
@@ -144,9 +144,14 @@ func setupRouter() *gin.Engine {
 	resourceRoutes := NewResourceRoutes("/adminapi/resource", router, &adminapi2.ResourceController{})
 	resourceRoutes.SetupRoutes()
 
+	dictRoutes := NewResourceRoutes("/adminapi/dict", router, &adminapi2.DictController{})
+	dictRoutes.SetupRoutes()
+
 	// 跨域处理
 	router.Use(middleware.Cors())
-
+	ResourceController := adminapi2.ResourceController{}
+	router.GET("/adminapi/share/waitlist", ResourceController.WaitShareList)
+	router.POST("/adminapi/share/doshare", app.DoShare)
 	// 前端项目静态资源
 	router.StaticFile("/staticfile", "./static/dist/index.html")
 	router.Static("/assets", "./static/dist/assets")
@@ -223,8 +228,15 @@ func setupRouter() *gin.Engine {
 		adminapi.POST("resource/batchCreate",
 			//middleware.CorsMiddleware(),
 			func(ctx *gin.Context) {
-				hello := adminapi2.ResourceController{}
-				hello.BatchCreate(ctx)
+				resouce := adminapi2.ResourceController{}
+				resouce.BatchCreate(ctx)
+			},
+		)
+
+		adminapi.POST("resource/batchShare",
+			func(ctx *gin.Context) {
+				resource := adminapi2.ResourceController{}
+				resource.BatchShare(ctx)
 			},
 		)
 
