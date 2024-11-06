@@ -37,14 +37,13 @@ func Login(c *gin.Context) {
 	}
 
 	if err, user := services.AppUserService.Login(form); err != nil {
-		fmt.Println("登陆失败")
+		fmt.Println("登录失败")
 		response.BusinessFail(c, err.Error())
 	} else {
 		fmt.Println(user)
 		tokenData, err, _ := services.JwtService.CreateToken(services.AppGuardName, user)
 		if err != nil {
 			response.Fail(c, 500, err.Error())
-			fmt.Println("登陆失败22")
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
@@ -62,6 +61,8 @@ func Login(c *gin.Context) {
 		})
 	}
 }
+
+
 
 func Logout(c *gin.Context) {
 	err := services.JwtService.JoinBlackList(c.Keys["token"].(*jwt.Token))

@@ -40,8 +40,8 @@ func CateList(c *gin.Context) {
 }
 
 type ShareItem struct {
-	Fids string `json:"Fids" gorm:"size:200;not null;comment:用户名称"`
-	Name string `json:"Name" gorm:"comment:用户名称"`
+	Fids string `json:"Fids" gorm:"size:200;not null;comment:资源id"`
+	Name string `json:"Name" gorm:"comment:资源名称"`
 }
 
 func DoShare(c *gin.Context) {
@@ -71,6 +71,7 @@ func DoShare(c *gin.Context) {
 	}
 
 	services.QuarkService.SaveResouceByUrl(ids, input.Name, data, 8)
+
 	//url := services.QuarkService.ShareItem(ids, input.Name)
 	//db := global.App.DB
 	//if url != "" {
@@ -143,7 +144,6 @@ func GetResList(c *gin.Context) {
 		res.UpdateTimeStr = tm2.Format("2006-01-02 15:04:05")
 	}
 
-	//totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
 	var res = gin.H{
 		"list":  data,
 		"total": total,
@@ -179,7 +179,6 @@ func ResSearch(c *gin.Context) {
 		fmt.Fprintf(os.Stderr, "Error when calling `SearchApi.SearchV1``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SearchApi.SearchV1`: %v\n", resp)
 	var resList []interface{}
 	for _, data := range resp.Hits.Hits {
 		resList = append(resList, data.GetSource())

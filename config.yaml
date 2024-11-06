@@ -4,6 +4,13 @@ app:
   app_name: 'gin-app'
   app_url: 'http://localhost'
 
+search:
+  url: 'http://198.46.248.64:4080'
+  user_name: '101'
+  password: 'abb111111'
+  tele_token: '7308892033:AAGdj0cABKgWovLnZRkEHvpa53X3-B9Zj70'
+
+
 log:
   level: 'info'
   root_dir: './storage/logs'
@@ -52,7 +59,7 @@ database:
 
 jwt:
   secret: '3Bde3BGEbYqtqyEUzW3ry8jKFcaPH17fRmTmqE7MDr05Lwj95uruRKrrkb44TJ4s'
-  jwt_ttl: 43200
+  jwt_ttl: 60
   jwt_blacklist_grace_period: 10
   refresh_grace_period: 1800
 
@@ -60,7 +67,7 @@ redis:
   host: '47.106.155.179'
   port: 6379
   db: 1
-  password: 'jhkdjhkjdhsIUTYURTU_WA78Jd'
+  password: 'websiteCCd'
 
 storage:
   default: 'local'

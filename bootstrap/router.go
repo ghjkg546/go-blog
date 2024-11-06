@@ -147,6 +147,9 @@ func setupRouter() *gin.Engine {
 	dictRoutes := NewResourceRoutes("/adminapi/dict", router, &adminapi2.DictController{})
 	dictRoutes.SetupRoutes()
 
+	logRoutes := NewResourceRoutes("/adminapi/log", router, &adminapi2.LogController{})
+	logRoutes.SetupRoutes()
+
 	// 跨域处理
 	router.Use(middleware.Cors())
 	ResourceController := adminapi2.ResourceController{}

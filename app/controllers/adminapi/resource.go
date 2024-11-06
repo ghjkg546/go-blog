@@ -261,7 +261,7 @@ func (uc *ResourceController) WaitShareList(c *gin.Context) {
 		fmt.Println(err)
 		page = 1
 	}
-	fmt.Println(page)
+
 	pageSize, err := strconv.Atoi(pageSizeStr)
 	if err != nil || pageSize < 1 {
 		pageSize = 10
@@ -290,7 +290,6 @@ func (uc *ResourceController) BatchShare(c *gin.Context) {
 	}
 	var dirResp response.DirResponse
 	dirResp = services.QuarkService.GetDirInfo(input.Fid, 1, 50)
-	fmt.Println("总数", dirResp.Total)
 	response.Success(c, nil)
 	var ids []string
 	if input.PageSize >= dirResp.Total {

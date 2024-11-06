@@ -47,10 +47,7 @@ func (quarkService *quarkService) SaveResouceByUrl(fids []string, name string, d
 	db := global.App.DB
 
 	var ids []string
-	fmt.Println("url", url1)
 	if url1 != "" {
-		fmt.Println(url1)
-
 		if len(data) > 0 {
 			for i := range data {
 				res := &data[i]
@@ -74,8 +71,8 @@ func (quarkService *quarkService) SaveResouceByUrl(fids []string, name string, d
 					continue
 
 				}
-
-				err1 := db.Create(&models.ResourceItem{Views: 0, Title: res.Name, DiskItems: string(jsonData), CategoryId: categoryId, Status: 1, CoverImg: ""})
+				var saveItem = models.ResourceItem{Views: 0, Title: res.Name, DiskItems: string(jsonData), CategoryId: categoryId, Status: 1, CoverImg: ""}
+				err1 := db.Create(&saveItem)
 
 				if err1 != nil {
 					fmt.Println("err1", err1)
@@ -204,8 +201,6 @@ func executeRequest(req *http.Request) ([]byte, error) {
 func share(fidList []string, title string, expiredType, urlType int, passcode, cookie string) (bool, string) {
 	baseURL := "https://drive-pc.quark.cn/1/clouddrive/share"
 	queryParams := fmt.Sprintf("?pr=ucpro&fr=pc&uc_param_str=&__dt=%d&__t=%d", rand.Intn(900)+100, time.Now().UnixMilli())
-	fmt.Println("参数")
-	fmt.Println(fidList)
 
 	postData := map[string]interface{}{
 		"fid_list":     fidList,
@@ -217,7 +212,11 @@ func share(fidList []string, title string, expiredType, urlType int, passcode, c
 		postData["passcode"] = passcode
 	}
 	body, _ := json.Marshal(postData)
-
+	requestJson := ""
+	jsonData, err := json.Marshal(postData)
+	if err == nil {
+		requestJson = string(jsonData)
+	}
 	addCookieHeader(headers, cookie)
 	req, err := createRequest(baseURL+queryParams, "POST", body)
 	if err != nil {
@@ -239,15 +238,21 @@ func share(fidList []string, title string, expiredType, urlType int, passcode, c
 		taskURL := fmt.Sprintf("https://drive-pc.quark.cn/1/clouddrive/task?pr=ucpro&fr=pc&uc_param_str=&task_id=%s&retry_index=%d", taskID, i)
 		req, _ = createRequest(taskURL, "GET", nil)
 		responseData, _ = executeRequest(req)
-
+		svc := &searchItemService{} // 创建指针类型实例
 		var taskRes TaskResponse
 		if err := json.Unmarshal(responseData, &taskRes); err == nil && taskRes.Status == 200 && taskRes.Code == 0 {
 			if shareID := taskRes.Data.ShareID; shareID != "" {
+				if err == nil {
+					svc.CreateShareLog(requestJson, string(responseData))
+				}
+
 				return getShareURL(shareID)
 			}
 		}
 		time.Sleep(1 * time.Second)
 	}
+	svc := &searchItemService{} // 创建指针类型实例
+	svc.CreateShareLog(requestJson, "分享成功，但获取分享url失败")
 	return false, "Failed to retrieve share_id"
 }
 

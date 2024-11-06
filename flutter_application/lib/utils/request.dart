@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
- 
+import 'package:flutter_application_2/utils/user_preference.dart';
+
 /// 请求方法:枚举类型
 enum DioMethod {
   get,
@@ -9,26 +10,27 @@ enum DioMethod {
   patch,
   head,
 }
- 
+
 // 创建请求类：封装dio
 class Request {
   /// 单例模式
   static Request? _instance;
- 
+
   // 工厂函数：执行初始化
   factory Request() => _instance ?? Request._internal();
- 
+
   // 获取实例对象时，如果有实例对象就返回，没有就初始化
   static Request? get instance => _instance ?? Request._internal();
- 
+
   /// Dio实例
   static Dio _dio = Dio();
- 
+
   /// 初始化
   Request._internal() {
     // 初始化基本选项
     BaseOptions options = BaseOptions(
-        baseUrl: 'https://api.shareziyuan.email/api',
+         baseUrl: 'https://api.shareziyuan.email/api',
+        // baseUrl: 'http://localhost:8080/api',
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 5));
     _instance = this;
@@ -38,20 +40,30 @@ class Request {
     _dio.interceptors.add(InterceptorsWrapper(
         onRequest: _onRequest, onResponse: _onResponse, onError: _onError));
   }
- 
+
   /// 请求拦截器
-  void _onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  void _onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     // 对非open的接口的请求参数全部增加userId
     if (!options.path.contains("open")) {
       options.queryParameters["userId"] = "xxx";
     }
-    // 头部添加token
-    // options.headers["token"] = "xxx";
+     var token = await getToken();
+
+  // Add the Authorization header if the token exists
+      if (token != null) {
+        options.headers["Authorization"] = "Bearer $token";
+      }
+
     // 更多业务需求
     handler.next(options);
     // super.onRequest(options, handler);
   }
- 
+
+  getToken() async {
+    var res = await UserPreferences.getAccessToken();
+    return res;
+  }
+
   /// 相应拦截器
   void _onResponse(
       Response response, ResponseInterceptorHandler handler) async {
@@ -65,12 +77,12 @@ class Request {
     }
     handler.next(response);
   }
- 
+
   /// 错误处理: 网络错误等
   void _onError(DioException error, ErrorInterceptorHandler handler) {
     handler.next(error);
   }
- 
+
   /// 请求类：支持异步请求操作
   Future<T> request<T>(
     String path, {
@@ -108,7 +120,7 @@ class Request {
       rethrow;
     }
   }
- 
+
   /// 开启日志打印
   /// 需要打印日志的接口在接口请求前 Request.instance?.openLog();
   void openLog() {
