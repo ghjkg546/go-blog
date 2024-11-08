@@ -11,8 +11,11 @@ import (
 	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
 	client "github.com/zinclabs/sdk-go-zincsearch"
+	"io"
+	"io/ioutil"
 	"math"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -245,7 +248,6 @@ func (uc *ResourceController) Delete(c *gin.Context) {
 	if len(ids) > 0 {
 		// 这里使用 IN 查询来批量删除这些 ID
 		global.App.DB.Where("id IN ?", ids).Delete(models.ResourceItem{})
-		fmt.Println("asdfasfdsaf")
 	}
 	response.Success(c, nil)
 }
@@ -274,6 +276,130 @@ func (uc *ResourceController) WaitShareList(c *gin.Context) {
 		"total": dirResp.Total,
 	}
 	response.Success(c, res)
+}
+
+// Fetch HTML content from a URL
+func fetchListHTML(url string) (string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	// Check for successful response
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("failed to fetch data: status code %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(body), nil
+}
+
+// Extract href links using regex
+func extractLinks(html string) []string {
+	// Regular expression to find the href attribute within <li class="item tcod0"> <a> tags
+	regex := `<h2><a href="(https://www\.ssyhb\.cn/\d+\.html)"\s*class="main">`
+	re := regexp.MustCompile(regex)
+
+	// Find all matches
+	matches := re.FindAllStringSubmatch(html, -1)
+
+	var links []string
+	for _, match := range matches {
+		if len(match) > 1 {
+			links = append(links, match[1])
+		}
+	}
+
+	return links
+}
+
+// 等待分享列表
+func (uc *ResourceController) Crawl(c *gin.Context) {
+
+	var input request.Crawl
+
+	url := "https://www.ssyhb.cn/page_2.html"
+
+	// Fetch HTML content
+	html, err := fetchListHTML(url)
+	if err != nil {
+		fmt.Println("Error fetching HTML:", err)
+		return
+	}
+
+	// Extract href links
+	links := extractLinks(html)
+	if len(links) == 0 {
+		fmt.Println("No links found.")
+		return
+	}
+	fmt.Println("Extracted links:")
+	for _, link := range links {
+		fmt.Println(link)
+	}
+
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	fmt.Println(input)
+
+	CrawlDetail(links, input)
+
+	response.Success(c, gin.H{})
+}
+
+func CrawlDetail(links []string, input request.Crawl) {
+	for _, link := range links {
+		fmt.Println("正在抓取", link)
+		input.DetailUrl = link
+		name, link, err := CrawlHTML(input)
+		if err != nil {
+			fmt.Println("Error:", err)
+			continue
+		}
+		db := global.App.DB
+		var craw_item models.CrawlItem
+		craw_item.Name = name
+		craw_item.Url = link
+		db.Save(&craw_item)
+		time.Sleep(5 * time.Second) // 暂停 5 秒
+	}
+
+}
+
+func CrawlHTML(params request.Crawl) (string, string, error) {
+	// Step 1: Fetch HTML content from the URL
+	resp, err := http.Get(params.DetailUrl)
+	if err != nil {
+		return "", "", fmt.Errorf("failed to fetch URL: %w", err)
+	}
+	defer resp.Body.Close()
+
+	htmlData, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", "", fmt.Errorf("failed to read HTML content: %w", err)
+	}
+
+	// Step 2: Extract name and link using regex patterns
+	nameRegex := regexp.MustCompile(params.NameRule)
+	linkRegex := regexp.MustCompile(params.LinkRule)
+
+	nameMatch := nameRegex.FindStringSubmatch(string(htmlData))
+	linkMatch := linkRegex.FindStringSubmatch(string(htmlData))
+
+	// Check if matches were found
+	if len(nameMatch) < 2 || len(linkMatch) < 2 {
+		return "", "", fmt.Errorf("failed to find matches with the provided regex rules")
+	}
+
+	// Return matched results
+	return nameMatch[1], linkMatch[1], nil
 }
 
 func calculatePages(totalItems, itemsPerPage int) int {

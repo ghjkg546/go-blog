@@ -324,6 +324,47 @@ func (bc *ResController) GetBlogDetail(c *gin.Context) {
 	c.AbortWithStatus(http.StatusNotFound)
 }
 
+func (bc *ResController) ApplyForReasource(c *gin.Context) {
+	//idStr := c.Param("id")
+	//id := strings.TrimSuffix(idStr, ".html")
+	//intId, err := strconv.Atoi(id)
+
+	//if err != nil {
+	//	c.String(400, "Invalid ID")
+	//	return
+	//}
+	//fmt.Println(intId)
+	//err, data := services.ResourceItemService.GetResInfo(intId)
+	//if err != nil {
+	//	response.BusinessFail(c, err.Error())
+	//	return
+	//}
+	err, cates, _ := services.CategoryService.GetList()
+	if err != nil {
+		response.BusinessFail(c, err.Error())
+		return
+	}
+
+	//var comments []models.Comment
+	//err1 := global.App.DB.Preload("User").Where("resource_item_id=?", intId).Order("id desc").Limit(20).Find(&comments)
+	//if err1 != nil {
+	//	fmt.Println(err1.Error)
+	//}
+	//global.App.DB.Model(&models.ResourceItem{}).Where("id = ?", intId).UpdateColumn("views", gorm.Expr("views + ?", 1))
+	//
+	//tm1 := time.Unix(data.CreatedAt, 0)
+	//
+	//data.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
+	//response.Success(c, gin.H{"info": data, "comments": comments})
+	c.HTML(http.StatusOK, "qiu.html", gin.H{
+		"Content": template.HTML("求资源"),
+		//"blogItem": data,
+		"Cates": cates,
+	})
+
+	c.AbortWithStatus(http.StatusNotFound)
+}
+
 func stringToInt32(s string) (int32, error) {
 	i, err := strconv.Atoi(s)
 	if err != nil {

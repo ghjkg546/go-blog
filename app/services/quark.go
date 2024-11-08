@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"github.com/jassue/jassue-gin/app/common/response"
 	"github.com/jassue/jassue-gin/global"
+	"regexp"
+	"strconv"
 
 	//"github.com/jassue/jassue-gin/app/controllers/app"
 	"github.com/jassue/jassue-gin/app/models"
@@ -409,4 +411,281 @@ func (client *QuarkDriveClient) GetDirByFid(fid string, size int, page int) (*re
 	// Output parsed data
 	return &response.DirResponse{Data: res.Data.List, Status: 200, Code: 0, Total: res.Metadata.Total}, nil
 
+}
+
+// Helper function to get the current milliseconds
+func getMilliseconds() int64 {
+	return time.Now().UnixNano() / int64(time.Millisecond)
+}
+
+// Placeholder for setCookie function (implement according to your needs)
+func (s *QuarkDriveClient) setCookie() {
+	// Set the necessary cookies here
+}
+
+// Helper to perform a POST request
+func curlPost(url string, data []byte) (map[string]interface{}, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
+	if err != nil {
+		return nil, err
+	}
+
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+	req.Header.Set("Accept-Encoding", "gzip")
+	req.Header.Set("Content-Type", "application/json")
+	cookie1 := DictService.GetValueByDict("quark", "cookie")
+	addGetCookieHeader(req, cookie1)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var reader io.ReadCloser
+	if resp.Header.Get("Content-Encoding") == "gzip" {
+		reader, err = gzip.NewReader(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+		defer reader.Close()
+	} else {
+		reader = resp.Body
+	}
+	body, err := ioutil.ReadAll(reader)
+
+	if err != nil {
+		fmt.Println("err")
+		return nil, err
+	}
+	fmt.Println(string(body))
+
+	var result map[string]interface{}
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+// Extracts pwd_id, pdir_fid, and passcode from URL
+func (s *quarkService) getIdFromUrl(urlStr string) (string, string, string) {
+	pwdID, pdirFid, passcode := "", "0", ""
+
+	pattern1 := regexp.MustCompile(`/s/(\w+)(#/list/share.*/(\w+))?`)
+	matches := pattern1.FindStringSubmatch(urlStr)
+	if len(matches) > 1 {
+		pwdID = matches[1]
+		if len(matches) > 3 {
+			pdirFid = matches[3]
+		}
+	}
+
+	pattern2 := regexp.MustCompile(`提取码[:：](\S+\d{1,4}\S*)`)
+	passcodeMatch := pattern2.FindStringSubmatch(urlStr)
+	if len(passcodeMatch) > 1 {
+		passcode = passcodeMatch[1]
+	}
+
+	return pwdID, pdirFid, passcode
+}
+
+// Retrieves stoken using pwd_id and passcode
+func (s *quarkService) getStoken(pwdID, passcode string) (bool, string) {
+	baseUrl := "https://pan.quark.cn/1/clouddrive/share/sharepage/token"
+	query := url.Values{
+		"pr":           {"ucpro"},
+		"fr":           {"pc"},
+		"uc_param_str": {""},
+		"__dt":         {strconv.Itoa(rand.Intn(900) + 100)},
+		"__t":          {fmt.Sprintf("%d", getMilliseconds())},
+	}
+	urlWithQuery := fmt.Sprintf("%s?%s", baseUrl, query.Encode())
+
+	postData := map[string]string{
+		"passcode": passcode,
+		"pwd_id":   pwdID,
+	}
+	postDataBytes, _ := json.Marshal(postData)
+
+	//s.setCookie()
+	res, err := curlPost(urlWithQuery, postDataBytes)
+	if err != nil || res == nil {
+		return false, "Failed to get stoken"
+	}
+
+	if status, ok := res["status"].(float64); ok && status == 200 {
+		if code, ok := res["code"].(float64); ok && code == 0 {
+			if data, ok := res["data"].(map[string]interface{}); ok {
+				return true, data["stoken"].(string)
+			}
+		}
+	}
+
+	return false, res["message"].(string)
+}
+
+// curlGet performs a GET request
+func curlGet(url string) (map[string]interface{}, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+	addCookieHeader(headers, cookie)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var reader io.ReadCloser
+	if resp.Header.Get("Content-Encoding") == "gzip" {
+		reader, err = gzip.NewReader(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+		defer reader.Close()
+	} else {
+		reader = resp.Body
+	}
+	body, err := ioutil.ReadAll(reader)
+	fmt.Println("tttd:")
+	fmt.Println(string(body))
+	var result map[string]interface{}
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+// Retrieves file details using pwd_id, stoken, and pdir_fid
+func (s *quarkService) getDetail(pwdID, stoken, pdirFid string) []map[string]interface{} {
+	var fileList []map[string]interface{}
+	page := 1
+
+	for {
+		baseurl := "https://pan.quark.cn/1/clouddrive/share/sharepage/detail"
+		query := url.Values{
+			"pr":            {"ucpro"},
+			"fr":            {"pc"},
+			"pwd_id":        {pwdID},
+			"stoken":        {stoken},
+			"pdir_fid":      {pdirFid},
+			"force":         {"0"},
+			"_page":         {strconv.Itoa(page)},
+			"_size":         {"50"},
+			"_fetch_banner": {"0"},
+			"_fetch_share":  {"0"},
+			"_fetch_total":  {"1"},
+			"_sort":         {"file_type:asc,updated_at:desc"},
+		}
+		urlWithQuery := fmt.Sprintf("%s?%s", baseurl, query.Encode())
+
+		//s.setCookie()
+		res, err := curlGet(urlWithQuery)
+		if err != nil || res == nil {
+			break
+		}
+
+		if status, ok := res["status"].(float64); ok && status == 200 {
+			if code, ok := res["code"].(float64); ok && code == 0 {
+				if data, ok := res["data"].(map[string]interface{}); ok {
+					list := data["list"].([]interface{})
+					for _, item := range list {
+						fileList = append(fileList, item.(map[string]interface{}))
+					}
+					page++
+				}
+				if meta, ok := res["metadata"].(map[string]interface{}); ok {
+					if total, ok := meta["_total"].(float64); ok && len(fileList) >= int(total) {
+						break
+					}
+				}
+			} else {
+				break
+			}
+		} else {
+			break
+		}
+	}
+
+	return fileList
+}
+
+// Main saveShare function
+func (s *quarkService) SaveShare(fid, shareURL string) (bool, interface{}) {
+	// Retrieve pwd_id, pdir_fid, and passcode from the URL
+
+	pwdID, pdirFid, passcode := s.getIdFromUrl(shareURL) // Implement getIdFromUrl to parse URL
+	// Get stoken
+	err, stokenRes := s.getStoken(pwdID, passcode) // Implement getStoken to retrieve stoken
+	fmt.Println("toekn res")
+	fmt.Println(stokenRes)
+	if !err {
+		return false, "Failed to get stoken"
+	}
+
+	stoken := stokenRes
+
+	// Get share file list
+	shareFileList := s.getDetail(pwdID, stoken, pdirFid) // Implement getDetail to get file list
+	if len(shareFileList) == 0 {
+		return false, "Share directory is empty"
+	}
+
+	// Prepare fid and fid_token lists
+	var fidList, fidTokenList []string
+	for _, saveList := range shareFileList {
+		fidList = append(fidList, saveList["fid"].(string))
+		fidTokenList = append(fidTokenList, saveList["share_fid_token"].(string))
+	}
+	fmt.Println("finalPost")
+	// Set up the request URL with query parameters
+	baseURL := "https://drive.quark.cn/1/clouddrive/share/sharepage/save"
+	query := url.Values{
+		"pr":           {"ucpro"},
+		"fr":           {"pc"},
+		"uc_param_str": {""},
+		"__dt":         {fmt.Sprintf("%d", rand.Intn(900)+100)},
+		"__t":          {fmt.Sprintf("%d", getMilliseconds())},
+	}
+
+	urlWithQuery := fmt.Sprintf("%s?%s", baseURL, query.Encode())
+
+	// Prepare the POST data
+	postData := map[string]interface{}{
+		"fid_list":       fidList,
+		"fid_token_list": fidTokenList,
+		"to_pdir_fid":    fid,
+		"pwd_id":         pwdID,
+		"stoken":         stoken,
+		"pdir_fid":       "0",
+		"scene":          "link",
+	}
+	postDataBytes, _ := json.Marshal(postData)
+
+	res, _ := curlPost(urlWithQuery, postDataBytes)
+	fmt.Println(res)
+	if !err {
+
+		return false, "存进网盘失败"
+	}
+
+	// Process the response data after ensuring no error occurred
+	if status, ok := res["status"].(float64); ok && status == 200 {
+		if code, ok := res["code"].(float64); ok && code == 0 {
+			if data, ok := res["data"].(map[string]interface{}); ok {
+				return true, data
+			}
+		}
+	}
+	return false, ""
 }

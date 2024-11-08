@@ -128,6 +128,7 @@ func setupRouter() *gin.Engine {
 	router.GET("/category/:category_id/:page", ResController.GetFrontReasouceItems)
 	router.GET("/category/:category_id", ResController.GetFrontReasouceItems)
 	router.GET("/archives/:id", ResController.GetBlogDetail)
+	router.GET("/qiu", ResController.ApplyForReasource)
 
 	userRoutes := NewResourceRoutes("/adminapi/users", router, &adminapi2.UserController{})
 	userRoutes.SetupRoutes()
@@ -144,6 +145,9 @@ func setupRouter() *gin.Engine {
 	resourceRoutes := NewResourceRoutes("/adminapi/resource", router, &adminapi2.ResourceController{})
 	resourceRoutes.SetupRoutes()
 
+	crawlRoutes := NewResourceRoutes("/adminapi/crawl", router, &adminapi2.CrawlController{})
+	crawlRoutes.SetupRoutes()
+
 	dictRoutes := NewResourceRoutes("/adminapi/dict", router, &adminapi2.DictController{})
 	dictRoutes.SetupRoutes()
 
@@ -155,6 +159,11 @@ func setupRouter() *gin.Engine {
 	ResourceController := adminapi2.ResourceController{}
 	router.GET("/adminapi/share/waitlist", ResourceController.WaitShareList)
 	router.POST("/adminapi/share/doshare", app.DoShare)
+	router.POST("/adminapi/share/crawl", ResourceController.Crawl)
+
+	crawController := adminapi2.CrawlController{}
+
+	router.POST("/adminapi/crawl/savetodisk", crawController.BatchSaveToDisk)
 	// 前端项目静态资源
 	router.StaticFile("/staticfile", "./static/dist/index.html")
 	router.Static("/assets", "./static/dist/assets")
@@ -168,6 +177,7 @@ func setupRouter() *gin.Engine {
 	apiGroup.Use(middleware.Cors())
 	routes.SetApiGroupRoutes(apiGroup)
 
+	//upload route
 	authRouter := router.Group("/adminapi").Use(middleware.JWTAuth(services.AppGuardName))
 	{
 		authRouter.POST("/image_upload", common.ImageUpload)
