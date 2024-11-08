@@ -2,4 +2,4 @@
 .vscode
 /vendor/
 /storage/
-./config.yaml
+config.yaml
