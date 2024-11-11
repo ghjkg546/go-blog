@@ -36,6 +36,7 @@ type ChangePass struct {
 type EditUser struct {
 	Id       int    `form:"id" json:"id"`
 	UserName string `form:"username" json:"username"`
+	Name     string `form:"name" json:"name"`
 	Password string `form:"password" json:"password"`
 	Mobile   string `form:"mobile" json:"mobile"` // 添加手机号码字段
 	Status   int    `form:"status" json:"status"` // 添加状态字段

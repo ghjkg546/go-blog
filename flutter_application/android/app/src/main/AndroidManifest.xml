@@ -2,10 +2,11 @@
 <!-- Required to fetch data from the internet. -->
 <uses-permission android:name="android.permission.INTERNET" />
     <application
+    android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        android:label="flutter_application_2"
+        android:label="夸克资源"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

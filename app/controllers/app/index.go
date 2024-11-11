@@ -119,7 +119,8 @@ func DoShare(c *gin.Context) {
 }
 
 func GetResList(c *gin.Context) {
-	keyword := c.DefaultQuery("keyword", "1")
+	keyword := c.DefaultQuery("keyword", "")
+	categoryId := c.DefaultQuery("category_id", "0")
 
 	pageSize := 10 // Number of items per page
 	pageStr := c.DefaultQuery("page", "1")
@@ -127,9 +128,13 @@ func GetResList(c *gin.Context) {
 	if err1 != nil {
 		page = 1
 	}
-	var cid int32 = 8
-
-	err, data, total := services.ResourceItemService.GetResList(page, pageSize, cid, keyword)
+	cid := 0
+	cid, err2 := strconv.Atoi(categoryId)
+	if err2 != nil {
+		cid = 0
+	}
+	fmt.Println(cid)
+	err, data, total := services.ResourceItemService.GetResList(page, pageSize, int32(cid), keyword)
 	if err != nil {
 		response.BusinessFail(c, err.Error())
 		return
@@ -139,7 +144,7 @@ func GetResList(c *gin.Context) {
 		res := &data[i]
 		tm1 := time.Unix(res.CreatedAt, 0)
 		tm2 := time.Unix(res.UpdatedAt, 0)
-		res.Description = ""
+		//res.Description = ""
 		res.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
 		res.UpdateTimeStr = tm2.Format("2006-01-02 15:04:05")
 	}

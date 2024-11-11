@@ -29,8 +29,9 @@ class Request {
   Request._internal() {
     // 初始化基本选项
     BaseOptions options = BaseOptions(
-         baseUrl: 'https://api.shareziyuan.email/api',
-        // baseUrl: 'http://localhost:8080/api',
+          // baseUrl: 'https://api.shareziyuan.email/api',
+             baseUrl: 'http://47.106.155.179:8080/api',
+          // baseUrl: 'http://localhost:8080/api',
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 5));
     _instance = this;
@@ -44,9 +45,9 @@ class Request {
   /// 请求拦截器
   void _onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     // 对非open的接口的请求参数全部增加userId
-    if (!options.path.contains("open")) {
-      options.queryParameters["userId"] = "xxx";
-    }
+    // if (!options.path.contains("open")) {
+    //   options.queryParameters["userId"] = "xxx";
+    // }
      var token = await getToken();
 
   // Add the Authorization header if the token exists

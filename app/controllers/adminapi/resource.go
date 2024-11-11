@@ -10,6 +10,7 @@ import (
 	"github.com/jassue/jassue-gin/app/models"
 	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
+	"github.com/jassue/jassue-gin/utils"
 	client "github.com/zinclabs/sdk-go-zincsearch"
 	"io"
 	"io/ioutil"
@@ -51,6 +52,10 @@ func (uc *ResourceController) GetList(c *gin.Context) {
 	}
 
 	query.Count(&totalUsers).Limit(limit).Offset(offset).Order("id desc").Find(&users)
+	for i, item := range users {
+		users[i].CreateTimeStr = utils.TimestampToDateYmd(item.CreatedAt)
+	}
+
 	var res = gin.H{
 		"list":  users,
 		"total": totalUsers,
@@ -270,7 +275,9 @@ func (uc *ResourceController) WaitShareList(c *gin.Context) {
 	}
 	var dirResp response.DirResponse
 	dirResp = services.QuarkService.GetDirInfo(fidStr, page, pageSize)
-
+	for i, item := range dirResp.Data {
+		dirResp.Data[i].CreateTimeStr = utils.TimestampToDateYmd(item.CreatedAt / 1000)
+	}
 	var res = gin.H{
 		"list":  dirResp.Data,
 		"total": dirResp.Total,
@@ -416,7 +423,7 @@ func (uc *ResourceController) BatchShare(c *gin.Context) {
 	}
 	var dirResp response.DirResponse
 	dirResp = services.QuarkService.GetDirInfo(input.Fid, 1, 50)
-	response.Success(c, nil)
+
 	var ids []string
 	if input.PageSize >= dirResp.Total {
 		var chunks []models.ShareItem

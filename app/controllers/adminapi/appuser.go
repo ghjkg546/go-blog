@@ -168,7 +168,7 @@ func (uc *AppUserController) Update(c *gin.Context) {
 		global.App.DB.Model(&models.User{}).Where("id = ?", input.Id).Update("password", utils.BcryptMake([]byte(input.Password)))
 	}
 
-	global.App.DB.Where("id = ?", input.Id).Updates(models.User{Mobile: input.Mobile})
+	global.App.DB.Where("id = ?", input.Id).Updates(models.User{Mobile: input.Mobile, Name: input.Name})
 
 	response.Success(c, nil)
 
@@ -178,5 +178,5 @@ func (uc *AppUserController) Update(c *gin.Context) {
 func (uc *AppUserController) Delete(c *gin.Context) {
 	id := c.Param("id")
 	global.App.DB.Delete(&models.User{}, id)
-	c.JSON(200, gin.H{"message": "User deleted", "id": id})
+	response.Success(c, nil)
 }

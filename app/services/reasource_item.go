@@ -40,6 +40,7 @@ func (resourceItemService *resourceItemService) GetResList(page int, pageSize in
 			data[i].DiskItemsArray = items
 		} else {
 			err1 = errors.New("出错了")
+			fmt.Println(err1)
 		}
 
 	}

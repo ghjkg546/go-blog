@@ -10,8 +10,8 @@ import 'package:flutter_application_2/pages/my.dart';
 import 'package:flutter_application_2/pages/list.dart';
 import 'package:flutter_application_2/pages/login.dart';
 import 'package:flutter_application_2/pages/register.dart';
+import 'package:flutter_application_2/pages/web_view.dart';
 import 'package:flutter_application_2/utils/user_preference.dart';
-import 'package:http/http.dart' as http;
 import 'package:number_paginator/number_paginator.dart';
 
 
@@ -35,19 +35,19 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   
   bool isLogin = false;
-  // int _page = 1;
+  int _page = 1;
   // int _categoryId = 0;
   @override
   void initState() {
     super.initState();
 
     // futureReasorce = fetchAlbum(_categoryId, _page);
-    getGoods();
+    // getGoods();
   }
 
   // 获取列表
   getGoods() async {
-    var c1 = await userApi.getGoods();
+    var c1 = await userApi.getReasources();
 
     var cates1 = CategoryRes.fromJson(c1).data.list;
 
@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   }
 
   getListData(int categoryId) async {
-    var res = await userApi.getListData(categoryId);
+    var res = await userApi.getListData(categoryId,1,"");
     var cates1 = DataRes.fromJson(res).data.list;
     setState(() {
       resource_items = cates1;
@@ -126,37 +126,38 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               Center(child: ListPage()),
               // Center(child: Tougao()),
               // Center(child: ComponentDetail()),
-              Center(child: Text("主页")),
+            
+              // Center(child: WebViewPage()),
               isLogin? Center(child: MyPage()):Center(child: LoginPage()),
 
-              // Center(child: Text("通知页面")),
-              // Center(child: UserPage()),
+           
+              //  Center(child: UserPage()),
             ],
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: '列表',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-                label: '讨论',
-              ),
-              // BottomNavigationBarItem(
-              //   icon: Icon(Icons.notifications),
-              //   label: '通知',
-              // ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: '我的',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.blue,
-            unselectedItemColor: Colors.grey,
-            onTap: _onItemTapped,
-          ),
+          // bottomNavigationBar: BottomNavigationBar(
+          //   items: const <BottomNavigationBarItem>[
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.home),
+          //       label: '列表',
+          //     ),
+          //     // BottomNavigationBarItem(
+          //     //   icon: Icon(Icons.search),
+          //     //   label: '搜索',
+          //     // ),
+          //     // BottomNavigationBarItem(
+          //     //   icon: Icon(Icons.notifications),
+          //     //   label: '通知',
+          //     // ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.person),
+          //       label: '我的',
+          //     ),
+          //   ],
+          //   currentIndex: _selectedIndex,
+          //   selectedItemColor: Colors.blue,
+          //   unselectedItemColor: Colors.grey,
+          //   onTap: _onItemTapped,
+          // ),
           // body: Column(
           //   children: [
           //     Expanded(

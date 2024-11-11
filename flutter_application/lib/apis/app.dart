@@ -30,7 +30,7 @@ class UserApi {
   }
 
   // 获取列表数据
-  getGoods() async {
+  getReasources() async {
     var result = await Request().request(
       "/category/list",
       method: DioMethod.get,
@@ -51,9 +51,9 @@ class UserApi {
     return result;
   }
 
-  getListData(int categoryId) async {
+  getListData(int categoryId,int page,String keyword) async {
     var result = await Request().request(
-      "/duanju/list?category_id=" + categoryId.toString(),
+      "/duanju/list?category_id=" + categoryId.toString()+"&page="+page.toString()+"&keyword="+keyword.toString(),
       method: DioMethod.get,
       // data: {"taskuuid": "queryprod", "splist": "66"}
     );

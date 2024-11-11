@@ -53,7 +53,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
        var info  = UserData.fromJson(res['data']);
       print("tokend"+info.accessToken);
         await UserPreferences.saveUserInfo(res, info.accessToken);
-   print("User info saved successfully!");
+
       // Navigator.push(
       //   context,
       //   MaterialPageRoute(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_2/entity/data.dart';
 import 'package:flutter_application_2/util.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:screenshot/screenshot.dart';
 
 import 'package:flutter/rendering.dart';
@@ -56,23 +57,28 @@ class SecondRoute extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            item.coverImg.isNotEmpty
-                ? Image.network(item.coverImg)
-                : Image.asset('images/noimage.png'),
+            // item.coverImg.isNotEmpty
+            //     ? Image.network(item.coverImg)
+            //     : Image.asset('images/noimage.png'),
             const SizedBox(height: 16),
             Text(
               item.name,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-
+        Html(
+            data: item.description,
+            
+          ),
+             
+            
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // 按钮点击事件
-                print("copy");
+                
                 Clipboard.setData(ClipboardData(text: url));
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("URL copied to clipboard!")),
+                  SnackBar(content: Text("链接复制成功!")),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -83,7 +89,7 @@ class SecondRoute extends StatelessWidget {
                 backgroundColor: Colors.blue, // 按钮背景色
               ),
               child: const Text(
-                "复制链接",
+                "复制夸克链接",
                 style: TextStyle(color: Colors.white, fontSize: 30), // 文字颜色
               ),
             )

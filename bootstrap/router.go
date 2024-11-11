@@ -129,7 +129,8 @@ func setupRouter() *gin.Engine {
 	router.GET("/category/:category_id", ResController.GetFrontReasouceItems)
 	router.GET("/archives/:id", ResController.GetBlogDetail)
 	router.GET("/qiu", ResController.ApplyForReasource)
-
+	// 跨域处理
+	router.Use(middleware.Cors())
 	userRoutes := NewResourceRoutes("/adminapi/users", router, &adminapi2.UserController{})
 	userRoutes.SetupRoutes()
 
@@ -154,8 +155,6 @@ func setupRouter() *gin.Engine {
 	logRoutes := NewResourceRoutes("/adminapi/log", router, &adminapi2.LogController{})
 	logRoutes.SetupRoutes()
 
-	// 跨域处理
-	router.Use(middleware.Cors())
 	ResourceController := adminapi2.ResourceController{}
 	router.GET("/adminapi/share/waitlist", ResourceController.WaitShareList)
 	router.POST("/adminapi/share/doshare", app.DoShare)

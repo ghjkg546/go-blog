@@ -39,3 +39,13 @@ func formatTime(inputTime string) string {
 	fmt.Println("格式化后的时间:", formattedTime)
 	return formattedTime
 }
+
+func TimestampToDateYmd(timestamp int64) string {
+
+	// 解析 ISO8601 格式时间字符串
+	t := time.Unix(timestamp, 0)
+
+	// 格式化为日期字符串
+	formattedTime := t.Format("2006-01-02 15:04:05")
+	return formattedTime
+}

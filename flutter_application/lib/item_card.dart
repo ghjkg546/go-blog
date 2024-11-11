@@ -22,17 +22,20 @@ class ItemCard extends StatelessWidget {
         elevation: 4.0,
 
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment:MainAxisAlignment.center ,
             children: [
               // GestureDetector(
                 
                  Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  item.name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                child: Center(
+                  child: Text(
+                    item.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),

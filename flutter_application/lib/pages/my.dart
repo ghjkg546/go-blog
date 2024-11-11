@@ -83,11 +83,11 @@ class _UserInfoPageState extends State<MyPage> {
                           children: [
                             Text(username ?? '点击登录',
                                 style: TextStyle(fontSize: 24)),
-                            const Text(
-                              "登录体验更多功能",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.grey),
-                            ),
+                            // const Text(
+                            //   "登录体验更多功能",
+                            //   style:
+                            //       TextStyle(fontSize: 16, color: Colors.grey),
+                            // ),
                           ],
                         ),
                       ],
@@ -107,32 +107,17 @@ class _UserInfoPageState extends State<MyPage> {
               Container(
                 width: 980,
                 height: 400,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFED88D).withOpacity(0.6), // 设置颜色
-                  borderRadius: BorderRadius.circular(30), // 设置圆角
-                ),
+                // decoration: BoxDecoration(
+                //   color: const Color(0xFFFED88D).withOpacity(0.6), // 设置颜色
+                //   borderRadius: BorderRadius.circular(30), // 设置圆角
+                // ),
                 child: Padding(
                   padding: EdgeInsets.all(13),
                   child: Column(children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Row(
-                          children: [
-                            SizedBox(
-                              width: 120.0, // 设置宽度
-                              height: 80.0, // 设置高度
-                              child: Icon(
-                                Icons.fmd_good, // 替换为你需要的图标
-                                size: 40.0, // 图标的大小
-                                color: Colors.black, // 图标颜色
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                          ],
-                        ),
+                        
                         ElevatedButton(
                           onPressed: () {
                             // 按钮点击事件
@@ -151,7 +136,7 @@ class _UserInfoPageState extends State<MyPage> {
                             backgroundColor: Colors.blue, // 按钮背景色
                           ),
                           child: const Text(
-                            "点击我",
+                            "退出登录",
                             style: TextStyle(
                                 color: Colors.white, fontSize: 30), // 文字颜色
                           ),
@@ -161,92 +146,51 @@ class _UserInfoPageState extends State<MyPage> {
                     SizedBox(
                       height: 10,
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              height: 22,
-                              width: 18,
-                              child: Icon(
-                                Icons.thumb_down,
-                                size: 28,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                    
+                    
                     SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              print("jum");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MycomponentPage()),
-                              );
-                            },
-                            child: Text(
-                              "我的组件",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10), // 设置按钮之间的间距
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // 第二个按钮点击事件
-                            },
-                            child: Text(
-                              "我的收藏",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: ElevatedButton(
+                    //         onPressed: () {
+                    //           print("jum");
+                    //           Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //                 builder: (context) => MycomponentPage()),
+                    //           );
+                    //         },
+                    //         child: Text(
+                    //           "我的组件",
+                    //           style: TextStyle(fontSize: 16),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     SizedBox(width: 10), // 设置按钮之间的间距
+                    //     Expanded(
+                    //       child: ElevatedButton(
+                    //         onPressed: () {
+                    //           // 第二个按钮点击事件
+                    //         },
+                    //         child: Text(
+                    //           "我的收藏",
+                    //           style: TextStyle(fontSize: 16),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     SizedBox(
                       height: 15,
                     ),
-                    Row(
-                      children: [
-                        Expanded(child: CustomList(count: 5)),
-                      ],
-                    ),
+                    
                     SizedBox(
                       height: 26,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: [
-                              CustomListTile(
-                                title: "主页",
-                                icon: Icons.home,
-                              ),
-
-                              // 可以继续添加更多 ListTile
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                   
                   ]),
                 ),
               )

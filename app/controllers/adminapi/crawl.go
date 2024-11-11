@@ -9,6 +9,7 @@ import (
 	"github.com/jassue/jassue-gin/app/models"
 	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
+	"github.com/jassue/jassue-gin/utils"
 	"net/http"
 	"strconv"
 	"strings"
@@ -18,8 +19,8 @@ import (
 type CrawlController struct{}
 
 func (uc *CrawlController) GetList(c *gin.Context) {
-	var users []models.CrawlItem
-	var totalUsers int64
+	var crawlItems []models.CrawlItem
+	var totalcrawlItems int64
 	pageStr := c.DefaultQuery("pageNum", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
 	keyword := c.DefaultQuery("keyword", "")
@@ -48,10 +49,13 @@ func (uc *CrawlController) GetList(c *gin.Context) {
 		query.Where("mobile LIKE ?", "%"+keyword+"%").Or("name LIKE ?", "%"+keyword+"%")
 	}
 
-	query.Count(&totalUsers).Limit(limit).Offset(offset).Order("id desc").Find(&users)
+	query.Count(&totalcrawlItems).Limit(limit).Offset(offset).Order("id desc").Find(&crawlItems)
+	for i, item := range crawlItems {
+		crawlItems[i].CreateTimeStr = utils.TimestampToDateYmd(item.CreatedAt)
+	}
 	var res = gin.H{
-		"list":  users,
-		"total": totalUsers,
+		"list":  crawlItems,
+		"total": totalcrawlItems,
 	}
 	response.Success(c, res)
 }
@@ -73,7 +77,6 @@ func (uc *CrawlController) Create(c *gin.Context) {
 
 		return
 	}
-	//index := "resource_item" // string | Index
 	err1 := json.Unmarshal([]byte(input.DiskItems), &input.DiskItemsArray)
 	if err1 != nil {
 		fmt.Println("Error decoding JSON:", err1)
@@ -141,160 +144,3 @@ func (uc *CrawlController) Delete(c *gin.Context) {
 	}
 	response.Success(c, nil)
 }
-
-//
-//// 等待分享列表
-//func (uc *CrawlController) WaitShareList(c *gin.Context) {
-//	pageStr := c.DefaultQuery("pageNum", "1")
-//	pageSizeStr := c.DefaultQuery("pageSize", "10")
-//	fidStr := c.DefaultQuery("fid", "")
-//
-//	page, err := strconv.Atoi(pageStr)
-//	if err != nil || page < 1 {
-//		fmt.Println(err)
-//		page = 1
-//	}
-//
-//	pageSize, err := strconv.Atoi(pageSizeStr)
-//	if err != nil || pageSize < 1 {
-//		pageSize = 10
-//	}
-//	var dirResp response.DirResponse
-//	dirResp = services.QuarkService.GetDirInfo(fidStr, page, pageSize)
-//
-//	var res = gin.H{
-//		"list":  dirResp.Data,
-//		"total": dirResp.Total,
-//	}
-//	response.Success(c, res)
-//}
-//
-//// 等待分享列表
-//func (uc *CrawlController) Crawl(c *gin.Context) {
-//
-//	var input request.Crawl
-//	//db := global.App.DB
-//	if err := c.BindJSON(&input); err != nil {
-//		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-//		return
-//	}
-//	fmt.Println(input)
-//	//
-//	//params := request.Crawl{
-//	//	DetailUrl: "https://example.com",
-//	//	NameRule:  `<h1>(.*?)</h1>`,  // Example regex for name
-//	//	LinkRule:  `href="(https://example.com.*?)"`,  // Example regex for link
-//	//}
-//
-//	name, link, err := CrawlHTML(input)
-//	if err != nil {
-//		fmt.Println("Error:", err)
-//		return
-//	}
-//
-//	fmt.Println("Name:", name)
-//	fmt.Println("Link:", link)
-//	//return
-//	//page, err := strconv.Atoi(pageStr)
-//	//if err != nil || page < 1 {
-//	//	fmt.Println(err)
-//	//	page = 1
-//	//}
-//	//
-//	//pageSize, err := strconv.Atoi(pageSizeStr)
-//	//if err != nil || pageSize < 1 {
-//	//	pageSize = 10
-//	//}
-//	//var dirResp response.DirResponse
-//	//dirResp = services.QuarkService.GetDirInfo(fidStr, page, pageSize)
-//	//
-//	//var res = gin.H{
-//	//	"list":  dirResp.Data,
-//	//	"total": dirResp.Total,
-//	//}
-//	response.Success(c, gin.H{})
-//}
-//
-//func CrawlHTML(params request.Crawl) (string, string, error) {
-//	// Step 1: Fetch HTML content from the URL
-//	resp, err := http.Get(params.DetailUrl)
-//	if err != nil {
-//		return "", "", fmt.Errorf("failed to fetch URL: %w", err)
-//	}
-//	defer resp.Body.Close()
-//
-//	htmlData, err := ioutil.ReadAll(resp.Body)
-//	if err != nil {
-//		return "", "", fmt.Errorf("failed to read HTML content: %w", err)
-//	}
-//
-//	// Step 2: Extract name and link using regex patterns
-//	nameRegex := regexp.MustCompile(params.NameRule)
-//	linkRegex := regexp.MustCompile(params.LinkRule)
-//
-//	nameMatch := nameRegex.FindStringSubmatch(string(htmlData))
-//	linkMatch := linkRegex.FindStringSubmatch(string(htmlData))
-//
-//	// Check if matches were found
-//	if len(nameMatch) < 2 || len(linkMatch) < 2 {
-//		return "", "", fmt.Errorf("failed to find matches with the provided regex rules")
-//	}
-//
-//	// Return matched results
-//	return nameMatch[1], linkMatch[1], nil
-//}
-//
-//func calculatePages(totalItems, itemsPerPage int) int {
-//	return int(math.Ceil(float64(totalItems) / float64(itemsPerPage)))
-//}
-//
-//// 批量分享
-//func (uc *CrawlController) BatchShare(c *gin.Context) {
-//	var input request.BatchShare
-//
-//	if err := c.BindJSON(&input); err != nil {
-//		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-//		return
-//	}
-//	var dirResp response.DirResponse
-//	dirResp = services.QuarkService.GetDirInfo(input.Fid, 1, 50)
-//	response.Success(c, nil)
-//	var ids []string
-//	if input.PageSize >= dirResp.Total {
-//		var chunks []models.ShareItem
-//		for _, item := range dirResp.Data {
-//
-//			ids = append(ids, item.Fid)
-//
-//			chunks = append(chunks, models.ShareItem{Name: item.FileName, ID: item.Fid})
-//		}
-//		services.QuarkService.SaveResouceByUrl(ids, "test", chunks, input.CategoryId)
-//		ids = []string{} // Clear the ids slice
-//		chunks = []models.ShareItem{}
-//
-//	} else {
-//		pages := calculatePages(dirResp.Total, 50)
-//		for i := 0; i < pages; i++ {
-//			dirResp = services.QuarkService.GetDirInfo(input.Fid, i+1, 50)
-//			fmt.Printf("Processing page %d\n", i+1)
-//			var chunks []models.ShareItem
-//			for _, item := range dirResp.Data {
-//
-//				ids = append(ids, item.Fid)
-//
-//				chunks = append(chunks, models.ShareItem{Name: item.FileName, ID: item.Fid})
-//
-//				if len(ids) >= input.PageSize {
-//
-//					services.QuarkService.SaveResouceByUrl(ids, item.FileName, chunks, input.CategoryId)
-//					ids = []string{} // Clear the ids slice
-//					chunks = []models.ShareItem{}
-//					time.Sleep(5 * time.Second)
-//				}
-//			}
-//		}
-//
-//	}
-//
-//	response.Success(c, nil)
-//}
