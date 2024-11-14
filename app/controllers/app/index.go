@@ -118,15 +118,91 @@ func DoShare(c *gin.Context) {
 	response.Success(c, res)
 }
 
-func GetResList(c *gin.Context) {
-	keyword := c.DefaultQuery("keyword", "")
+func GetFavList(c *gin.Context) {
+	//keyword := c.DefaultQuery("keyword", "")
 	categoryId := c.DefaultQuery("category_id", "0")
+	pageSizeStr := c.DefaultQuery("pageSize", "50")
 
-	pageSize := 10 // Number of items per page
 	pageStr := c.DefaultQuery("page", "1")
 	page, err1 := strconv.Atoi(pageStr)
 	if err1 != nil {
 		page = 1
+	}
+	pageSize, err3 := strconv.Atoi(pageSizeStr)
+	if err3 != nil {
+		pageSize = 10
+	}
+	cid := 0
+	cid, err2 := strconv.Atoi(categoryId)
+	if err2 != nil {
+		cid = 0
+	}
+	fmt.Println(cid)
+	itemIDs, _ := services.AppUserService.GetFavIds(c)
+	fmt.Println(itemIDs)
+	totalCount := len(itemIDs)
+	// 计算分页
+	start := (page - 1) * pageSize
+	end := int(math.Min(float64(start+pageSize), float64(totalCount)))
+	if start >= totalCount {
+		var res = gin.H{
+			"list":  []models.ResourceItem{},
+			"total": totalCount,
+		}
+		response.Success(c, res)
+		return
+	}
+
+	// 分页获取 itemID
+	pagedItemIDs := itemIDs[start:end]
+
+	// 从数据库中查询收藏的物品
+	var items []models.ResourceItem
+	if err := global.App.DB.Where("id IN ?", pagedItemIDs).Find(&items).Error; err != nil {
+		response.BusinessFail(c, err.Error())
+		return
+	}
+	var res = gin.H{
+		"list":  items,
+		"total": totalCount,
+	}
+	response.Success(c, res)
+	return
+	//err, data, total := services.ResourceItemService.GetResList(page, pageSize, int32(cid), keyword)
+	//if err != nil {
+	//	response.BusinessFail(c, err.Error())
+	//	return
+	//}
+
+	//for i := range data {
+	//	res := &data[i]
+	//	tm1 := time.Unix(res.CreatedAt, 0)
+	//	tm2 := time.Unix(res.UpdatedAt, 0)
+	//	//res.Description = ""
+	//	res.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
+	//	res.UpdateTimeStr = tm2.Format("2006-01-02 15:04:05")
+	//}
+	//
+	//var res = gin.H{
+	//	"list":  data,
+	//	"total": total,
+	//}
+	//response.Success(c, res)
+}
+
+func GetResList(c *gin.Context) {
+	keyword := c.DefaultQuery("keyword", "")
+	categoryId := c.DefaultQuery("category_id", "0")
+	pageSizeStr := c.DefaultQuery("pageSize", "50")
+
+	pageStr := c.DefaultQuery("page", "1")
+	page, err1 := strconv.Atoi(pageStr)
+	if err1 != nil {
+		page = 1
+	}
+	pageSize, err3 := strconv.Atoi(pageSizeStr)
+	if err3 != nil {
+		pageSize = 10
 	}
 	cid := 0
 	cid, err2 := strconv.Atoi(categoryId)
@@ -297,7 +373,6 @@ func (bc *ResController) GetBlogDetail(c *gin.Context) {
 		c.String(400, "Invalid ID")
 		return
 	}
-	fmt.Println(intId)
 	err, data := services.ResourceItemService.GetResInfo(intId)
 	if err != nil {
 		response.BusinessFail(c, err.Error())
@@ -312,18 +387,25 @@ func (bc *ResController) GetBlogDetail(c *gin.Context) {
 	var comments []models.Comment
 	err1 := global.App.DB.Preload("User").Where("resource_item_id=?", intId).Order("id desc").Limit(20).Find(&comments)
 	if err1 != nil {
-		fmt.Println(err1.Error)
+		data.IsFavorite = false
 	}
 	global.App.DB.Model(&models.ResourceItem{}).Where("id = ?", intId).UpdateColumn("views", gorm.Expr("views + ?", 1))
-
+	data.IsFavorite, _ = services.AppUserService.IsFavorite(c, id)
 	tm1 := time.Unix(data.CreatedAt, 0)
 
 	data.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
 	//response.Success(c, gin.H{"info": data, "comments": comments})
+	buttonTextMap := map[int]string{
+		1: "百度网盘",
+		2: "夸克网盘",
+		3: "阿里网盘",
+		4: "移动彩云",
+	}
 	c.HTML(http.StatusOK, "detail.html", gin.H{
-		"Content":  template.HTML(data.Description),
-		"blogItem": data,
-		"Cates":    cates,
+		"Content":       template.HTML(data.Description),
+		"ButtonTextMap": buttonTextMap,
+		"blogItem":      data,
+		"Cates":         cates,
 	})
 
 	c.AbortWithStatus(http.StatusNotFound)
@@ -434,7 +516,7 @@ func Info(c *gin.Context) {
 	global.App.DB.Model(&models.ResourceItem{}).Where("id = ?", intId).UpdateColumn("views", gorm.Expr("views + ?", 1))
 
 	tm1 := time.Unix(data.CreatedAt, 0)
-
+	data.IsFavorite, _ = services.AppUserService.IsFavorite(c, c.Query("id"))
 	data.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
 	response.Success(c, gin.H{"info": data, "comments": comments})
 }

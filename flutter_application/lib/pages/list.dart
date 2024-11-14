@@ -1,26 +1,27 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
-import 'package:flutter_application_2/utils/user_preference.dart';
 import 'package:flutter_application_2/entity/category.dart';
 import 'package:flutter_application_2/entity/data.dart';
 import 'package:flutter_application_2/pages/detail.dart';
 import 'package:flutter_application_2/item_card.dart';
+import 'package:get/get.dart';
 
 import 'package:number_paginator/number_paginator.dart';
 
 // void main() => runApp(const MyApp());
 
-class ListPage extends StatefulWidget {
-  const ListPage({super.key});
+class ListWidget extends StatefulWidget {
+  const ListWidget({super.key});
 
   // @override
-  State<ListPage> createState() => _MyAppState();
+  State<ListWidget> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
+class _MyAppState extends State<ListWidget> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   // late Future<Resource> futureReasorce;
   // late Future<CategoryRes> futureCategory;
@@ -30,12 +31,11 @@ class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
   int _page = 1;
   int _categoryId = 0;
   int _totalPage = 10;
+
   String _keyword = "";
   @override
   void initState() {
     super.initState();
-    // getInfo();
-    // futureReasorce = fetchAlbum(_categoryId, _page);
     getReasouceItem();
   }
 
@@ -76,7 +76,7 @@ class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
   }
 
   getListData(int categoryId) async {
-    print(_keyword);
+
     var c1 = await userApi.getListData(categoryId, _page,_keyword);
 
     var cates1 = DataRes.fromJson(c1).data.list;
@@ -93,7 +93,6 @@ class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
       _totalPage = tmp_totalPage;
       resource_items = cates1;
     });
-    // print(cates1);
   }
 
   @override
@@ -107,14 +106,19 @@ class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
   void _onSearch() {
     _keyword = _controller.text.trim();
    
-    // if (query.isNotEmpty) {
-    //   // 执行搜索逻辑
-    //   print("搜索内容: $query");
-    //   // 这里可以触发你的搜索逻辑，如 API 请求
-    // } else {
-    //   print("输入框为空，请输入搜索内容");
-    // }
+   
     getListData(_categoryId);
+  }
+
+  void _onItemTapped(int index) {
+
+    if(index==1){
+      Get.toNamed("/my");
+    }
+    // setState(() {
+    //   _selectedIndex = index;
+    // });
+   
   }
 
   @override
@@ -124,17 +128,21 @@ class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              bottom: TabBar(
-                controller: _tabController,
-                tabs:
-                    cates.map((category) => Tab(text: category.name)).toList(),
-              ),
-            ),
-            body: Column(
+        
+        home:
+            
+            Column(
               children: [
+                Container(
+          color: Colors.blue,
+          child: TabBar(
+            controller: _tabController,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
+            indicatorColor: Colors.yellow,
+            tabs: cates.map((category) => Tab(text: category.name)).toList(),
+          ),
+        ),
                 Row(
                   children: [
             // 使用 Expanded 使 TextField 占据剩余空间
@@ -149,13 +157,15 @@ class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
               ),
             ),
             const SizedBox(width: 10),
-            ElevatedButton(
-              onPressed: _onSearch,
-              child: const Text('搜索'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              ),
-            ),
+            
+BrnSmallMainButton(
+  title: '搜索',
+  onTap: () {
+    _onSearch();
+    //BrnToast.show('录需求信息', context);
+  },
+),
+            
           ],
                 ),
                 const SizedBox(height: 20),
@@ -165,10 +175,13 @@ class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
                     children: resource_items.map((_item) {
                       // 使用 GridView.builder 替换内容
                       return GridView.builder(
+                        padding:  const EdgeInsets.all(8.0),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2, // 每行显示 2 个项
                           childAspectRatio: 1, // 设置子项的宽高比
+                          crossAxisSpacing: 8.0,
+                               mainAxisSpacing: 8.0,
                         ),
                         itemCount: resource_items.length, // 这里你可以根据具体数据调整数量
                         itemBuilder: (context, index) {
@@ -176,97 +189,7 @@ class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
                         },
                       );
                     }).toList(),
-                    // 每个 Tab 对应的内容
-                    //       return GridView.builder(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         gridDelegate:
-                    //             const SliverGridDelegateWithFixedCrossAxisCount(
-                    //           crossAxisCount: 2,
-                    //           crossAxisSpacing: 8.0,
-                    //           mainAxisSpacing: 8.0,
-                    //         ),
-                    //         itemCount: resource.data.list.length,
-                    //         itemBuilder: (context, index) {
-                    //           final item = resource.data.list[index];
-
-                    // }).toList(),
-                    // return Center(child: Text('内容 for ${item.name}'));
-                    // }).toList(),
-
-                    //       final resource = snapshot.data!;
-
-                    //       return GridView.builder(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         gridDelegate:
-                    //             const SliverGridDelegateWithFixedCrossAxisCount(
-                    //           crossAxisCount: 2,
-                    //           crossAxisSpacing: 8.0,
-                    //           mainAxisSpacing: 8.0,
-                    //         ),
-                    //         itemCount: resource.data.list.length,
-                    //         itemBuilder: (context, index) {
-                    //           final item = resource.data.list[index];
-                    //           return Card(
-                    //             elevation: 4.0,
-                    //             child: Column(
-                    //               crossAxisAlignment: CrossAxisAlignment.start,
-                    //               children: [
-                    //                 GestureDetector(
-                    //                   onTap: () {
-                    //                     Navigator.push(
-                    //                       context,
-                    //                       MaterialPageRoute(
-                    //                         builder: (context) =>
-                    //                             SecondRoute(item: item),
-                    //                       ),
-                    //                     );
-                    //                   },
-                    //                   child: SizedBox(
-                    //                     height:
-                    //                         150, // Specify a height for the image
-                    //                     width: double.infinity,
-                    //                     child: item.coverImg.isNotEmpty
-                    //                         ? Image.network(
-                    //                             item.coverImg,
-                    //                             fit: BoxFit.cover,
-                    //                             loadingBuilder: (context, child,
-                    //                                 loadingProgress) {
-                    //                               if (loadingProgress == null) {
-                    //                                 return child;
-                    //                               } else {
-                    //                                 return const Center(
-                    //                                     child:
-                    //                                         CircularProgressIndicator());
-                    //                               }
-                    //                             },
-                    //                             errorBuilder: (context, error,
-                    //                                 stackTrace) {
-                    //                               return Image.asset(
-                    //                                   'images/noimage.png');
-                    //                             },
-                    //                           )
-                    //                         : Image.asset('images/noimage.png',
-                    //                             fit: BoxFit.cover),
-                    //                   ),
-                    //                 ),
-                    //                 Padding(
-                    //                   padding: const EdgeInsets.all(8.0),
-                    //                   child: Text(
-                    //                     item.name,
-                    //                     style: const TextStyle(
-                    //                       fontWeight: FontWeight.bold,
-                    //                       fontSize: 16,
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           );
-                    //         },
-                    //       );
-                    //     },
-                    //   );
-                    // }).toList(),
+                    
                   ),
                 ),
                 NumberPaginator(
@@ -282,6 +205,6 @@ class _MyAppState extends State<ListPage> with SingleTickerProviderStateMixin {
                   },
                 ),
               ],
-            )));
+            ));
   }
 }

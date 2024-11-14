@@ -12,6 +12,7 @@ import (
 	"github.com/jassue/jassue-gin/global"
 	"github.com/jassue/jassue-gin/utils"
 	client "github.com/zinclabs/sdk-go-zincsearch"
+	"gorm.io/gorm"
 	"io"
 	"io/ioutil"
 	"math"
@@ -30,6 +31,7 @@ func (uc *ResourceController) GetList(c *gin.Context) {
 	pageStr := c.DefaultQuery("pageNum", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
 	keyword := c.DefaultQuery("keyword", "")
+	diskTypeId := c.DefaultQuery("disk_type_id", "")
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
@@ -48,7 +50,10 @@ func (uc *ResourceController) GetList(c *gin.Context) {
 
 	query := db.Model(models.ResourceItem{})
 	if keyword != "" {
-		query.Where("mobile LIKE ?", "%"+keyword+"%").Or("name LIKE ?", "%"+keyword+"%")
+		query.Where("title LIKE ?", "%"+keyword+"%")
+	}
+	if diskTypeId != "" {
+		query.Where("title LIKE ?", "%"+keyword+"%")
 	}
 
 	query.Count(&totalUsers).Limit(limit).Offset(offset).Order("id desc").Find(&users)
@@ -182,36 +187,87 @@ func (uc *ResourceController) BatchCreate(c *gin.Context) {
 	}
 	lines := strings.Split(input.Content, "\n")
 	for _, line := range lines {
-		fmt.Println("line")
 		parts := strings.Split(line, ">>>")
-
-		var items []models.NetDiskItem
 
 		// Create a new NetDiskItem
 		newItem := models.NetDiskItem{
-			Type: 2,
+			Type: input.DiskTypeId,
 			Url:  parts[1],
 		}
 
-		// Append the new item to the slice
-		items = append(items, newItem)
-
-		// Convert the slice to JSON
-		jsonData, err := json.MarshalIndent(items, "", "  ")
-		if err != nil {
-			continue
-
-		}
-		err1 := db.Create(&models.ResourceItem{Views: 0, Title: parts[0], DiskItems: string(jsonData), CategoryId: input.CategoryId, Status: 1, CoverImg: ""})
-
-		if err1.Error != nil {
-			response.Fail(c, 500, err1.Error.Error())
-			return
+		//&models.ResourceItem{Views: 0, Title: parts[0], DiskItems: string(jsonData), CategoryId: input.CategoryId, Status: 1, CoverImg: ""}
+		err1 := CreateOrUpdateResourceItem(models.ResourceItem{Views: 0, Title: parts[0], DiskItems: "",
+			CategoryId: input.CategoryId, Status: 1, CoverImg: ""}, newItem, db)
+		if err1 != nil {
+			response.Fail(c, 500, err1.Error())
+			fmt.Println("操作失败:", err1)
+		} else {
+			fmt.Println("操作成功")
 		}
 
 	}
 
 	response.Success(c, nil)
+}
+
+func CreateOrUpdateResourceItem(input models.ResourceItem, newItem models.NetDiskItem, db *gorm.DB) error {
+	// 去掉 title 前后空格
+	trimmedTitle := strings.TrimSpace(input.Title)
+
+	// 先尝试根据 title 查找记录
+	var existingItem models.ResourceItem
+	db.Where("title = ?", trimmedTitle).First(&existingItem)
+	var items []models.NetDiskItem
+	fmt.Println(existingItem.GetUid())
+	if existingItem.GetUid() == "0" {
+		// Create a new NetDiskItem
+		items = append(items, newItem)
+		jsonData, err := json.MarshalIndent(items, "", "  ")
+		fmt.Println(jsonData)
+		//if errors.Is(err, gorm.ErrRecordNotFound) {
+		// 如果未找到记录，则创建新记录
+		err = db.Create(&models.ResourceItem{
+			Views:      0,
+			Title:      trimmedTitle,
+			DiskItems:  string(jsonData),
+			CategoryId: input.CategoryId,
+			Status:     1,
+			CoverImg:   "",
+		}).Error
+		if err != nil {
+			return fmt.Errorf("创建记录失败: %v", err)
+		}
+		fmt.Println("创建新记录成功")
+		//} else {
+		//	return fmt.Errorf("查找记录失败: %v", err)
+		//}
+	} else {
+		// 如果找到记录，则更新
+		err1 := json.Unmarshal([]byte(existingItem.DiskItems), &items)
+		if err1 != nil {
+			fmt.Println("Error decoding JSON:", err1)
+			return nil
+		}
+		items = append(items, newItem)
+		jsonData, err := json.MarshalIndent(items, "", "  ")
+		if err != nil {
+			return fmt.Errorf("update时json_encode失败: %v", err)
+
+		}
+		fmt.Println(string(jsonData))
+		err = db.Model(&existingItem).Updates(models.ResourceItem{
+			Views:     existingItem.Views + 1, // 示例更新逻辑
+			DiskItems: string(jsonData),
+
+			Status: 1,
+		}).Error
+		if err != nil {
+			return fmt.Errorf("更新记录失败: %v", err)
+		}
+		fmt.Println("更新记录成功")
+	}
+
+	return nil
 }
 
 // Update handles PUT requests to update a user

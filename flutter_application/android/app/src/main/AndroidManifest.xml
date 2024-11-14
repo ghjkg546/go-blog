@@ -4,7 +4,7 @@
     <application
     android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        android:label="夸克资源"
+        android:label="疾风短剧"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
 import 'package:flutter_application_2/entity/register.dart';
 import 'package:flutter_application_2/main.dart';
-import 'package:flutter_application_2/pages/login.dart';
-import 'package:flutter_application_2/pages/my.dart';
+import 'package:flutter_application_2/pages/index.dart';
+import 'package:flutter_application_2/pages/register.dart';
+
 import 'package:flutter_application_2/utils/user_preference.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -30,7 +32,7 @@ class _LogintionPageState extends State<LogintionPage> {
 
   String? _password;
 
-  void _register() {
+  void _login() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -42,8 +44,6 @@ class _LogintionPageState extends State<LogintionPage> {
   void dologin(String? _username, String? _password) async {
     var res = await userApi.login(_username, _password);
     if (res['code'] != 0) {
-      print(res['message']);
-      // var res_msg = res['msg'];
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('登录失败 ' + res['message'])),
       );
@@ -52,14 +52,14 @@ class _LogintionPageState extends State<LogintionPage> {
         SnackBar(content: Text('登录成功 $_username')),
       );
       var tokenInfo = UserData.fromJson(res['data']['accessToken']);
-      UserPreferences.saveUserInfo(tokenInfo.accessToken, tokenInfo.tokenType);
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MyApp(),
-        ),
-      );
+      UserPreferences.saveUserInfo(tokenInfo.accessToken, tokenInfo.tokenType);
+      // if (Get.previousRoute.isNotEmpty) {
+      //   Get.back();
+      // } else {
+      Get.to(IndexPage());
+      // 可以在这里处理其他逻辑，比如跳转到首页或退出应用
+      //}
     }
   }
 
@@ -79,7 +79,7 @@ class _LogintionPageState extends State<LogintionPage> {
                 decoration: InputDecoration(labelText: '用户名'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
+                    return '请输入用户名';
                   }
                   return null;
                 },
@@ -92,7 +92,7 @@ class _LogintionPageState extends State<LogintionPage> {
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return '请输入密码';
                   }
                   return null;
                 },
@@ -101,9 +101,27 @@ class _LogintionPageState extends State<LogintionPage> {
                 },
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _register,
-                child: Text('登录'),
+              Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                
+                  ElevatedButton(
+                    onPressed: _login,
+                    child: Text('登录'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.to(RegisterPage());
+                    },
+                    child: Text('注册'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: Text('返回'),
+                  ),
+                ],
               ),
             ],
           ),

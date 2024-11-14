@@ -23,9 +23,16 @@
                 </article>
                 <article class="post post-1">
                     {{range  $index, $item :=.blogItem.DiskItemsArray}}
-                    <a href="{{$item.Url}}" class="btn btn-primary" role="button">
-                        夸克网盘
-                    </a>
+                    <li style="list-style-type: none;margin-bottom: 10px">
+                        <a href="{{$item.Url}}" class="btn btn-primary" role="button">
+                            {{index $.ButtonTextMap $item.Type}}
+                        </a>
+                        点击跳转下载
+                        <a href="{{$item.Url}}" class="btn btn-primary copyButton" role="button" >
+                            复制链接
+                        </a>
+                    </li>
+
                     {{end}}
                 </article>
                 <section class="comment-area" id="comment-area">
@@ -217,6 +224,38 @@
 </div>
 
 <script src="/js/script.js"></script>
+<script>
+    $(document).ready(function() {
+        // 为所有具有 'copyButton' 类的元素添加点击事件监听器
+        $('.copyButton').click(function() {
+            // 获取当前点击按钮的 href 属性
+            event.preventDefault(); // Prevent default link action
+            var href = $(this).attr('href');
 
+            // 创建一个隐藏的输入框用于复制
+            var $tempInput = $("<input>");
+            $("body").append($tempInput);
+            $tempInput.val(href).select(); // 设置值并选中
+            document.execCommand('copy'); // 执行复制命令
+            $tempInput.remove(); // 删除临时输入框
+
+            // 可选：显示复制成功的提示
+            alert("链接已复制到剪贴板: " + href);
+        });
+    });
+
+    // document.querySelector(".copyButton").addEventListener("click", function(event) {
+    //     event.preventDefault(); // Prevent default link action
+    //     var url = this.href; // Get the href value
+    //     // Create a temporary input to copy the text
+    //     var tempInput = document.createElement("input");
+    //     document.body.appendChild(tempInput);
+    //     tempInput.value = url;
+    //     tempInput.select();
+    //     document.execCommand("copy");
+    //     document.body.removeChild(tempInput);
+    //     alert("链接已复制到剪贴板"); // Alert to confirm
+    // });
+</script>
 </body>
 </html>

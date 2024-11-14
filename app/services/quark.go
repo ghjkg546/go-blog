@@ -35,12 +35,11 @@ func (quarkService *quarkService) ShareItem(fids []string, name string) (url str
 	success, message := share(fids, name, 1, 1, "", cookie)
 	if success {
 		fmt.Println("拿到的url", message)
-
+		return message
 	} else {
-		fmt.Println("Share failed:", message)
+		return ""
 	}
 
-	return message
 }
 
 // 分享资源并入库

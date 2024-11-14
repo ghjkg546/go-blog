@@ -29,9 +29,9 @@ class Request {
   Request._internal() {
     // 初始化基本选项
     BaseOptions options = BaseOptions(
-          // baseUrl: 'https://api.shareziyuan.email/api',
-             baseUrl: 'http://47.106.155.179:8080/api',
-          // baseUrl: 'http://localhost:8080/api',
+          //  baseUrl: 'https://api.shareziyuan.email/api',
+            baseUrl: 'http://47.106.155.179:8080/api',
+            // baseUrl: 'http://localhost:8080/api',
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 5));
     _instance = this;
@@ -53,11 +53,13 @@ class Request {
   // Add the Authorization header if the token exists
       if (token != null) {
         options.headers["Authorization"] = "Bearer $token";
+      }else{
+        options.headers["Authorization"] = "Bearer ";
       }
+
 
     // 更多业务需求
     handler.next(options);
-    // super.onRequest(options, handler);
   }
 
   getToken() async {
@@ -71,7 +73,6 @@ class Request {
     // 请求成功是对数据做基本处理
     if (response.statusCode == 200) {
       // 处理成功的响应
-      // print("响应结果: $response");
     } else {
       // 处理异常结果
       print("响应异常: $response");

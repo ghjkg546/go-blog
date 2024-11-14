@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
-import 'package:flutter_application_2/entity/register.dart';
 import 'package:flutter_application_2/entity/user.dart';
 import 'package:flutter_application_2/mycomponent.dart';
 import 'package:flutter_application_2/pages/login.dart';
+import 'package:flutter_application_2/pages/setting.dart';
 import 'package:flutter_application_2/utils/user_preference.dart';
+import 'package:get/get.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -16,32 +17,31 @@ class _UserInfoPageState extends State<MyPage> {
   @override
   void initState() {
     super.initState();
+
+  
+   
+    getToken();
     // getInfo();
-    // futureReasorce = fetchAlbum(_categoryId, _page);
-    getGoods();
   }
 
-  void _doLogout() {
-    UserPreferences.clearUserInfo(); // Assuming you have a function like this
-
-    // Navigate to the login page and remove all previous routes
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-      (route) => false,
-    );
+ 
+ getToken() async {
+    String? accessToken = await UserPreferences.getAccessToken();
+    if (accessToken != null) {
+      print("tk:" + accessToken);
+    //  Get.toNamed("login");
+    getInfo();
+    } else {
+      print("null");
+      Get.toNamed("login");
+    }
   }
 
-  getGoods() async {
+  getInfo() async {
     var c1 = await userApi.getInfo();
     var res = UserRes.fromJson(c1);
     if (res.code != 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-      );
+      Get.toNamed("login");
     } else {
       setState(() {
         username = res.data?.userName.toString() ?? "";
@@ -67,13 +67,12 @@ class _UserInfoPageState extends State<MyPage> {
                   children: [
                     Row(
                       children: [
-                        const CircleAvatar(
-                          radius: 25, // Adjust the size of the avatar
-                          backgroundImage: AssetImage(
-                              'avatar.jpg'), // Replace with your asset path
-                          // If you want to use a placeholder:
-                          // child: Text('A'), // Use initials or a placeholder text
-                        ),
+                        // const CircleAvatar(
+                        //   radius: 25, // Adjust the size of the avatar
+                        //   backgroundImage: AssetImage(
+                        //       'avatar.jpg'), // Replace with your asset path
+                          
+                        // ),
                         const SizedBox(
                           width: 10,
                         ),
@@ -83,11 +82,7 @@ class _UserInfoPageState extends State<MyPage> {
                           children: [
                             Text(username ?? '点击登录',
                                 style: TextStyle(fontSize: 24)),
-                            // const Text(
-                            //   "登录体验更多功能",
-                            //   style:
-                            //       TextStyle(fontSize: 16, color: Colors.grey),
-                            // ),
+                      
                           ],
                         ),
                       ],
@@ -95,54 +90,64 @@ class _UserInfoPageState extends State<MyPage> {
                     IconButton(
                       icon: Icon(Icons.settings),
                       onPressed: () {
-                        _doLogout();
+                                                      Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SettingPage()),
+                              );
+                      
                       },
                     )
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 55,
               ),
+              Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // 收藏
+            InkWell(
+              onTap: () {
+     
+                Get.to(MycomponentPage());
+              },
+              child: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.favorite, color: Colors.red),
+                  SizedBox(height: 4),
+                  Text('我的收藏', style: TextStyle(fontSize: 14)),
+                ],
+              ),
+            ),
+
+            // 评论
+            // InkWell(
+            //   onTap: () {
+            //     print('评论 clicked');
+            //   },
+            //   child: const Column(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       Icon(Icons.comment, color: Colors.blue),
+            //       SizedBox(height: 4),
+            //       Text('评论', style: TextStyle(fontSize: 14)),
+            //     ],
+            //   ),
+            // ),
+          ],
+        ),
+        SizedBox(height: 200,),
               Container(
                 width: 980,
                 height: 400,
-                // decoration: BoxDecoration(
-                //   color: const Color(0xFFFED88D).withOpacity(0.6), // 设置颜色
-                //   borderRadius: BorderRadius.circular(30), // 设置圆角
-                // ),
+            
                 child: Padding(
                   padding: EdgeInsets.all(13),
                   child: Column(children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        
-                        ElevatedButton(
-                          onPressed: () {
-                            // 按钮点击事件
-                            print("xxxxxxxxxx");
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MycomponentPage()),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            fixedSize: Size(246, 80), // 设置宽度和高度
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10), // 设置圆角半径
-                            ),
-                            backgroundColor: Colors.blue, // 按钮背景色
-                          ),
-                          child: const Text(
-                            "退出登录",
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 30), // 文字颜色
-                          ),
-                        )
-                      ],
-                    ),
+                  
                     SizedBox(
                       height: 10,
                     ),

@@ -16,7 +16,7 @@ var ResourceItemService = new(resourceItemService)
 
 // 获取资源列表
 func (resourceItemService *resourceItemService) GetResList(page int, pageSize int, category_id int32, keyword string) (err error, data []models.ResourceItem, total int64) {
-	pageSize = 10
+
 	offset := (page - 1) * pageSize
 	query := global.App.DB.Order("id DESC")
 	if category_id > 0 {

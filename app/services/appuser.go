@@ -1,13 +1,18 @@
 package services
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/jassue/jassue-gin/app/common/request"
+	constants "github.com/jassue/jassue-gin/app/constant"
 	"github.com/jassue/jassue-gin/app/models"
 	"github.com/jassue/jassue-gin/global"
 	"github.com/jassue/jassue-gin/utils"
 	"strconv"
+	"strings"
 )
 
 type appUserService struct {
@@ -43,6 +48,21 @@ func (appUserService *appUserService) Login(params request.Login) (err error, us
 	return
 }
 
+func getTokenFromHeader(c *gin.Context) string {
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		return ""
+	}
+
+	// The header should be in the format "Bearer <token>"
+	splitToken := strings.Split(authHeader, " ")
+	if len(splitToken) != 2 || splitToken[0] != "Bearer" {
+		return ""
+	}
+
+	return splitToken[1]
+}
+
 // GetUserInfo 获取用户信息
 func (appUserService *appUserService) GetUserInfo(id string) (err error, user models.AdminUser) {
 	intId, err := strconv.Atoi(id)
@@ -51,4 +71,43 @@ func (appUserService *appUserService) GetUserInfo(id string) (err error, user mo
 		err = errors.New("数据不存在")
 	}
 	return
+}
+
+// GetUserInfo 获取用户信息
+func (appUserService *appUserService) GetUserId(c *gin.Context) string {
+	tokenString := getTokenFromHeader(c)
+	if tokenString == "" {
+		return ""
+	}
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(global.App.Config.Jwt.Secret), nil
+	})
+	if err != nil {
+		//response.BusinessFail(c, "解析失败"+err.Error())
+		return ""
+	}
+	// Check if the token is valid
+	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
+		// Access user info from claims
+		userID := claims.ID
+		return userID
+	}
+	return ""
+}
+
+// 检查是否被用户收藏
+func (appUserService *appUserService) IsFavorite(c *gin.Context, itemID string) (bool, error) {
+	userID := appUserService.GetUserId(c)
+
+	return global.App.Redis.SIsMember(context.Background(), constants.GetFavKey(userID), itemID).Result()
+}
+
+// 获取所有收藏id
+func (appUserService *appUserService) GetFavIds(c *gin.Context) ([]string, error) {
+	userID := appUserService.GetUserId(c)
+	if userID == "" {
+		return []string{}, nil
+	}
+	ctx := context.Background()
+	return global.App.Redis.SMembers(ctx, constants.GetFavKey(userID)).Result()
 }

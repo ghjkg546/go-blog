@@ -1,3 +1,4 @@
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/pages/detail.dart';
 import 'package:flutter_application_2/entity/data.dart';
@@ -5,8 +6,14 @@ import 'package:flutter_application_2/entity/data.dart';
 class ItemCard extends StatelessWidget {
   final Item item; // 假设 Item 是你的数据模型
 
-  const ItemCard({Key? key, required this.item}) : super(key: key);
-
+  Map<int, String> diskMap = {
+    1: '百度',
+    2: '夸克',
+    3: '阿里',
+    4: '移动彩云',
+  };
+   ItemCard({Key? key, required this.item}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -14,12 +21,19 @@ class ItemCard extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SecondRoute(item: item), // 替换为你的目标页面
+                      builder: (context) => DetailPage(itemId: item.id), // 替换为你的目标页面
                     ),
                   );
                 },
-      child: Card(
-        elevation: 4.0,
+      child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.grey.shade300, // 浅灰色边框
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8), // 可选的圆角边框
+                ),
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +55,19 @@ class ItemCard extends StatelessWidget {
               ),
                
               // ),
-              
+              SizedBox(height: 30,),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Wrap(
+            spacing: 10.0, // 元素之间的水平间距
+            runSpacing: 10.0, // 元素之间的垂直间距
+            children:item.diskItemsArray.map((i) {
+        return BrnStateTag(
+  tagText: diskMap[ i.type].toString(),
+  tagState: TagState.succeed,
+);
+      }).toList(),
+              ))
             ],
           ),
         

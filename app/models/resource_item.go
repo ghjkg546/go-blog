@@ -26,6 +26,7 @@ type ResourceItem struct {
 	CreateTimeStr  string        `gorm:"-" json:"create_time_str"`
 	UpdateTimeStr  string        `gorm:"-" json:"update_time_str"`
 	Url            string        `gorm:"-" json:"url"`
+	IsFavorite     bool          `gorm:"-" json:"is_favorite"`
 }
 
 func (res ResourceItem) GetUid() string {

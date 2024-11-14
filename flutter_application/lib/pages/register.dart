@@ -3,6 +3,7 @@ import 'package:flutter_application_2/apis/app.dart';
 import 'package:flutter_application_2/utils/user_preference.dart';
 import 'package:flutter_application_2/entity/register.dart';
 import 'package:flutter_application_2/pages/login.dart';
+import 'package:get/get.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -50,16 +51,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('注册成功 $_username')),
       );
-       var info  = UserData.fromJson(res['data']);
-      print("tokend"+info.accessToken);
-        await UserPreferences.saveUserInfo(res, info.accessToken);
-
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => LoginPage(),
-      //   ),
-      // );
+     
+      Get.to(LoginPage());
+      
     }
   }
 
@@ -90,13 +84,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
               TextFormField(
                 decoration: InputDecoration(labelText: '邮箱'),
                 validator: (value) {
-                  // if (value == null || value.isEmpty) {
-                  //   return 'Please enter your email';
-                  // }
-                  // // Simple email validation
-                  // if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                  //   return 'Please enter a valid email';
-                  // }
+                  if (value == null || value.isEmpty) {
+                    return '请输入邮箱';
+                  }
+                  // Simple email validation
+                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    return '邮箱格式不正确';
+                  }
                   return null;
                 },
                 onSaved: (value) {

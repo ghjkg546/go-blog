@@ -1,6 +1,9 @@
 import 'package:flutter_application_2/entity/category.dart';
 
 
+
+
+
 class DataRes {
   final int code;
   final ItemData data;
@@ -52,6 +55,7 @@ class ItemData {
 }
 
 class Item {
+  final bool isFavorite;
   final int id;
   final String name;
   final int categoryId;
@@ -69,6 +73,7 @@ class Item {
 
   Item({
     required this.id,
+    required this.isFavorite,
     required this.name,
     required this.categoryId,
     required this.description,
@@ -91,6 +96,7 @@ class Item {
 
     return Item(
       id: json['id'],
+      isFavorite: json['is_favorite']??0,
       name: json['name'],
       categoryId: json['category_id'],
       description: json['description'],

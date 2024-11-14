@@ -22,6 +22,10 @@ type Login struct {
 	Password string `form:"password" json:"password"`
 }
 
+type Fav struct {
+	Id int `form:"id" json:"id"`
+}
+
 type PostComment struct {
 	Content   string `form:"content" json:"content"`
 	ResItemId int32  `form:"resource_item_id" json:"resource_item_id"`

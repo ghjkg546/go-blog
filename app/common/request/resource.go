@@ -3,6 +3,7 @@ package request
 type BatchSave struct {
 	Content    string `form:"content" json:"content"`
 	CategoryId uint   `form:"category_id" json:"category_id"`
+	DiskTypeId int    `form:"disk_type_id" json:"disk_type_id"`
 }
 
 type Crawl struct {

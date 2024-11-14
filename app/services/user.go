@@ -44,3 +44,12 @@ func (userService *userService) GetUserInfo(id string) (err error, user models.A
 	}
 	return
 }
+
+func (userService *userService) GetUserId(id string) (err error, user models.AdminUser) {
+	intId, err := strconv.Atoi(id)
+	err = global.App.DB.First(&user, intId).Error
+	if err != nil {
+		err = errors.New("数据不存在")
+	}
+	return
+}
