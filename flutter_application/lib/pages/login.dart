@@ -1,32 +1,24 @@
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
 import 'package:flutter_application_2/entity/register.dart';
-import 'package:flutter_application_2/main.dart';
+
 import 'package:flutter_application_2/pages/index.dart';
 import 'package:flutter_application_2/pages/register.dart';
 
 import 'package:flutter_application_2/utils/user_preference.dart';
 import 'package:get/get.dart';
 
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Logintion Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: LogintionPage(),
-    );
-  }
-}
 
-class LogintionPage extends StatefulWidget {
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LogintionPageState createState() => _LogintionPageState();
 }
 
-class _LogintionPageState extends State<LogintionPage> {
+class _LogintionPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String? _username;
 
@@ -41,15 +33,15 @@ class _LogintionPageState extends State<LogintionPage> {
     }
   }
 
-  void dologin(String? _username, String? _password) async {
-    var res = await userApi.login(_username, _password);
+  void dologin(String? username, String? password) async {
+    var res = await userApi.login(username, password);
     if (res['code'] != 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('登录失败 ' + res['message'])),
+        SnackBar(content: Text('登录失败 ' + res['msg'])),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('登录成功 $_username')),
+        SnackBar(content: Text('登录成功 $username')),
       );
       var tokenInfo = UserData.fromJson(res['data']['accessToken']);
 
@@ -57,7 +49,7 @@ class _LogintionPageState extends State<LogintionPage> {
       // if (Get.previousRoute.isNotEmpty) {
       //   Get.back();
       // } else {
-      Get.to(IndexPage());
+      Get.to(const IndexPage());
       // 可以在这里处理其他逻辑，比如跳转到首页或退出应用
       //}
     }
@@ -67,7 +59,15 @@ class _LogintionPageState extends State<LogintionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('登录'),
+        title: const Text('登录'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_border),
+            onPressed: () {
+               Navigator.pop(context, 'refresh');
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -76,7 +76,7 @@ class _LogintionPageState extends State<LogintionPage> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: '用户名'),
+                decoration: const InputDecoration(labelText: '用户名'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '请输入用户名';
@@ -88,7 +88,7 @@ class _LogintionPageState extends State<LogintionPage> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: '密码'),
+                decoration: const InputDecoration(labelText: '密码'),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -100,29 +100,18 @@ class _LogintionPageState extends State<LogintionPage> {
                   _password = value;
                 },
               ),
-              SizedBox(height: 20),
-              Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                
-                  ElevatedButton(
-                    onPressed: _login,
-                    child: Text('登录'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.to(RegisterPage());
-                    },
-                    child: Text('注册'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: Text('返回'),
-                  ),
-                ],
+              const SizedBox(height: 20),
+              BrnBigMainButton(
+                title: '登录',
+                onTap: () {
+                  _login();
+                },
               ),
+              const SizedBox(height: 10,),
+              GestureDetector(
+                onTap: () => {Get.to(RegisterPage())},
+                child: const Text("去注册"))
+              
             ],
           ),
         ),

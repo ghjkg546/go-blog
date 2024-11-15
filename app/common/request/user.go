@@ -1,14 +1,18 @@
 package request
 
 type Register struct {
-	UserName string `form:"username" json:"username" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required"`
+	UserName     string `form:"username" json:"username" binding:"required"`
+	Password     string `form:"password" json:"password" binding:"required"`
+	Email        string `form:"email" json:"email"`
+	CaptchaId    string `form:"captcha_id" json:"captcha_id" `
+	CaptchaValue string `form:"captcha_value" json:"captcha_value" binding:"required"`
 }
 
 func (register Register) GetMessages() ValidatorMessages {
 	return ValidatorMessages{
-		"username.required": "用户名不能为空",
-		"password.required": "用户密码不能为空",
+		"username.required":      "用户名不能为空",
+		"password.required":      "用户密码不能为空",
+		"captcha_value.required": "验证码不能为空",
 	}
 }
 
@@ -16,6 +20,11 @@ func (register Register) GetMessages() ValidatorMessages {
 //	UserName string `form:"username" json:"username" binding:"required,username"`
 //	Password string `form:"password" json:"password" binding:"required"`
 //}
+
+type Captcha struct {
+	CaptchaID    string `form:"captcha_id" json:"captcha_id"`
+	CaptchaValue string `form:"captcha_value" json:"captcha_value"`
+}
 
 type Login struct {
 	UserName string `form:"username" json:"username"`
@@ -27,8 +36,10 @@ type Fav struct {
 }
 
 type PostComment struct {
-	Content   string `form:"content" json:"content"`
-	ResItemId int32  `form:"resource_item_id" json:"resource_item_id"`
+	Content      string `form:"content" json:"content"`
+	ResItemId    int32  `form:"resource_item_id" json:"resource_item_id"`
+	CaptchaId    string `form:"captcha_id" json:"captcha_id" `
+	CaptchaValue string `form:"captcha_value" json:"captcha_value" binding:"required"`
 }
 
 type ChangePass struct {

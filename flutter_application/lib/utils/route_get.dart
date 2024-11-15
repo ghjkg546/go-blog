@@ -14,7 +14,7 @@ class RouteGet {
   static final List<GetPage> getPages = [
     GetPage(
         name: index, 
-        page: () => IndexPage(), 
+        page: () => const IndexPage(), 
     ),
     GetPage(
         name: my, 

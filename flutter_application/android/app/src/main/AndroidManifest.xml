@@ -4,7 +4,7 @@
     <application
     android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
-        android:label="疾风短剧"
+        android:label="海渊沉鱼资源库"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

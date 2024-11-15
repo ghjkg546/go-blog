@@ -22,9 +22,12 @@ class UserInfoData {
     String userId;
     
     String userName;
-
+    int score;
+    String avatar;
     UserInfoData({
         required this.userId,
+        required this.score,
+        required this.avatar,
         
         required this.userName,
     });
@@ -33,7 +36,11 @@ class UserInfoData {
   factory UserInfoData.fromJson( json) {
     return UserInfoData(
       userId: json['user_id'],
-      userName: json['username']);
+      userName: json['username'],
+      avatar: json['avatar'],
+      score: json['score']
+      );
+      
       
   }
 

@@ -1,39 +1,49 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
 import 'package:flutter_application_2/entity/user.dart';
 import 'package:flutter_application_2/mycomponent.dart';
 import 'package:flutter_application_2/pages/login.dart';
 import 'package:flutter_application_2/pages/setting.dart';
+import 'package:flutter_application_2/pages/signin.dart';
 import 'package:flutter_application_2/utils/user_preference.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyPage extends StatefulWidget {
+  const MyPage({super.key});
+
   @override
   _UserInfoPageState createState() => _UserInfoPageState();
 }
 
 class _UserInfoPageState extends State<MyPage> {
   String? username = "";
+  int score = 0;
+  String avatar = "";
   @override
   void initState() {
     super.initState();
-
-  
-   
     getToken();
-    // getInfo();
   }
 
- 
- getToken() async {
+  final ImagePicker _picker = ImagePicker();
+  File? _selectedImage;
+  PickedFile? _pickedFile;
+
+  getToken() async {
     String? accessToken = await UserPreferences.getAccessToken();
     if (accessToken != null) {
-      print("tk:" + accessToken);
-    //  Get.toNamed("login");
-    getInfo();
+      getInfo();
     } else {
-      print("null");
-      Get.toNamed("login");
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+
+      // 检查返回结果，并更新导航栏
+      if (result == 'refresh') {}
     }
   }
 
@@ -45,7 +55,36 @@ class _UserInfoPageState extends State<MyPage> {
     } else {
       setState(() {
         username = res.data?.userName.toString() ?? "";
+        score = res.data?.score ?? 0;
+        avatar = res.data?.avatar ?? "";
       });
+    }
+  }
+
+  // 从手机选择图片
+  Future<void> pickImage() async {
+    print("Attempting to pick an image...");
+
+    final XFile? pickedFile;
+    try {
+      pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      print("Image picker result received");
+    } catch (e) {
+      print("Error picking image: $e");
+      return;
+    }
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile!.path);
+      });
+
+      // 选择图片后上传
+      await userApi.uploadImage(_selectedImage!);
+      getInfo();
+      print("Image upload completed");
+    } else {
+      print("No image selected");
     }
   }
 
@@ -55,24 +94,25 @@ class _UserInfoPageState extends State<MyPage> {
       length: 3, // 标签页数量
       child: Scaffold(
         body: SingleChildScrollView(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        // const CircleAvatar(
-                        //   radius: 25, // Adjust the size of the avatar
-                        //   backgroundImage: AssetImage(
-                        //       'avatar.jpg'), // Replace with your asset path
-                          
-                        // ),
+                        GestureDetector(
+                          onTap: pickImage,
+                          child: CircleAvatar(
+                            radius: 25, // Adjust the size of the avatar
+                            backgroundImage: NetworkImage(
+                              avatar, // Replace with your image URL
+                            ),
+                          ),
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
@@ -81,78 +121,83 @@ class _UserInfoPageState extends State<MyPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(username ?? '点击登录',
-                                style: TextStyle(fontSize: 24)),
-                      
+                                style: const TextStyle(fontSize: 24)),
                           ],
                         ),
                       ],
                     ),
                     IconButton(
-                      icon: Icon(Icons.settings),
+                      icon: const Icon(Icons.settings),
                       onPressed: () {
-                                                      Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SettingPage()),
-                              );
-                      
+                        Get.to(SettingPage());
                       },
                     )
                   ],
                 ),
               ),
               const SizedBox(
-                width: 55,
+                width: 100,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.local_activity),
+                        Text("积分"),
+                      ],
+                    ),
+                    Text(score.toString())
+                  ],
+                ),
               ),
               Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // 收藏
-            InkWell(
-              onTap: () {
-     
-                Get.to(MycomponentPage());
-              },
-              child: const Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(Icons.favorite, color: Colors.red),
-                  SizedBox(height: 4),
-                  Text('我的收藏', style: TextStyle(fontSize: 14)),
+                  // 收藏
+                  InkWell(
+                    onTap: () {
+                      Get.to(const MycomponentPage());
+                    },
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.favorite, color: Colors.red),
+                        SizedBox(height: 4),
+                        Text('我的收藏', style: TextStyle(fontSize: 14)),
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.to(const SignInPage());
+                    },
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.assignment, color: Colors.blue),
+                        SizedBox(height: 4),
+                        Text('签到', style: TextStyle(fontSize: 14)),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            ),
-
-            // 评论
-            // InkWell(
-            //   onTap: () {
-            //     print('评论 clicked');
-            //   },
-            //   child: const Column(
-            //     mainAxisSize: MainAxisSize.min,
-            //     children: [
-            //       Icon(Icons.comment, color: Colors.blue),
-            //       SizedBox(height: 4),
-            //       Text('评论', style: TextStyle(fontSize: 14)),
-            //     ],
-            //   ),
-            // ),
-          ],
-        ),
-        SizedBox(height: 200,),
-              Container(
+              const SizedBox(
+                height: 200,
+              ),
+              SizedBox(
                 width: 980,
                 height: 400,
-            
-                child: Padding(
+                child: const Padding(
                   padding: EdgeInsets.all(13),
                   child: Column(children: [
-                  
                     SizedBox(
                       height: 10,
                     ),
-                    
-                    
+
                     SizedBox(
                       height: 20,
                     ),
@@ -191,11 +236,10 @@ class _UserInfoPageState extends State<MyPage> {
                     SizedBox(
                       height: 15,
                     ),
-                    
+
                     SizedBox(
                       height: 26,
                     ),
-                   
                   ]),
                 ),
               )
@@ -208,6 +252,8 @@ class _UserInfoPageState extends State<MyPage> {
 }
 
 class ItemList extends StatelessWidget {
+  const ItemList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -217,7 +263,7 @@ class ItemList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Expanded(child: ItemCard(index: index)),
-            SizedBox(width: 10), // 项目间的间距
+            const SizedBox(width: 10), // 项目间的间距
             Expanded(child: ItemCard(index: index + 1)),
           ],
         );
@@ -229,13 +275,13 @@ class ItemList extends StatelessWidget {
 class ItemCard extends StatelessWidget {
   final int index;
 
-  const ItemCard({Key? key, required this.index}) : super(key: key);
+  const ItemCard({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -244,7 +290,7 @@ class ItemCard extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             blurRadius: 5,
             spreadRadius: 2,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -257,14 +303,14 @@ class ItemCard extends StatelessWidget {
             width: 100,
             fit: BoxFit.cover,
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             '标题 $index',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text('描述内容 $index'),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text('作者: 作者 $index'),
         ],
       ),
@@ -277,10 +323,10 @@ class CustomListTile extends StatelessWidget {
   final IconData icon;
 
   const CustomListTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +340,7 @@ class CustomListTile extends StatelessWidget {
         leading: Icon(icon),
         title: Text(
           title,
-          style: TextStyle(fontSize: 28),
+          style: const TextStyle(fontSize: 28),
         ),
       ),
     );
@@ -304,7 +350,7 @@ class CustomListTile extends StatelessWidget {
 class CustomList extends StatelessWidget {
   final int count;
 
-  const CustomList({Key? key, required this.count}) : super(key: key);
+  const CustomList({super.key, required this.count});
 
   @override
   Widget build(BuildContext context) {
@@ -317,23 +363,23 @@ class CustomList extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
-              topLeft: index == 0 ? Radius.circular(20) : Radius.zero,
-              topRight: index == 0 ? Radius.circular(20) : Radius.zero,
+              topLeft: index == 0 ? const Radius.circular(20) : Radius.zero,
+              topRight: index == 0 ? const Radius.circular(20) : Radius.zero,
               bottomLeft:
-                  index == count - 1 ? Radius.circular(20) : Radius.zero,
+                  index == count - 1 ? const Radius.circular(20) : Radius.zero,
               bottomRight:
-                  index == count - 1 ? Radius.circular(20) : Radius.zero,
+                  index == count - 1 ? const Radius.circular(20) : Radius.zero,
             ),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
                 blurRadius: 5,
                 spreadRadius: 2,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
-          child: CustomListTile(
+          child: const CustomListTile(
             icon: Icons.add_a_photo,
             title: "组件吐槽",
           ),

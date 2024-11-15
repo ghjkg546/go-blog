@@ -10,6 +10,7 @@ class MycomponentPage extends StatefulWidget {
   const MycomponentPage({super.key});
 
   // @override
+  @override
   State<MycomponentPage> createState() => _MyAppState();
 }
 
@@ -24,9 +25,9 @@ class _MyAppState  extends State<MycomponentPage> with SingleTickerProviderState
 
      var res = FavRes.fromJson(c1).data.list;
      print(res);
-    var tmp_totalPage = (FavRes.fromJson(c1).data.total / 10).ceil();
-    if (tmp_totalPage < 1) {
-      tmp_totalPage = 1;
+    var tmpTotalpage = (FavRes.fromJson(c1).data.total / 10).ceil();
+    if (tmpTotalpage < 1) {
+      tmpTotalpage = 1;
     }
     final validInitialPage = _page < _totalPage ? _page : _totalPage - 1;
     _page = validInitialPage;
@@ -34,7 +35,7 @@ class _MyAppState  extends State<MycomponentPage> with SingleTickerProviderState
     setState(() {
        _page = validInitialPage;
       favs = res;
-       _totalPage = tmp_totalPage;
+       _totalPage = tmpTotalpage;
       
     });
   }
@@ -51,15 +52,15 @@ class _MyAppState  extends State<MycomponentPage> with SingleTickerProviderState
       length: 6, // 标签页数量
       child: Scaffold(
         appBar: AppBar(
-          title: Text("我的收藏", style: TextStyle(fontSize: 36)),
+          title: const Text("我的收藏", style: TextStyle(fontSize: 36)),
           
         ),
         body: Column(
           children: [
             Column(
-               children: (favs.map((_item) {
+               children: (favs.map((item) {
                           // 使用 GridView.builder 替换内容
-                          return ItemCard(item: _item);
+                          return ItemCard(item: item);
                          
                         }).toList()
             )
@@ -89,7 +90,7 @@ class ItemCard extends StatelessWidget {
   // final int index;
   FavItem item;
 
-   ItemCard({Key? key, required this.item}) : super(key: key);
+   ItemCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +106,8 @@ class ItemCard extends StatelessWidget {
       
     child: Container(
       height: 100,  // 设置高度，Row 会撑满这个高度
-      margin: EdgeInsets.all(4),
-      padding: EdgeInsets.all(12),
+      margin: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -115,7 +116,7 @@ class ItemCard extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             blurRadius: 5,
             spreadRadius: 2,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -135,7 +136,7 @@ class ItemCard extends StatelessWidget {
                   children: [
                     Text(
                       item.name,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     
                   ],

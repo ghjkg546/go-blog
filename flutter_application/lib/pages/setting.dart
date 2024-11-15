@@ -2,11 +2,13 @@ import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
 import 'package:flutter_application_2/entity/user.dart';
-import 'package:flutter_application_2/mycomponent.dart';
+
 import 'package:flutter_application_2/pages/login.dart';
 import 'package:flutter_application_2/utils/user_preference.dart';
 
 class SettingPage extends StatefulWidget {
+  const SettingPage({super.key});
+
   @override
   _SettingPageState createState() => _SettingPageState();
 }
@@ -16,9 +18,6 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void initState() {
     super.initState();
-    // getInfo();
-    // futureReasorce = fetchAlbum(_categoryId, _page);
-    getGoods();
   }
 
   void _doLogout() {
@@ -31,28 +30,26 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  getGoods() async {
-    var c1 = await userApi.getInfo();
-    var res = UserRes.fromJson(c1);
-    if (res.code != 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-      );
-    } else {
-      setState(() {
-        username = res.data?.userName.toString() ?? "";
-      });
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
+    
     return DefaultTabController(
+      
       length: 3, // 标签页数量
       child: Scaffold(
+        appBar: AppBar(
+        title: const Text('设置'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_border),
+            onPressed: () {
+               Navigator.pop(context, 'refresh');
+            },
+          ),
+        ],
+      ),
         body: SingleChildScrollView(
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
@@ -78,6 +75,8 @@ class _SettingPageState extends State<SettingPage> {
 }
 
 class ItemList extends StatelessWidget {
+  const ItemList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -87,7 +86,7 @@ class ItemList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Expanded(child: ItemCard(index: index)),
-            SizedBox(width: 10), // 项目间的间距
+            const SizedBox(width: 10), // 项目间的间距
             Expanded(child: ItemCard(index: index + 1)),
           ],
         );
@@ -99,13 +98,13 @@ class ItemList extends StatelessWidget {
 class ItemCard extends StatelessWidget {
   final int index;
 
-  const ItemCard({Key? key, required this.index}) : super(key: key);
+  const ItemCard({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -114,7 +113,7 @@ class ItemCard extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             blurRadius: 5,
             spreadRadius: 2,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -127,14 +126,14 @@ class ItemCard extends StatelessWidget {
             width: 100,
             fit: BoxFit.cover,
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             '标题 $index',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text('描述内容 $index'),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text('作者: 作者 $index'),
         ],
       ),
@@ -147,10 +146,10 @@ class CustomListTile extends StatelessWidget {
   final IconData icon;
 
   const CustomListTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +163,7 @@ class CustomListTile extends StatelessWidget {
         leading: Icon(icon),
         title: Text(
           title,
-          style: TextStyle(fontSize: 28),
+          style: const TextStyle(fontSize: 28),
         ),
       ),
     );
@@ -174,7 +173,7 @@ class CustomListTile extends StatelessWidget {
 class CustomList extends StatelessWidget {
   final int count;
 
-  const CustomList({Key? key, required this.count}) : super(key: key);
+  const CustomList({super.key, required this.count});
 
   @override
   Widget build(BuildContext context) {
@@ -187,23 +186,23 @@ class CustomList extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
-              topLeft: index == 0 ? Radius.circular(20) : Radius.zero,
-              topRight: index == 0 ? Radius.circular(20) : Radius.zero,
+              topLeft: index == 0 ? const Radius.circular(20) : Radius.zero,
+              topRight: index == 0 ? const Radius.circular(20) : Radius.zero,
               bottomLeft:
-                  index == count - 1 ? Radius.circular(20) : Radius.zero,
+                  index == count - 1 ? const Radius.circular(20) : Radius.zero,
               bottomRight:
-                  index == count - 1 ? Radius.circular(20) : Radius.zero,
+                  index == count - 1 ? const Radius.circular(20) : Radius.zero,
             ),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
                 blurRadius: 5,
                 spreadRadius: 2,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
-          child: CustomListTile(
+          child: const CustomListTile(
             icon: Icons.add_a_photo,
             title: "组件吐槽",
           ),

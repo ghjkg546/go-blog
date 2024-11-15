@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/jassue/jassue-gin/app/common/request"
 	"github.com/jassue/jassue-gin/app/common/response"
@@ -464,11 +465,13 @@ func stringToInt32(s string) (int32, error) {
 func CreateComment(c *gin.Context) {
 	var input request.PostComment
 	if err := c.BindJSON(&input); err != nil {
-		fmt.Println("出错000")
 		response.Fail(c, 500, "参数出错")
 		return
 	}
-
+	if !captcha.VerifyString(input.CaptchaId, input.CaptchaValue) {
+		response.BusinessFail(c, "验证码错误")
+		return
+	}
 	uidsStr, ok := c.Get("id")
 	if !ok {
 		// Handle the case where the value is not a string

@@ -14,3 +14,8 @@ const (
 func GetFavKey(userID string) string {
 	return fmt.Sprintf(FavKeyPattern, global.App.Config.App.AppName, userID)
 }
+
+// 获取 Redis 签到键
+func GetSignKey(userID string, week string) string {
+	return fmt.Sprintf("%s:user_sign:%s:%s", global.App.Config.App.AppName, userID, week)
+}

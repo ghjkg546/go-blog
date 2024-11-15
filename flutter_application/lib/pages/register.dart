@@ -1,49 +1,58 @@
+import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
-import 'package:flutter_application_2/utils/user_preference.dart';
-import 'package:flutter_application_2/entity/register.dart';
+import 'package:flutter_application_2/entity/capchat.dart';
+
 import 'package:flutter_application_2/pages/login.dart';
+import 'package:flutter_application_2/utils/request.dart';
 import 'package:get/get.dart';
 
-class RegisterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Registration Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: RegistrationPage(),
-    );
-  }
-}
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
-class RegistrationPage extends StatefulWidget {
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _RegistrationPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   String? _username;
   String? _email;
   String? _password;
+  String captchaId = '';
+  String captchaImageUrl = '';
+  final TextEditingController captchaController = TextEditingController();
 
   void _register() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      doregister(_username, _password);
+      // doregister(_username, _password, _email??"", captchaId, captchaController.text);
+      doregister();
       // Implement your registration logic here
     }
   }
 
-  void doregister(String? _username, String? _password) async {
-    var res = await userApi.register(_username, _password);
+  void fetchCaptchaImg() async {
+    var c1 = await userApi.fetchCaptcha();
+    var res = CapchatRes.fromJson(c1).data;
+    setState(() {
+      captchaId = res.CapchatId;
+      captchaImageUrl = Request().baseUrl + res.ImageUrl;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCaptchaImg();
+  }
+
+  void doregister() async {
+    var res = await userApi.register(
+        _username, _password, _email ?? "", captchaId, captchaController.text);
     if (res['code'] != 0) {
-      print(res['msg']);
-     
-      // var res_msg = res['msg'];
+      fetchCaptchaImg();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('注册失败 ' + res['msg'])),
       );
@@ -51,9 +60,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('注册成功 $_username')),
       );
-     
+
       Get.to(LoginPage());
-      
     }
   }
 
@@ -61,7 +69,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('注册'),
+        title: const Text('注册'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_border),
+            onPressed: () {
+              Navigator.pop(context, 'refresh');
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -70,7 +86,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: '用户名'),
+                decoration: const InputDecoration(labelText: '用户名'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your username';
@@ -82,7 +98,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: '邮箱'),
+                decoration: const InputDecoration(labelText: '邮箱'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '请输入邮箱';
@@ -98,11 +114,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: '密码'),
+                decoration: const InputDecoration(labelText: '密码'),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return '输入密码';
                   }
                   return null;
                 },
@@ -110,10 +126,48 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   _password = value;
                 },
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _register,
-                child: Text('注册'),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  if (captchaImageUrl.isNotEmpty)
+                    Expanded(
+                      flex: 1,
+                      child: GestureDetector(
+                        onTap: () {
+                          fetchCaptchaImg();
+                        },
+                        child: Image.network(
+                          captchaImageUrl,
+                          height: 40,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  const SizedBox(width: 8), // 间距
+                  Expanded(
+                    flex: 1,
+                    child: TextFormField(
+                      controller: captchaController,
+                      decoration: const InputDecoration(
+                        labelText: '输入验证码',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '请输入验证码';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              BrnBigMainButton(
+                title: '注册',
+                onTap: () {
+                  _register();
+                },
               ),
             ],
           ),

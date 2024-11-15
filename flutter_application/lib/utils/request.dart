@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_application_2/utils/user_preference.dart';
 
@@ -25,13 +27,19 @@ class Request {
   /// Dio实例
   static Dio _dio = Dio();
 
+  // String baseUrl = 'https://api.shareziyuan.email/api';
+  //  String baseUrl = 'http://127.0.0.1:8080/api';
+  //  String baseUrl = 'http://192.168.2.236:8080/api';
+     String baseUrl = 'http://47.106.155.179:8080/api';
+
+
+
   /// 初始化
   Request._internal() {
     // 初始化基本选项
     BaseOptions options = BaseOptions(
-          //  baseUrl: 'https://api.shareziyuan.email/api',
-            baseUrl: 'http://47.106.155.179:8080/api',
-            // baseUrl: 'http://localhost:8080/api',
+       
+             baseUrl: baseUrl,
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 5));
     _instance = this;
@@ -85,6 +93,43 @@ class Request {
     handler.next(error);
   }
 
+ // 上传图片到服务器
+  Future<void> uploadImage(File image) async {
+    try {
+      String uploadUrl =  baseUrl+'/user/avatar_upload';
+
+      FormData formData = FormData.fromMap({
+        'business':'avatar',
+        'image': await MultipartFile.fromFile(image.path, filename: 'avatar'),
+      });
+
+      var token = await getToken();
+      var options = Options(
+          headers: {'Content-Type': 'multipart/form-data'},
+        );
+  // Add the Authorization header if the token exists
+      if (token != null) {
+        options.headers?["Authorization"] = "Bearer $token";
+      }else{
+        options.headers?["Authorization"] = "Bearer ";
+      }
+
+      Response response = await _dio.post(
+        uploadUrl,
+        data: formData,
+        options: options,
+      );
+
+      if (response.statusCode == 200) {
+        print('Upload successful: ${response.data}');
+      } else {
+        print('Upload failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
+  }
+
   /// 请求类：支持异步请求操作
   Future<T> request<T>(
     String path, {
@@ -96,7 +141,7 @@ class Request {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    const _methodValues = {
+    const methodValues = {
       DioMethod.get: 'get',
       DioMethod.post: 'post',
       DioMethod.put: 'put',
@@ -105,7 +150,7 @@ class Request {
       DioMethod.head: 'head'
     };
     // 默认配置选项
-    options ??= Options(method: _methodValues[method]);
+    options ??= Options(method: methodValues[method]);
     try {
       Response response;
       // 开始发送请求

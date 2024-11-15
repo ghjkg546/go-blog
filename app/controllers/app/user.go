@@ -8,11 +8,14 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/jassue/jassue-gin/app/common/request"
 	"github.com/jassue/jassue-gin/app/common/response"
+	constants "github.com/jassue/jassue-gin/app/constant"
 	"github.com/jassue/jassue-gin/app/models"
 	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
+	"gorm.io/gorm"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func UserInfo(c *gin.Context) {
@@ -38,7 +41,7 @@ func UserInfo(c *gin.Context) {
 		var user models.User
 		query.Where("id=?", userID).Find(&user)
 
-		response.Success(c, gin.H{"user_id": userID, "username": user.Name})
+		response.Success(c, gin.H{"user_id": userID, "username": user.Name, "score": user.Score, "avatar": user.Avatar})
 		return
 	}
 	response.BusinessFail(c, "解析失败"+err.Error())
@@ -102,14 +105,96 @@ func AddToFavorites(userID string, itemID int) (bool, error) {
 	//return global.App.Redis.SAdd(context.Background(), key, itemID).Err()
 }
 
-// 检查商品是否被用户收藏
+// 检查商品是否被用户
 func IsFavorite(userID, itemID string) (bool, error) {
 	key := fmt.Sprintf(global.App.Config.App.AppName+":user:%s:fav", userID)
 	return global.App.Redis.SIsMember(context.Background(), key, itemID).Result()
 }
 
-// 获取用户的所有收藏商品
+// 获取用户的所有收藏
 func GetFavoriteItems(redisClient *redis.Client, userID string) ([]string, error) {
 	key := fmt.Sprintf(global.App.Config.App.AppName+":user:%s:fav", userID)
 	return redisClient.SMembers(context.Background(), key).Result()
+}
+
+// 获取当前的周次 (year-week)
+func getCurrentWeek() string {
+	now := time.Now()
+	_, week := now.ISOWeek()
+	return fmt.Sprintf("%d-%02d", now.Year(), week)
+}
+
+// 用户签到接口
+func SignIn(c *gin.Context) {
+	week := getCurrentWeek()
+	day := time.Now().Weekday()
+
+	uid := services.AppUserService.GetUserId(c)
+	if uid == "" {
+		response.BusinessFail(c, "未登录或登录过期")
+		return
+	}
+	exist, err := global.App.Redis.GetBit(context.Background(), constants.GetSignKey(uid, week), int64(day)).Result()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "获取签到状态失败"})
+		return
+	}
+	if exist > 0 {
+		response.BusinessFail(c, "今天你已经签到过了")
+		//return
+	}
+	_, err1 := global.App.Redis.SetBit(context.Background(), constants.GetSignKey(uid, week), int64(day), 1).Result()
+	if err1 != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "签到失败"})
+		return
+	}
+	_ = UpdateUserScore(uid, 100)
+
+	response.Success(c, "签到成功")
+
+}
+
+// 更新用户分数，如果用户存在则加分
+func UpdateUserScore(uid string, increment int64) error {
+	var user models.User
+
+	// 根据 UID 查找用户
+	result := global.App.DB.Where("id = ?", uid).First(&user)
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			return fmt.Errorf("user not found")
+		}
+		return result.Error
+	}
+	// 用户存在，增加分数
+	user.Score += increment
+
+	// 保存更新后的用户
+	if err := global.App.DB.Save(&user).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// 获取用户签到状态接口
+func GetSignStatus(c *gin.Context) {
+
+	week := getCurrentWeek()
+
+	uid := services.AppUserService.GetUserId(c)
+	if uid == "" {
+		response.BusinessFail(c, "未登录或登录过期")
+		return
+	}
+	var status []int
+	for i := 0; i < 7; i++ {
+		bit, err := global.App.Redis.GetBit(context.Background(), constants.GetSignKey(uid, week), int64(i)).Result()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "获取签到状态失败"})
+			return
+		}
+		status = append(status, int(bit))
+	}
+	response.Success(c, status)
 }

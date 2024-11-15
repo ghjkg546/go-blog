@@ -13,10 +13,70 @@ import (
 	"github.com/jassue/jassue-gin/global"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
+	"gorm.io/gorm"
 	"io/ioutil"
 	"regexp"
 	"strings"
 )
+
+func getTokenFromHeader(c *gin.Context) string {
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		return ""
+	}
+
+	// The header should be in the format "Bearer <token>"
+	splitToken := strings.Split(authHeader, " ")
+	if len(splitToken) != 2 || splitToken[0] != "Bearer" {
+		return ""
+	}
+
+	return splitToken[1]
+}
+
+func AvatarUpload(c *gin.Context) {
+	var form request.ImageUpload
+	if err := c.ShouldBind(&form); err != nil {
+		response.ValidateFail(c, request.GetErrorMsg(form, err))
+		return
+	}
+	uid := services.AppUserService.GetUserId(c)
+	if uid == "" {
+		response.BusinessFail(c, "未登录或登录过期")
+		return
+	}
+	outPut, err := services.MediaService.SaveImage(form)
+	if err != nil {
+		response.BusinessFail(c, err.Error())
+		return
+	}
+	fmt.Println(outPut.Url)
+	_ = UpdateuserAvater(uid, outPut.Url)
+	response.Success(c, outPut)
+}
+
+// 更新用户分数，如果用户存在则加分
+func UpdateuserAvater(uid string, url string) error {
+	var user models.User
+
+	// 根据 UID 查找用户
+	result := global.App.DB.Where("id = ?", uid).First(&user)
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			return fmt.Errorf("user not found")
+		}
+		return result.Error
+	}
+
+	user.Avatar = url
+
+	// 保存更新后的用户
+	if err := global.App.DB.Save(&user).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func ImageUpload(c *gin.Context) {
 	var form request.ImageUpload

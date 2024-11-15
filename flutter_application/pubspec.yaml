@@ -50,6 +50,7 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   bruno: ^3.4.3
   get: ^4.6.6
+  image_picker: ^1.1.2
 
 
 

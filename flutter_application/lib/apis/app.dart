@@ -1,7 +1,8 @@
 
-import 'dart:convert';
 
-import 'package:flutter_application_2/entity/resource_item.dart';
+import 'dart:io';
+
+import 'package:get/get.dart';
 
 import '../utils/request.dart';
 
@@ -57,7 +58,7 @@ class UserApi {
 
   getListData(int categoryId,int page, String keyword) async {
     var result = await Request().request(
-      "/duanju/list?category_id=" + categoryId.toString()+"&page="+page.toString()+"&keyword="+keyword.toString()+"&pageSize=50",
+      "/duanju/list?category_id=$categoryId&page=$page&keyword=$keyword&pageSize=50",
       method: DioMethod.get,
       // data: {"taskuuid": "queryprod", "splist": "66"}
     );
@@ -65,9 +66,18 @@ class UserApi {
     return result;
   }
 
+  fetchCaptcha() async{
+var result = await Request().request(
+      "/generate-captcha",
+      method: DioMethod.get,
+      // data: {"taskuuid": "queryprod", "splist": "66"}
+    );
+    return result;
+  }
+
   getFavList(int categoryId,int page, String keyword) async {
     var result = await Request().request(
-      "/user/favlist"+"?page="+page.toString()+"&keyword="+keyword.toString()+"&pageSize=50",
+      "/user/favlist?page=$page&keyword=$keyword&pageSize=50",
       method: DioMethod.get,
       // data: {"taskuuid": "queryprod", "splist": "66"}
     );
@@ -77,37 +87,24 @@ class UserApi {
 
   // 获取列表数据
   getDetail(int id) async {
-    var result = await Request().request("/res/info?id=${id}",
+    var result = await Request().request("/res/info?id=$id",
         method: DioMethod.get,);
         // final Map<String, dynamic> jsonMap = jsonDecode(result);
   
-// print(res);
-  // 输出数据
-  // print('Code: ${apiResponse.code}');
-  // print('Message: ${apiResponse.msg}');
-  // print('Info Name: ${res.data.info.name}');
-  // print('Is Favorite: ${res.data.info.isFavorite}');
-  // print('Disk Items Array: ${apiResponse.data.info.diskItemsArray.map((item) => item.url).toList()}');
-      //  print(result.data['info']['name']);
+
     return result;
   }
 
   // 注册
-  register(String? username, String? password) async {
+  register(String? username, String? password,String email, String captchaId, String capchatValue) async {
     try {
       var result = await Request().request(
         "/auth/register",
         method: DioMethod.post,
-        data: {"username": username, "password": password},
+        data: {"username": username, "password": password, "email": email,"captcha_id":captchaId,"captcha_value":capchatValue},
       );
-
-      // Assuming `result` is a Map, you can directly access `msg`
-      if (result is Map<String, dynamic> && result.containsKey('msg')) {
-        print("Message: ${result['msg']}");
-        return result;
-      } else {
-        print("Message not found in the response");
-      }
+      return result;
+      
     } catch (e) {
       print("Error during registration: $e");
     }
@@ -152,6 +149,79 @@ class UserApi {
       print("Error during registration: $e");
     }
   }
+
+   // 评论
+  comment(int id,String content, String captchaId, String capchatValue) async {
+    try {
+      var result = await Request().request(
+        "/comment/add",
+        method: DioMethod.post,
+        data: {"resource_item_id": id,"content":content,"captcha_id":captchaId,"captcha_value":capchatValue},
+      );
+      
+      // Assuming `result` is a Map, you can directly access `msg`
+      if (result is Map<String, dynamic> && result.containsKey('message')) {
+        print("Message: ${result['msg']}");
+       
+      } 
+       return result;
+    } catch (e) {
+      print("Error during registration: $e");
+    }
+  }
+
+  // 签到
+  signin() async {
+    try {
+      var result = await Request().request(
+        "/user/sign",
+        method: DioMethod.post,
+         data: {},
+      );
+      
+     
+       return result;
+    } catch (e) {
+      print("Error during registration: $e");
+    }
+  }
+
+  getSignStatus() async {
+    try {
+      var result = await Request().request(
+        "/user/signstatus",
+        method: DioMethod.get,
+        
+      );
+      
+      
+       return result;
+    } catch (e) {
+      print("Error during registration: $e");
+    }
+  }
+
+  uploadImage(File img ) async {
+    /// 开启日志打印
+    Request.instance?.openLog();
+    try {
+       
+
+      var result = await Request().uploadImage(
+        img
+        // "/image_upload",
+        // method: DioMethod.post,
+        
+      );
+      
+      
+       return result;
+    } catch (e) {
+      print("Error during registration: $e");
+    }
+  }
+
+
 }
 
 // 导出全局使用这一个实例

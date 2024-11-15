@@ -12,7 +12,7 @@ class NaviController extends GetxController  {
   }
 
   void onBottomNavItemTapped(int index) {
-    print ("tab item clicked:"+index.toString());
+    
     selectedIndex.value=index;
     /*
     switch (index) {

@@ -1,4 +1,4 @@
-import 'package:flutter_application_2/entity/data.dart';
+
 
 class CategoryRes {
   final int code;
