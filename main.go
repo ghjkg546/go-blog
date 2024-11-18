@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/jassue/jassue-gin/bootstrap"
 	"github.com/jassue/jassue-gin/global"
-	"sync"
 )
 
 func main() {

@@ -27,6 +27,7 @@ type ResourceItem struct {
 	UpdateTimeStr  string        `gorm:"-" json:"update_time_str"`
 	Url            string        `gorm:"-" json:"url"`
 	IsFavorite     bool          `gorm:"-" json:"is_favorite"`
+	Category       Category      `gorm:"foreignKey:category_id" json:"category"`
 }
 
 func (res ResourceItem) GetUid() string {

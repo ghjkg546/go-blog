@@ -485,9 +485,6 @@ func CreateComment(c *gin.Context) {
 	}
 	uidsInt, _ := stringToInt32(str)
 
-	fmt.Println("str")
-	fmt.Println(uidsStr)
-
 	comment := models.Comment{ParentID: 0, Content: input.Content, ResourceItemId: input.ResItemId, UserID: uidsInt}
 	global.App.DB.Create(&comment)
 	var comments []models.Comment

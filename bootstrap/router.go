@@ -15,80 +15,79 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"reflect"
 	"syscall"
 	"time"
 )
 
-// Define a struct to hold your resource routes
-type ResourceRoutes struct {
-	BasePath   string
-	Router     *gin.Engine
-	Controller interface{}
-}
+//// Define a struct to hold your resource routes
+//type ResourceRoutes struct {
+//	BasePath   string
+//	Router     *gin.Engine
+//	Controller interface{}
+//}
 
 // Controller defines the methods that must be implemented by controllers
-type Controller interface {
-	GetList(c *gin.Context)
-	GetDetail(c *gin.Context)
-	Create(c *gin.Context)
-	Update(c *gin.Context)
-	Delete(c *gin.Context)
-}
-
-func NewResourceRoutes(basePath string, router *gin.Engine, controller interface{}) *ResourceRoutes {
-	return &ResourceRoutes{
-		BasePath:   basePath,
-		Router:     router,
-		Controller: controller,
-	}
-}
-
-func (r *ResourceRoutes) SetupRoutes() {
-	resource := r.BasePath
-	//ctrlType := reflect.TypeOf(r.Controller)
-	ctrlValue := reflect.ValueOf(r.Controller)
-
-	// Map HTTP methods to controller methods
-	methodMappings := map[string]string{
-		"LIST":   "GetList",
-		"GET":    "GetDetail",
-		"POST":   "Create",
-		"PUT":    "Update",
-		"DELETE": "Delete",
-	}
-
-	for method, action := range methodMappings {
-		methodFunc := ctrlValue.MethodByName(action)
-		if !methodFunc.IsValid() {
-			continue
-		}
-
-		switch method {
-		case "LIST":
-			r.Router.GET(resource, func(c *gin.Context) {
-				methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-			}).Use(middleware.Cors())
-		case "GET":
-			r.Router.GET(resource+"/:id", func(c *gin.Context) {
-				methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-			}).Use(middleware.Cors())
-		case "POST":
-			r.Router.POST(resource, func(c *gin.Context) {
-				methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-			}).Use(middleware.Cors())
-		case "PUT":
-			r.Router.PUT(resource+"/:id", func(c *gin.Context) {
-				methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-			}).Use(middleware.Cors())
-		case "DELETE":
-			r.Router.DELETE(resource+"/:id", func(c *gin.Context) {
-				methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-			}).Use(middleware.Cors())
-		}
-	}
-}
-
+//
+//	type Controller interface {
+//		GetList(c *gin.Context)
+//		GetDetail(c *gin.Context)
+//		Create(c *gin.Context)
+//		Update(c *gin.Context)
+//		Delete(c *gin.Context)
+//	}
+//
+//	func NewResourceRoutes(basePath string, router *gin.Engine, controller interface{}) *ResourceRoutes {
+//		return &ResourceRoutes{
+//			BasePath:   basePath,
+//			Router:     router,
+//			Controller: controller,
+//		}
+//	}
+//
+//	func (r *ResourceRoutes) SetupRoutes() {
+//		resource := r.BasePath
+//		//ctrlType := reflect.TypeOf(r.Controller)
+//		ctrlValue := reflect.ValueOf(r.Controller)
+//
+//		// Map HTTP methods to controller methods
+//		methodMappings := map[string]string{
+//			"LIST":   "GetList",
+//			"GET":    "GetDetail",
+//			"POST":   "Create",
+//			"PUT":    "Update",
+//			"DELETE": "Delete",
+//		}
+//
+//		for method, action := range methodMappings {
+//			methodFunc := ctrlValue.MethodByName(action)
+//			if !methodFunc.IsValid() {
+//				continue
+//			}
+//
+//			switch method {
+//			case "LIST":
+//				r.Router.GET(resource, func(c *gin.Context) {
+//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
+//				}).Use(middleware.Cors())
+//			case "GET":
+//				r.Router.GET(resource+"/:id", func(c *gin.Context) {
+//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
+//				}).Use(middleware.Cors())
+//			case "POST":
+//				r.Router.POST(resource, func(c *gin.Context) {
+//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
+//				}).Use(middleware.Cors())
+//			case "PUT":
+//				r.Router.PUT(resource+"/:id", func(c *gin.Context) {
+//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
+//				}).Use(middleware.Cors())
+//			case "DELETE":
+//				r.Router.DELETE(resource+"/:id", func(c *gin.Context) {
+//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
+//				}).Use(middleware.Cors())
+//			}
+//		}
+//	}
 func seq(start, end int) []int {
 	var numbers []int
 	for i := start; i <= end; i++ {
@@ -131,29 +130,29 @@ func setupRouter() *gin.Engine {
 	router.GET("/qiu", ResController.ApplyForReasource)
 	// 跨域处理
 	router.Use(middleware.Cors())
-	userRoutes := NewResourceRoutes("/adminapi/users", router, &adminapi2.UserController{})
-	userRoutes.SetupRoutes()
-
-	appuserRoutes := NewResourceRoutes("/adminapi/appusers", router, &adminapi2.AppUserController{})
-	appuserRoutes.SetupRoutes()
-
-	cateRoutes := NewResourceRoutes("/adminapi/category", router, &adminapi2.CateController{})
-	cateRoutes.SetupRoutes()
-
-	menuRoutes := NewResourceRoutes("/adminapi/menus", router, &adminapi2.MenuController{})
-	menuRoutes.SetupRoutes()
-
-	resourceRoutes := NewResourceRoutes("/adminapi/resource", router, &adminapi2.ResourceController{})
-	resourceRoutes.SetupRoutes()
-
-	crawlRoutes := NewResourceRoutes("/adminapi/crawl", router, &adminapi2.CrawlController{})
-	crawlRoutes.SetupRoutes()
-
-	dictRoutes := NewResourceRoutes("/adminapi/dict", router, &adminapi2.DictController{})
-	dictRoutes.SetupRoutes()
-
-	logRoutes := NewResourceRoutes("/adminapi/log", router, &adminapi2.LogController{})
-	logRoutes.SetupRoutes()
+	//userRoutes := NewResourceRoutes("/adminapi/users", router, &adminapi2.UserController{})
+	//userRoutes.SetupRoutes()
+	//
+	//appuserRoutes := NewResourceRoutes("/adminapi/appusers", router, &adminapi2.AppUserController{})
+	//appuserRoutes.SetupRoutes()
+	//
+	//cateRoutes := NewResourceRoutes("/adminapi/category", router, &adminapi2.CateController{})
+	//cateRoutes.SetupRoutes()
+	//
+	//menuRoutes := NewResourceRoutes("/adminapi/menus", router, &adminapi2.MenuController{})
+	//menuRoutes.SetupRoutes()
+	//
+	//resourceRoutes := NewResourceRoutes("/adminapi/resource", router, &adminapi2.ResourceController{})
+	//resourceRoutes.SetupRoutes()
+	//
+	//crawlRoutes := NewResourceRoutes("/adminapi/crawl", router, &adminapi2.CrawlController{})
+	//crawlRoutes.SetupRoutes()
+	//
+	//dictRoutes := NewResourceRoutes("/adminapi/dict", router, &adminapi2.DictController{})
+	//dictRoutes.SetupRoutes()
+	//
+	//logRoutes := NewResourceRoutes("/adminapi/log", router, &adminapi2.LogController{})
+	//logRoutes.SetupRoutes()
 
 	ResourceController := adminapi2.ResourceController{}
 	router.GET("/adminapi/share/waitlist", ResourceController.WaitShareList)
@@ -175,6 +174,11 @@ func setupRouter() *gin.Engine {
 	apiGroup := router.Group("/api")
 	apiGroup.Use(middleware.Cors())
 	routes.SetApiGroupRoutes(apiGroup)
+
+	// 注册 adminapi 分组路由
+	admimApiGroup := router.Group("/adminapi")
+	admimApiGroup.Use(middleware.Cors())
+	routes.SetAdminApiGroupRoutes(admimApiGroup)
 
 	//upload route
 	authRouter := router.Group("/adminapi").Use(middleware.JWTAuth(services.AppGuardName))

@@ -26,22 +26,26 @@ import (
 type ResourceController struct{}
 
 func (uc *ResourceController) GetList(c *gin.Context) {
-	var users []models.ResourceItem
-	var totalUsers int64
+	var ResourceItem []models.ResourceItem
+	var totalResourceItem int64
 	pageStr := c.DefaultQuery("pageNum", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
 	keyword := c.DefaultQuery("keyword", "")
 	diskTypeId := c.DefaultQuery("disk_type_id", "")
+	categoryIdStr := c.DefaultQuery("category_id", "")
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
 		fmt.Println(err)
 		page = 1
 	}
-	fmt.Println(page)
 	pageSize, err := strconv.Atoi(pageSizeStr)
 	if err != nil || pageSize < 1 {
 		pageSize = 10
+	}
+	cagetoryId, err2 := strconv.Atoi(categoryIdStr)
+	if err2 != nil {
+		cagetoryId = 0
 	}
 	// Calculate offset and limit
 	offset := (page - 1) * pageSize
@@ -49,6 +53,9 @@ func (uc *ResourceController) GetList(c *gin.Context) {
 	db := global.App.DB
 
 	query := db.Model(models.ResourceItem{})
+	if cagetoryId != 0 {
+		query.Where("category_id= ?", cagetoryId)
+	}
 	if keyword != "" {
 		query.Where("title LIKE ?", "%"+keyword+"%")
 	}
@@ -56,20 +63,20 @@ func (uc *ResourceController) GetList(c *gin.Context) {
 		query.Where("title LIKE ?", "%"+keyword+"%")
 	}
 
-	query.Count(&totalUsers).Limit(limit).Offset(offset).Order("id desc").Find(&users)
-	for i, item := range users {
-		users[i].CreateTimeStr = utils.TimestampToDateYmd(item.CreatedAt)
+	query.Count(&totalResourceItem).Preload("Category").Limit(limit).Offset(offset).Order("id desc").Find(&ResourceItem)
+	for i, item := range ResourceItem {
+		ResourceItem[i].CreateTimeStr = utils.TimestampToDateYmd(item.CreatedAt)
 	}
 
 	var res = gin.H{
-		"list":  users,
-		"total": totalUsers,
+		"list":  ResourceItem,
+		"total": totalResourceItem,
 	}
 	response.Success(c, res)
 }
 
 func (uc *ResourceController) SyncToSearch(c *gin.Context) {
-	var users []models.ResourceItem
+	var ResourceItem []models.ResourceItem
 	pageStr := c.DefaultQuery("pageNum", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "100000")
 	keyword := c.DefaultQuery("keyword", "")
@@ -94,8 +101,8 @@ func (uc *ResourceController) SyncToSearch(c *gin.Context) {
 		query.Where("mobile LIKE ?", "%"+keyword+"%").Or("name LIKE ?", "%"+keyword+"%")
 	}
 
-	query.Limit(limit).Offset(offset).Find(&users)
-	err = services.SearchItemService.BatchSync(&users)
+	query.Limit(limit).Offset(offset).Find(&ResourceItem)
+	err = services.SearchItemService.BatchSync(&ResourceItem)
 	if err != nil {
 		response.BusinessFail(c, err.Error())
 	}
