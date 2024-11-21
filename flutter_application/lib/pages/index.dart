@@ -5,6 +5,7 @@ import 'package:flutter_application_2/navi/bottom_navi.dart';
 import 'package:flutter_application_2/navi/navi_controller.dart';
 import 'package:flutter_application_2/pages/list.dart';
 import 'package:flutter_application_2/pages/my.dart';
+import 'package:flutter_application_2/pages/rank.dart';
 import 'package:get/get.dart';
 
 // void main() => runApp(const MyApp());
@@ -30,16 +31,15 @@ class _MyAppState extends State<IndexPage> with SingleTickerProviderStateMixin {
 
   }
 
-
-
   final NaviController naviController = Get.put(NaviController());
 
 
   final List<Widget> _widgetList = <Widget>[
-    const ListWidget(),
-    //  ListWidget(),
-    MyPage()
+     const ListWidget(),
+    RankWidget(),
+    const MyPage()
     // testWidget(),
+    
     // settingsWidget()
   ];
 

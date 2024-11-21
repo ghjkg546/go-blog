@@ -28,9 +28,9 @@ class Request {
   static Dio _dio = Dio();
 
   // String baseUrl = 'https://api.shareziyuan.email/api';
-  //  String baseUrl = 'http://127.0.0.1:8080/api';
+    String baseUrl = 'http://127.0.0.1:8080/api';
   //  String baseUrl = 'http://192.168.2.236:8080/api';
-     String baseUrl = 'http://47.106.155.179:8080/api';
+    //  String baseUrl = 'http://47.106.155.179:8080/api';
 
 
 
@@ -52,7 +52,7 @@ class Request {
 
   /// 请求拦截器
   void _onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    // 对非open的接口的请求参数全部增加userId
+    // 添加通用参数方法
     // if (!options.path.contains("open")) {
     //   options.queryParameters["userId"] = "xxx";
     // }

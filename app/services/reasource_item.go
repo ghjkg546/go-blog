@@ -15,17 +15,24 @@ type resourceItemService struct {
 var ResourceItemService = new(resourceItemService)
 
 // 获取资源列表
-func (resourceItemService *resourceItemService) GetResList(page int, pageSize int, category_id int32, keyword string) (err error, data []models.ResourceItem, total int64) {
+func (resourceItemService *resourceItemService) GetResList(page int, pageSize int, categoryId int32, keyword string, orderBy string) (err error, data []models.ResourceItem, total int64) {
 
 	offset := (page - 1) * pageSize
-	query := global.App.DB.Order("id DESC")
-	if category_id > 0 {
-		query.Where("category_id=?", category_id)
+	query := global.App.DB.Model(models.ResourceItem{})
+	if orderBy != "" {
+		fmt.Println(orderBy)
+		query.Order(orderBy + ",id DESC")
+	} else {
+		query.Order("id DESC")
+	}
+	if categoryId > 0 {
+		query.Where("category_id=?", categoryId)
 	}
 	if keyword != "" {
 		query.Where("title LIKE ?", "%"+keyword+"%")
 	}
-	if err := query.Model(models.ResourceItem{}).Count(&total).Offset(offset).Limit(pageSize).Find(&data).Error; err != nil {
+
+	if err := query.Count(&total).Offset(offset).Limit(pageSize).Find(&data).Error; err != nil {
 		err = errors.New("数据为空")
 	}
 
@@ -40,7 +47,6 @@ func (resourceItemService *resourceItemService) GetResList(page int, pageSize in
 			data[i].DiskItemsArray = items
 		} else {
 			err1 = errors.New("出错了")
-			fmt.Println(err1)
 		}
 
 	}

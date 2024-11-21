@@ -7,6 +7,7 @@ Widget bottomNavi(NaviController naviController)  {
 return Obx(()=>  BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
+          BottomNavigationBarItem(icon: Icon(Icons.arrow_upward ), label: "排行"),
           // BottomNavigationBarItem(icon: Icon(Icons.share), label: "推荐"),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_box), label: "我的"),

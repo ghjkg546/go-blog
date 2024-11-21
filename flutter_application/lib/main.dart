@@ -1,20 +1,9 @@
-import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/apis/app.dart';
-import 'package:flutter_application_2/entity/category.dart';
-import 'package:flutter_application_2/entity/data.dart';
-import 'package:flutter_application_2/pages/my.dart';
 
-import 'package:flutter_application_2/pages/list.dart';
-import 'package:flutter_application_2/pages/login.dart';
-import 'package:flutter_application_2/pages/register.dart';
-import 'package:flutter_application_2/pages/web_view.dart';
 import 'package:flutter_application_2/utils/route_get.dart';
 import 'package:flutter_application_2/utils/user_preference.dart';
 import 'package:get/get.dart';
-import 'package:number_paginator/number_paginator.dart';
 
 
 

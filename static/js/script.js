@@ -1,5 +1,19 @@
 var searchvisible = 0;
 
+$(function () {
+    $('#search-btn2').on('click', () => {
+        console.log(44);
+        window.location.href = "/"+$('#default-search2').val();
+    });
+});
+
+$(function () {
+    $('#search-btn').on('click', () => {
+        console.log(44);
+        window.location.href = "/"+$('#default-search').val();
+    });
+});
+
 $("#search-menu").click(function(e){ 
     //This stops the page scrolling to the top on a # link.
     e.preventDefault();

@@ -33,15 +33,15 @@ func main() {
 
 	// 初始化计划任务
 	bootstrap.InitializeCron()
-	var wg sync.WaitGroup
+	//var wg sync.WaitGroup
 
 	// Start the Telegram bot in a separate goroutine
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		bootstrap.InitializeTele()
-	}()
+	//wg.Add(1)
+	//go func() {
+	//	defer wg.Done()
+	//	bootstrap.InitializeTele()
+	//}()
 	// 启动服务器
 	bootstrap.RunServer()
-	wg.Wait()
+	//wg.Wait()
 }

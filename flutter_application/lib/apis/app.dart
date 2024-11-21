@@ -35,11 +35,22 @@ class UserApi {
   }
 
   // 获取列表数据
-  getReasources() async {
+  getCategories() async {
     var result = await Request().request(
       "/category/list",
       method: DioMethod.get,
       // data: {"taskuuid": "queryprod", "splist": "66"}
+    );
+
+    return result;
+  }
+
+  // 获取列表数据
+  getRankList(int categoryId) async {
+    var result = await Request().request(
+      "/rank/list?category_id=$categoryId",
+      method: DioMethod.get,
+     
     );
 
     return result;

@@ -26,12 +26,7 @@ class _SignInPageState extends State<SignInPage> {
   fetchSignStatus() async {
     var c1 = await userApi.getSignStatus();
 
-
-// print(res);
-
 var status = SignInResponse.fromJson(c1).data;
-// print(cates1);
-
     setState(() {
         signStatus = List<int>.from(status);
       });
@@ -49,6 +44,7 @@ var status = SignInResponse.fromJson(c1).data;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('签到成功 ')),
       );
+      fetchSignStatus();
     }
   }
 
@@ -78,7 +74,7 @@ var status = SignInResponse.fromJson(c1).data;
                           signStatus[index] == 1 ? Colors.green : Colors.grey,
                       shape: BoxShape.circle,
                     ),
-                    child: Center(child: Text('周${index + 1}')),
+                    child: Center(child: Text(index==0?'周日':'周${index }')),
                   ),
                   const SizedBox(height: 5),
                   Text(

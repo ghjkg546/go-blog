@@ -251,9 +251,14 @@
 
 <!-- Mobile Menu -->
 {{template "menu.html" .}}
+<script>
+    var script = document.createElement('script');
+    script.src = '/js/script.js?v=' + new Date().getTime();
+    document.head.appendChild(script);
+</script>
 
 
-<script src="/js/script.js"></script>
+
 
 </body>
 </html>

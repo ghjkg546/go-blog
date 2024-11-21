@@ -19,75 +19,6 @@ import (
 	"time"
 )
 
-//// Define a struct to hold your resource routes
-//type ResourceRoutes struct {
-//	BasePath   string
-//	Router     *gin.Engine
-//	Controller interface{}
-//}
-
-// Controller defines the methods that must be implemented by controllers
-//
-//	type Controller interface {
-//		GetList(c *gin.Context)
-//		GetDetail(c *gin.Context)
-//		Create(c *gin.Context)
-//		Update(c *gin.Context)
-//		Delete(c *gin.Context)
-//	}
-//
-//	func NewResourceRoutes(basePath string, router *gin.Engine, controller interface{}) *ResourceRoutes {
-//		return &ResourceRoutes{
-//			BasePath:   basePath,
-//			Router:     router,
-//			Controller: controller,
-//		}
-//	}
-//
-//	func (r *ResourceRoutes) SetupRoutes() {
-//		resource := r.BasePath
-//		//ctrlType := reflect.TypeOf(r.Controller)
-//		ctrlValue := reflect.ValueOf(r.Controller)
-//
-//		// Map HTTP methods to controller methods
-//		methodMappings := map[string]string{
-//			"LIST":   "GetList",
-//			"GET":    "GetDetail",
-//			"POST":   "Create",
-//			"PUT":    "Update",
-//			"DELETE": "Delete",
-//		}
-//
-//		for method, action := range methodMappings {
-//			methodFunc := ctrlValue.MethodByName(action)
-//			if !methodFunc.IsValid() {
-//				continue
-//			}
-//
-//			switch method {
-//			case "LIST":
-//				r.Router.GET(resource, func(c *gin.Context) {
-//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-//				}).Use(middleware.Cors())
-//			case "GET":
-//				r.Router.GET(resource+"/:id", func(c *gin.Context) {
-//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-//				}).Use(middleware.Cors())
-//			case "POST":
-//				r.Router.POST(resource, func(c *gin.Context) {
-//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-//				}).Use(middleware.Cors())
-//			case "PUT":
-//				r.Router.PUT(resource+"/:id", func(c *gin.Context) {
-//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-//				}).Use(middleware.Cors())
-//			case "DELETE":
-//				r.Router.DELETE(resource+"/:id", func(c *gin.Context) {
-//					methodFunc.Call([]reflect.Value{reflect.ValueOf(c)})
-//				}).Use(middleware.Cors())
-//			}
-//		}
-//	}
 func seq(start, end int) []int {
 	var numbers []int
 	for i := start; i <= end; i++ {
@@ -123,7 +54,8 @@ func setupRouter() *gin.Engine {
 
 	ResController := app.ResController{}
 	router.GET("/", ResController.GetFrontReasouceItems)
-	router.GET("/:cateid", ResController.GetFrontReasouceItems)
+	//router.GET("/:cateid", ResController.GetFrontReasouceItems)
+	router.GET("/:keyword", ResController.GetFrontReasouceItems)
 	router.GET("/category/:category_id/:page", ResController.GetFrontReasouceItems)
 	router.GET("/category/:category_id", ResController.GetFrontReasouceItems)
 	router.GET("/archives/:id", ResController.GetBlogDetail)

@@ -141,7 +141,7 @@ func SignIn(c *gin.Context) {
 	}
 	if exist > 0 {
 		response.BusinessFail(c, "今天你已经签到过了")
-		//return
+		return
 	}
 	_, err1 := global.App.Redis.SetBit(context.Background(), constants.GetSignKey(uid, week), int64(day), 1).Result()
 	if err1 != nil {

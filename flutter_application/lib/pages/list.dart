@@ -1,14 +1,10 @@
-import 'dart:async';
-import 'dart:convert';
 
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
 import 'package:flutter_application_2/entity/category.dart';
 import 'package:flutter_application_2/entity/data.dart';
-import 'package:flutter_application_2/pages/detail.dart';
-import 'package:flutter_application_2/item_card.dart';
-import 'package:get/get.dart';
+import 'package:flutter_application_2/components/item_card.dart';
 
 import 'package:number_paginator/number_paginator.dart';
 
@@ -43,7 +39,7 @@ class _MyAppState extends State<ListWidget>
 
   // 获取列表
   getReasouceItem() async {
-    var c1 = await userApi.getReasources();
+    var c1 = await userApi.getCategories();
   
     var cates1 = CategoryRes.fromJson(c1).data.list;
 
@@ -169,6 +165,7 @@ class _MyAppState extends State<ListWidget>
                     ),
                     itemCount: resource_items.length, // 这里你可以根据具体数据调整数量
                     itemBuilder: (context, index) {
+                    
                       return ItemCard(item: resource_items[index]); // 传入每个项
                     },
                   );

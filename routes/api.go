@@ -18,7 +18,7 @@ func SetApiGroupRoutes(router *gin.RouterGroup) {
 	router.GET("/user/signstatus", app.GetSignStatus)
 	router.GET("/user/favlist", app.GetFavList)
 	router.GET("/duanju/list", app.GetResList)
-
+	router.GET("/rank/list", app.GetRankList)
 	router.GET("/res/info", app.Info)
 	router.GET("/res/search", app.ResSearch)
 

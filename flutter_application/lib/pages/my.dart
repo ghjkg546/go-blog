@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
 import 'package:flutter_application_2/entity/user.dart';
-import 'package:flutter_application_2/mycomponent.dart';
+import 'package:flutter_application_2/components/mycomponent.dart';
 import 'package:flutter_application_2/pages/login.dart';
 import 'package:flutter_application_2/pages/setting.dart';
 import 'package:flutter_application_2/pages/signin.dart';

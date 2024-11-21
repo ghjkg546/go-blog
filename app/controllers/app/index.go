@@ -169,26 +169,6 @@ func GetFavList(c *gin.Context) {
 	}
 	response.Success(c, res)
 	return
-	//err, data, total := services.ResourceItemService.GetResList(page, pageSize, int32(cid), keyword)
-	//if err != nil {
-	//	response.BusinessFail(c, err.Error())
-	//	return
-	//}
-
-	//for i := range data {
-	//	res := &data[i]
-	//	tm1 := time.Unix(res.CreatedAt, 0)
-	//	tm2 := time.Unix(res.UpdatedAt, 0)
-	//	//res.Description = ""
-	//	res.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
-	//	res.UpdateTimeStr = tm2.Format("2006-01-02 15:04:05")
-	//}
-	//
-	//var res = gin.H{
-	//	"list":  data,
-	//	"total": total,
-	//}
-	//response.Success(c, res)
 }
 
 func GetResList(c *gin.Context) {
@@ -211,7 +191,7 @@ func GetResList(c *gin.Context) {
 		cid = 0
 	}
 	fmt.Println(cid)
-	err, data, total := services.ResourceItemService.GetResList(page, pageSize, int32(cid), keyword)
+	err, data, total := services.ResourceItemService.GetResList(page, pageSize, int32(cid), keyword, "")
 	if err != nil {
 		response.BusinessFail(c, err.Error())
 		return
@@ -221,7 +201,47 @@ func GetResList(c *gin.Context) {
 		res := &data[i]
 		tm1 := time.Unix(res.CreatedAt, 0)
 		tm2 := time.Unix(res.UpdatedAt, 0)
-		//res.Description = ""
+		res.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
+		res.UpdateTimeStr = tm2.Format("2006-01-02 15:04:05")
+	}
+
+	var res = gin.H{
+		"list":  data,
+		"total": total,
+	}
+	response.Success(c, res)
+}
+
+func GetRankList(c *gin.Context) {
+	keyword := c.DefaultQuery("keyword", "")
+	categoryId := c.DefaultQuery("category_id", "0")
+	pageSizeStr := c.DefaultQuery("pageSize", "50")
+
+	pageStr := c.DefaultQuery("page", "1")
+	page, err1 := strconv.Atoi(pageStr)
+	if err1 != nil {
+		page = 1
+	}
+	pageSize, err3 := strconv.Atoi(pageSizeStr)
+	if err3 != nil {
+		pageSize = 10
+	}
+	cid := 0
+	cid, err2 := strconv.Atoi(categoryId)
+	if err2 != nil {
+		cid = 0
+	}
+	fmt.Println(cid)
+	err, data, total := services.ResourceItemService.GetResList(page, pageSize, int32(cid), keyword, "views DESC")
+	if err != nil {
+		response.BusinessFail(c, err.Error())
+		return
+	}
+
+	for i := range data {
+		res := &data[i]
+		tm1 := time.Unix(res.CreatedAt, 0)
+		tm2 := time.Unix(res.UpdatedAt, 0)
 		res.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
 		res.UpdateTimeStr = tm2.Format("2006-01-02 15:04:05")
 	}
@@ -307,7 +327,7 @@ func (bc *ResController) GetFrontReasouceItems(c *gin.Context) {
 		cid = cate.ID
 		cateName = cate.Name
 	}
-	err, data, total := services.ResourceItemService.GetResList(page, pageSize, cid, keyword)
+	err, data, total := services.ResourceItemService.GetResList(page, pageSize, cid, keyword, "")
 	if err != nil {
 		response.BusinessFail(c, err.Error())
 		return
@@ -344,6 +364,7 @@ func (bc *ResController) GetFrontReasouceItems(c *gin.Context) {
 		"cateName":       cateName,
 		"blogNew":        dataNew,
 		"CurrentPage":    page,
+		"Keyword":        keyword,
 		"TotalPages":     totalPages,
 		"TotalPageArray": generatePages(totalPages, page),
 		"PrevPage":       page - 1,

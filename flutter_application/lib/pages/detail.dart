@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_2/apis/app.dart';
 import 'package:flutter_application_2/components/comment_section.dart';
-import 'package:flutter_application_2/entity/data.dart';
 import 'package:flutter_application_2/entity/resource_item.dart';
 import 'package:flutter_application_2/pages/login.dart';
 import 'package:flutter_application_2/pages/write_comment.dart';
@@ -23,7 +22,7 @@ class DetailPage extends StatefulWidget {
 // class _MyAppState extends State<ListWidget> with SingleTickerProviderStateMixin {
 class _MyAppState extends State<DetailPage>
     with SingleTickerProviderStateMixin {
-  late Info item;
+  late Info? item;
   final List<String> _categories = ['详情', '评论'];
   late List comments;
   String url = "";
@@ -37,7 +36,7 @@ class _MyAppState extends State<DetailPage>
   late TabController _tabController;
   void getDetailInfo() async {
     var result;
-
+    item = null;
     result = await userApi.getDetail(widget.itemId);
 
     final res = ApiResponse.fromJson(result);
@@ -62,6 +61,29 @@ class _MyAppState extends State<DetailPage>
 
   @override
   Widget build(BuildContext context) {
+    if (item == null) {
+      return const Center(
+        child: Column(
+          mainAxisSize:
+              MainAxisSize.min, // Ensure the content is vertically centered
+          children: [
+            SizedBox(
+              width: 50,
+              height: 50,
+              child: CircularProgressIndicator(
+                strokeWidth: 5,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+              ),
+            ),
+            SizedBox(height: 10), // Spacing between spinner and text
+            Text(
+              "加载中...",
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          ],
+        ),
+      ); // Show a loading indicator
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("资源详情"),
@@ -94,7 +116,7 @@ class _MyAppState extends State<DetailPage>
                             // 收藏
                             InkWell(
                               onTap: () async {
-                                var res = await userApi.fav(item.id);
+                                var res = await userApi.fav(item!.id);
                                 if (res['code'] != 0) {
                                   BrnToast.show(res['msg'], context);
                                   Get.to(LoginPage());
@@ -113,7 +135,8 @@ class _MyAppState extends State<DetailPage>
                                           : Icons.favorite_border,
                                       color: Colors.red),
                                   const SizedBox(height: 4),
-                                  const Text('收藏', style: TextStyle(fontSize: 14)),
+                                  const Text('收藏',
+                                      style: TextStyle(fontSize: 14)),
                                 ],
                               ),
                             ),
@@ -125,18 +148,18 @@ class _MyAppState extends State<DetailPage>
                         const SizedBox(height: 16),
 
                         Text(
-                          item.name,
+                          item!.name,
                           style: const TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         Html(
-                          data: item.description,
+                          data: item!.description,
                         ),
 
                         const SizedBox(height: 16),
                         Column(
-                          children: item.diskItemsArray.map((item) {
+                          children: item!.diskItemsArray.map((item) {
                             return Column(
                               children: [
                                 const SizedBox(
@@ -190,7 +213,7 @@ class _MyAppState extends State<DetailPage>
             final result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => WriteCommentPage(id: item.id),
+                builder: (context) => WriteCommentPage(id: item!.id),
               ),
             );
             if (result == true) {
