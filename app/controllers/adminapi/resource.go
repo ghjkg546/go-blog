@@ -29,10 +29,13 @@ func (uc *ResourceController) GetList(c *gin.Context) {
 	var ResourceItem []models.ResourceItem
 	var totalResourceItem int64
 	pageStr := c.DefaultQuery("pageNum", "1")
+	disk_type_id_str := c.DefaultQuery("disk_type_id", "")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
 	keyword := c.DefaultQuery("keyword", "")
-	diskTypeId := c.DefaultQuery("disk_type_id", "")
+
 	categoryIdStr := c.DefaultQuery("category_id", "")
+	startTime := c.DefaultQuery("createTime[0]", "")
+	endTime := c.DefaultQuery("createTime[1]", "")
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
@@ -56,10 +59,18 @@ func (uc *ResourceController) GetList(c *gin.Context) {
 	if cagetoryId != 0 {
 		query.Where("category_id= ?", cagetoryId)
 	}
-	if keyword != "" {
-		query.Where("title LIKE ?", "%"+keyword+"%")
+	if disk_type_id_str != "" {
+
+		fmt.Println(`"type": "` + disk_type_id_str + `"`)
+		query.Where("disk_items LIKE ?", "%"+`"type": `+disk_type_id_str+`%`)
+		query.Or("disk_items LIKE ?", "%"+`"type":`+disk_type_id_str+`%`)
+
 	}
-	if diskTypeId != "" {
+	if startTime != "" {
+		startTimeStamp, endTimeStamp := services.CrudService.ParseStartEndTime(startTime, endTime)
+		query.Where("created_at between ? and ?", startTimeStamp, endTimeStamp)
+	}
+	if keyword != "" {
 		query.Where("title LIKE ?", "%"+keyword+"%")
 	}
 

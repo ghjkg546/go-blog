@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jassue/jassue-gin/app/common/response"
 	"github.com/jassue/jassue-gin/app/models"
+	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
 	"github.com/jassue/jassue-gin/utils"
 	"net/http"
@@ -14,68 +15,6 @@ import (
 
 type CommentController struct{}
 
-func (t *CommentController) RoleList(c *gin.Context) {
-	// 执行数据库操作
-	db := global.App.DB
-
-	// Fetch all routes
-	var roles []models.SysRoleMenu
-	db.Where("role_id = ?", 2).Find(&roles)
-	var ids []uint
-	for i := range roles {
-		route := &roles[i]
-		ids = append(ids, route.MenuID)
-
-	}
-	var menus []models.SysMenu
-
-	db.Where("id in ?", ids).Order("parent_id asc").Find(&menus)
-
-	routeMap := make(map[uint]*models.Route)
-	var rootRoutes []*models.Route
-	for i := range menus {
-		menu := &menus[i]
-		route := &models.Route{
-			ID:        menu.ID,
-			Path:      menu.RoutePath,
-			Component: menu.Component,
-			Redirect:  menu.Redirect,
-			Name:      menu.Name,
-			ParentID:  menu.ParentID,
-
-			MetaStr: "",
-		}
-		meta := models.Meta{
-			Title:      menu.Name,
-			Icon:       menu.Icon,
-			AlwaysShow: true,
-		}
-		route.Meta = meta
-		route.Children = []models.Route{}
-		routeMap[menu.ID] = route
-
-		if route.ParentID == 0 {
-
-			rootRoutes = append(rootRoutes, route)
-		}
-
-	}
-	for _, route := range routeMap {
-		if route.ParentID != 0 {
-			parent, exists := routeMap[route.ParentID]
-			if exists {
-				parent.Children = append(parent.Children, *route)
-			}
-		}
-	}
-	//
-
-	c.JSON(http.StatusOK, gin.H{
-		"code": 0,
-		"data": rootRoutes,
-	})
-}
-
 // GetList handles GET requests for Comments
 func (uc *CommentController) GetList(c *gin.Context) {
 	var Comments []models.Comment
@@ -83,7 +22,8 @@ func (uc *CommentController) GetList(c *gin.Context) {
 	pageStr := c.DefaultQuery("page", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
 	keyword := c.DefaultQuery("keyword", "")
-
+	startTime := c.DefaultQuery("createTime[0]", "")
+	endTime := c.DefaultQuery("createTime[1]", "")
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
 		page = 1
@@ -102,9 +42,11 @@ func (uc *CommentController) GetList(c *gin.Context) {
 	if keyword != "" {
 		query = query.Where("c.content LIKE ? OR user.mobile LIKE ?", "%"+keyword+"%", "%"+keyword+"%").
 			Joins("LEFT JOIN user ON user.id = c.user_id")
-
 	}
-
+	if startTime != "" {
+		startTimeStamp, endTimeStamp := services.CrudService.ParseStartEndTime(startTime, endTime)
+		query.Where("created_at between ? and ?", startTimeStamp, endTimeStamp)
+	}
 	query.Count(&totalComments).Offset(offset).Limit(limit).Preload("User").Find(&Comments)
 	for i, item := range Comments {
 		Comments[i].CreatedAtStr = utils.TimestampToDateYmd(item.CreatedAt)

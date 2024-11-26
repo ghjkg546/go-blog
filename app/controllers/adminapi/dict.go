@@ -6,6 +6,7 @@ import (
 	"github.com/jassue/jassue-gin/app/common/response"
 	"github.com/jassue/jassue-gin/app/models"
 	"github.com/jassue/jassue-gin/global"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"strconv"
@@ -78,6 +79,34 @@ func (uc *DictController) Create(c *gin.Context) {
 	response.Success(c, nil)
 }
 
+func getOldIdsByDictId(db *gorm.DB, dictId int32) ([]int32, error) {
+	var ids []int32
+	// Get all IDs for the given dict_id
+	err := db.Model(&models.SysDictItem{}).Where("dict_id = ?", dictId).Pluck("id", &ids).Error
+	if err != nil {
+		return nil, err
+	}
+	return ids, nil
+}
+
+func calculateExcludeIds(oldIds []int32, newIds []int32) []int32 {
+	var excludeIds []int32
+
+	for _, oldId := range oldIds {
+		found := false
+		for _, newId := range newIds {
+			if oldId == newId {
+				found = true
+				break
+			}
+		}
+		if !found {
+			excludeIds = append(excludeIds, oldId)
+		}
+	}
+	return excludeIds
+}
+
 // Update handles PUT requests to update a dict
 func (uc *DictController) Update(c *gin.Context) {
 	var input models.SysDict
@@ -87,25 +116,58 @@ func (uc *DictController) Update(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	var newIds []int32
 	for _, item := range input.DictItems {
 		fmt.Printf("Sort: %d, Status: %d, Name: %s, Value: %s\n", item.Sort, item.Status, item.Name, item.Value)
 		if item.ID != 0 {
+			newIds = append(newIds, item.ID)
+
+		}
+	}
+	//excludeIds := []uint{6, 7} // IDs to exclude and delete if dict_id does not contain them
+	err := deleteDictItemsIfNotMatching(db, input.ID, newIds)
+	if err != nil {
+		response.Fail(c, 500, "删数据出错")
+	}
+	for _, item := range input.DictItems {
+		if item.ID != 0 {
 			// Update existing item if ID is present
-			if err := db.Model(&models.SysDictItem{}).Where("id = ?", item.ID).Updates(item).Error; err != nil {
+			if err1 := db.Model(&models.SysDictItem{}).Where("id = ?", item.ID).Updates(item).Error; err1 != nil {
 				log.Println("Error updating item:", err)
 				continue
 			}
-			fmt.Printf("Updated item with ID %d\n", item.ID)
 		}
 	} // Save data to database
 	result := db.Save(&input)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		response.Fail(c, 500, result.Error.Error())
 		return
 	}
 	response.Success(c, nil)
 
+}
+
+func deleteDictItemsIfNotMatching(db *gorm.DB, dictId int32, newIds []int32) error {
+	// Delete records where dict_id is not the given dict_id and the id is in the excludeIds list
+
+	oldIds, err := getOldIdsByDictId(db, dictId)
+	if err != nil {
+		return err
+	}
+
+	// Calculate excludeIds by comparing oldIds with newIds
+	excludeIds := calculateExcludeIds(oldIds, newIds)
+	fmt.Println(excludeIds)
+	// If there are no IDs to delete, return early
+	if len(excludeIds) == 0 {
+		return nil
+	}
+	err2 := db.Where("dict_id = ? AND id IN ?", dictId, excludeIds).
+		Delete(&models.SysDictItem{}).Error
+	if err2 != nil {
+		return err2
+	}
+	return nil
 }
 
 // Delete handles DELETE requests to delete a dict

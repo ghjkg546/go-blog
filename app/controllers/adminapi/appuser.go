@@ -85,8 +85,7 @@ func (uc *AppUserController) ChangePass(c *gin.Context) {
 	}
 	uid := services.JwtService.GetUserId(c)
 	var user models.User
-	fmt.Println("ui:d")
-	fmt.Println(uid)
+
 	global.App.DB.First(&user, uid)
 	fmt.Println(user)
 	if !utils.BcryptMakeCheck([]byte(input.OldPassword), user.Password) {
@@ -103,10 +102,11 @@ func (uc *AppUserController) ChangePass(c *gin.Context) {
 func (uc *AppUserController) GetList(c *gin.Context) {
 	var users []models.User
 	var totalUsers int64
-	pageStr := c.DefaultQuery("page", "1")
+	pageStr := c.DefaultQuery("pageNum", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
 	keyword := c.DefaultQuery("keyword", "")
-
+	startTime := c.DefaultQuery("createTime[0]", "")
+	endTime := c.DefaultQuery("createTime[1]", "")
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
 		page = 1
@@ -125,11 +125,17 @@ func (uc *AppUserController) GetList(c *gin.Context) {
 	if keyword != "" {
 		query.Where("mobile LIKE ?", "%"+keyword+"%").Or("name LIKE ?", "%"+keyword+"%")
 	}
+	if startTime != "" {
+		startstamp, endstamp := services.CrudService.ParseStartEndTime(startTime, endTime)
+		query.Where("created_at between ? and ?", startstamp, endstamp)
+	}
+	query.Count(&totalUsers).Limit(limit).Offset(offset).Find(&users)
 
-	query.Find(&users).Count(&totalUsers).Limit(limit).Offset(offset)
-	//for _, route := range routeMap
 	for i := range users {
 		user := &users[i]
+
+		user.CreatedAtStr = utils.TimestampToDateYmd(user.CreatedAt)
+
 		user.Password = ""
 	}
 	var res = gin.H{

@@ -101,4 +101,7 @@ func SetAdminApiGroupRoutes(router *gin.RouterGroup) {
 
 	logRoutes := NewResourceRoutes("/log", router, &adminapi.LogController{})
 	logRoutes.SetupRoutes()
+
+	feedbackRoutes := NewResourceRoutes("/feedbacks", router, &adminapi.FeedbackController{})
+	feedbackRoutes.SetupRoutes()
 }
