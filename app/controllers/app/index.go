@@ -171,6 +171,54 @@ func GetFavList(c *gin.Context) {
 	return
 }
 
+func GetIndexList(c *gin.Context) {
+	keyword := c.DefaultQuery("keyword", "")
+	categoryId := c.DefaultQuery("category_id", "0")
+	pageSizeStr := c.DefaultQuery("pageSize", "50")
+
+	pageStr := c.DefaultQuery("page", "1")
+	page, err1 := strconv.Atoi(pageStr)
+	if err1 != nil {
+		page = 1
+	}
+	pageSize, err3 := strconv.Atoi(pageSizeStr)
+	if err3 != nil {
+		pageSize = 12
+	}
+	cid := 0
+	cid, err2 := strconv.Atoi(categoryId)
+	if err2 != nil {
+		cid = 0
+	}
+
+	err, data, total := services.ResourceItemService.GetRecommendList(page, pageSize, int32(cid), keyword, "")
+	if err != nil {
+		response.BusinessFail(c, err.Error())
+		return
+	}
+
+	for i := range data {
+		res := &data[i]
+		tm1 := time.Unix(res.CreatedAt, 0)
+		tm2 := time.Unix(res.UpdatedAt, 0)
+		res.CreateTimeStr = tm1.Format("2006-01-02 15:04:05")
+		res.UpdateTimeStr = tm2.Format("2006-01-02 15:04:05")
+	}
+
+	var list []gin.H
+
+	list = append(list, gin.H{
+		"title": "小编推荐",
+		"data":  data,
+	})
+
+	var res = gin.H{
+		"list":  list,
+		"total": total,
+	}
+	response.Success(c, res)
+}
+
 func GetResList(c *gin.Context) {
 	keyword := c.DefaultQuery("keyword", "")
 	categoryId := c.DefaultQuery("category_id", "0")

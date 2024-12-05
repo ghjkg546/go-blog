@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 class NaviController extends GetxController  {
   var selectedIndex = 0.obs;
-
+RxString keyword = "".obs;
   @override
   void onInit()  {
 

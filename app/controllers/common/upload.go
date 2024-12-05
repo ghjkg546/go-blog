@@ -50,7 +50,6 @@ func AvatarUpload(c *gin.Context) {
 		response.BusinessFail(c, err.Error())
 		return
 	}
-	fmt.Println(outPut.Url)
 	_ = UpdateuserAvater(uid, outPut.Url)
 	response.Success(c, outPut)
 }

@@ -67,6 +67,16 @@ class UserApi {
     return result;
   }
 
+  getIndexData(int page, String keyword) async {
+    var result = await Request().request(
+      "/index/data?&page=$page&keyword=$keyword&pageSize=50",
+      method: DioMethod.get,
+      // data: {"taskuuid": "queryprod", "splist": "66"}
+    );
+   
+    return result;
+  }
+
   getListData(int categoryId,int page, String keyword) async {
     var result = await Request().request(
       "/duanju/list?category_id=$categoryId&page=$page&keyword=$keyword&pageSize=50",

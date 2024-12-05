@@ -1,10 +1,11 @@
-
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/apis/app.dart';
 import 'package:flutter_application_2/entity/category.dart';
 import 'package:flutter_application_2/entity/data.dart';
 import 'package:flutter_application_2/components/item_card.dart';
+import 'package:flutter_application_2/navi/navi_controller.dart';
+import 'package:get/get.dart';
 
 import 'package:number_paginator/number_paginator.dart';
 
@@ -18,10 +19,9 @@ class ListWidget extends StatefulWidget {
   State<ListWidget> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<ListWidget>
-    with TickerProviderStateMixin {
+class _MyAppState extends State<ListWidget> with TickerProviderStateMixin {
   late TabController _tabController;
-  
+  final NaviController naviController = Get.find<NaviController>();
   List cates = [];
   List resource_items = [];
   int _page = 1;
@@ -34,13 +34,18 @@ class _MyAppState extends State<ListWidget>
   void initState() {
     super.initState();
     _tabController = TabController(length: 0, vsync: this);
+    print(naviController.keyword.value);
+    if (naviController.keyword.value != "") {
+      _controller.text = naviController.keyword.value;
+      _onSearch();
+    }
     getReasouceItem();
   }
 
   // 获取列表
   getReasouceItem() async {
     var c1 = await userApi.getCategories();
-  
+
     var cates1 = CategoryRes.fromJson(c1).data.list;
 
     setState(() {
@@ -75,8 +80,7 @@ class _MyAppState extends State<ListWidget>
     var c1 = await userApi.getListData(categoryId, _page, _keyword);
 
     var cates1 = DataRes.fromJson(c1).data.list;
-    var tmpTotalpage =
-        (CategoryRes.fromJson(c1).data.total / _pageSize).ceil();
+    var tmpTotalpage = (CategoryRes.fromJson(c1).data.total / _pageSize).ceil();
     if (tmpTotalpage < 1) {
       tmpTotalpage = 1;
     }
@@ -101,6 +105,7 @@ class _MyAppState extends State<ListWidget>
 
   void _onSearch() {
     _keyword = _controller.text.trim();
+    // }
 
     getListData(_categoryId);
   }
@@ -149,29 +154,45 @@ class _MyAppState extends State<ListWidget>
               ],
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: resource_items.map((item) {
-                  // 使用 GridView.builder 替换内容
-                  return GridView.builder(
-                    padding: const EdgeInsets.all(8.0),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 每行显示 2 个项
-                      childAspectRatio: 1, // 设置子项的宽高比
-                      crossAxisSpacing: 8.0,
-                      mainAxisSpacing: 8.0,
+            resource_items.length == 0
+                ? Container(
+                    width: double.infinity,
+                    height: 300,
+                    color: Colors.white, // 设置背景色（可选）
+                    child: Center(
+                      child: Text(
+                        '空空如也',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
-                    itemCount: resource_items.length, // 这里你可以根据具体数据调整数量
-                    itemBuilder: (context, index) {
-                    
-                      return ItemCard(item: resource_items[index]); // 传入每个项
-                    },
-                  );
-                }).toList(),
-              ),
-            ),
+                  )
+                : Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: resource_items.map((item) {
+                        // 使用 GridView.builder 替换内容
+                        return GridView.builder(
+                          padding: const EdgeInsets.all(8.0),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, // 每行显示 2 个项
+                            childAspectRatio: 1, // 设置子项的宽高比
+                            crossAxisSpacing: 8.0,
+                            mainAxisSpacing: 8.0,
+                          ),
+                          itemCount: resource_items.length, // 这里你可以根据具体数据调整数量
+                          itemBuilder: (context, index) {
+                            return ItemCard(
+                                item: resource_items[index]); // 传入每个项
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
             NumberPaginator(
               initialPage: 0,
               numberPages: _totalPage,

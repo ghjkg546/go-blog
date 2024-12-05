@@ -3,6 +3,7 @@ package adminapi
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/jassue/jassue-gin/app/common/request"
 	"github.com/jassue/jassue-gin/app/common/response"
 	"github.com/jassue/jassue-gin/app/models"
@@ -144,21 +145,43 @@ func (t *UserController) Me(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing or malformed token"})
 		return
 	}
-
-	//fmt.Println("JWT Token: %s", tokenString)
-	////tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcHAiLCJleHAiOjE3Mjk4MjYxOTgsIm5iZiI6MTcyOTgyNTEzOCwianRpIjoiOSJ9.EkpA17EczVghGuOFG4kqmzuKlUkSUjDHJAYZyEIkKaM"
-	//token, err := jwt.ParseWithClaims(tokenString, &services.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-	//	return []byte("AllYourBase"), nil
-	//})
-	//
-	//if claims, ok := token.Claims.(*services.CustomClaims); ok && token.Valid {
-	//	fmt.Printf("%v %v", claims.ExpiresAt, claims.RegisteredClaims.Issuer)
+	token, err := jwt.ParseWithClaims(tokenString, &services.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(global.App.Config.Jwt.Secret), nil
+	})
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusOK, gin.H{
+			"code": 500,
+			"data": gin.H{
+				"expire":   "",
+				"userId":   token,
+				"username": "",
+				"nickname": "系统管理员",
+				"avatar":   "https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif",
+				"roles":    []string{"ADMIN"},
+				"perms":    []string{},
+			},
+			"msg": err.Error(),
+		})
+		return
+	}
+	// 验证 Token 是否有效
+	uidStr := ""
+	if claims, ok := token.Claims.(*services.CustomClaims); ok && token.Valid {
+		// 从 claims 获取 user_id 和其他信息
+		fmt.Printf("UserID: %s\n", claims.ID)
+		uidStr = claims.ID
+	}
+	uidsInt, _ := stringToInt32(uidStr)
+	query := global.App.DB.Model(models.AdminUser{})
+	var user models.AdminUser
+	query.Where("id=?", uidsInt).Find(&user)
 	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
 		"data": gin.H{
-			"expire":   "111",
-			"userId":   2,
-			"username": "admin",
+			"expire":   "",
+			"userId":   uidsInt,
+			"username": user.Name,
 			"nickname": "系统管理员",
 			"avatar":   "https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif",
 			"roles":    []string{"ADMIN"},
@@ -166,17 +189,15 @@ func (t *UserController) Me(c *gin.Context) {
 		},
 		"msg": "一切ok",
 	})
-	//} else {
-	//	fmt.Println(err)
-	//	c.JSON(http.StatusOK, gin.H{
-	//		"code": 500,
-	//		"data": gin.H{
-	//			"expire": "111",
-	//		},
-	//		"msg": "token过期",
-	//	})
-	//}
 
+}
+
+func stringToInt32(s string) (int32, error) {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		return 0, err
+	}
+	return int32(i), nil
 }
 
 func (t *UserController) Logout(c *gin.Context) {

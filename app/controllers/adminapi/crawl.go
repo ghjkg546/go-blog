@@ -79,7 +79,6 @@ func (uc *CrawlController) Create(c *gin.Context) {
 	}
 	err1 := json.Unmarshal([]byte(input.DiskItems), &input.DiskItemsArray)
 	if err1 != nil {
-		fmt.Println("Error decoding JSON:", err1)
 		return
 	}
 }

@@ -1,11 +1,13 @@
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/entity/index_item.dart';
+import 'package:flutter_application_2/entity/resource_item.dart';
 import 'package:flutter_application_2/pages/detail.dart';
 import 'package:flutter_application_2/entity/data.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-class ItemCard extends StatelessWidget {
-  final Item item; // 假设 Item 是你的数据模型
+class SimpleItemCard extends StatelessWidget {
+  final ResourceItem item; // 假设 Item 是你的数据模型
 
   Map<int, String> diskMap = {
     1: '百度',
@@ -13,7 +15,7 @@ class ItemCard extends StatelessWidget {
     3: '阿里',
     4: '移动彩云',
   };
-  ItemCard({super.key, required this.item});
+  SimpleItemCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class ItemCard extends StatelessWidget {
               child: Center(
                 child: Text(
                   item.name,
-                  maxLines: 3, // 限制为单行
+                  maxLines: 2, // 限制为单行
   overflow: TextOverflow.ellipsis, // 超出部分显示省略号
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
@@ -60,27 +62,8 @@ class ItemCard extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Wrap(
-                  spacing: 10.0, // 元素之间的水平间距
-                  runSpacing: 10.0, // 元素之间的垂直间距
-                  children: item.diskItemsArray.map((i) {
-                    return BrnStateTag(
-                      tagText: diskMap[i.type].toString(),
-                      tagState: TagState.succeed,
-                    );
-                  }).toList(),
-                )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Icon(Icons.visibility),
-                    const SizedBox(width: 5,),
-                    Text(item.views.toString(),style: const TextStyle(fontSize: 12),),
-                    const SizedBox(width: 10,),
-                  ],
-                )
+           
+               
           ],
         ),
       ),

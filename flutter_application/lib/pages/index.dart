@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_application_2/navi/bottom_navi.dart';
 import 'package:flutter_application_2/navi/navi_controller.dart';
+import 'package:flutter_application_2/pages/first.dart';
 import 'package:flutter_application_2/pages/list.dart';
 import 'package:flutter_application_2/pages/my.dart';
 import 'package:flutter_application_2/pages/rank.dart';
@@ -35,6 +36,7 @@ class _MyAppState extends State<IndexPage> with SingleTickerProviderStateMixin {
 
 
   final List<Widget> _widgetList = <Widget>[
+     const FirstPageWidget(),
      const ListWidget(),
     RankWidget(),
     const MyPage()

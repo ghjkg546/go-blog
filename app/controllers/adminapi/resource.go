@@ -60,8 +60,6 @@ func (uc *ResourceController) GetList(c *gin.Context) {
 		query.Where("category_id= ?", cagetoryId)
 	}
 	if disk_type_id_str != "" {
-
-		fmt.Println(`"type": "` + disk_type_id_str + `"`)
 		query.Where("disk_items LIKE ?", "%"+`"type": `+disk_type_id_str+`%`)
 		query.Or("disk_items LIKE ?", "%"+`"type":`+disk_type_id_str+`%`)
 

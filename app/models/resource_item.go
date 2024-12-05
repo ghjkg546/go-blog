@@ -20,6 +20,7 @@ type ResourceItem struct {
 	TagIds         string        `json:"tag_ids" gorm:"not null;default:'';comment:tag"`
 	SearchId       string        `json:"search_id" gorm:"comment:搜索id"`
 	Status         uint          `json:"status" gorm:"comment:状态"`
+	IsRecommend    uint          `json:"is_recommend" gorm:"is_recommend:是否推荐"`
 	Views          uint          `json:"views" gorm:"comment:阅读次数"`
 	CreatedAt      int64         `gorm:"autoCreateTime"` // 使用时间戳秒数填充创建时间
 	UpdatedAt      int64         `gorm:"autoUpdateTime"` // 使用时间戳毫秒数填充更新时间
