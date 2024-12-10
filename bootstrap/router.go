@@ -150,6 +150,14 @@ func setupRouter() *gin.Engine {
 			},
 		)
 
+		adminapi.GET("category/allwithChildlist",
+			//middleware.CorsMiddleware(),
+			func(ctx *gin.Context) {
+				hello := adminapi2.CateController{}
+				hello.AllWithChildList(ctx)
+			},
+		)
+
 		adminapi.POST("user/login",
 			//middleware.CorsMiddleware(),
 			func(ctx *gin.Context) {

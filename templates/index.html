@@ -1,264 +1,1112 @@
-{{template "header.html" .}}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name='robots' content='max-image-preview:large' />
+    <title>疾风夸克资源</title>
+    <meta name="keywords" content="网盘,夸克网盘,夸克资源,夸克资源合集,夸克网盘资源" />
+    <meta name="description" content="一个很好用的夸克资源的网站，每天更新最新最热门的资源，包括电影、电视剧、综艺、动漫、纪录片、小说、短剧、学习资料等资源。" />
+    <link rel="alternate" type="application/rss+xml" title="夸克网盘社 &raquo; Feed" href="/feed" />
+    <link rel="alternate" type="application/rss+xml" title="夸克网盘社 &raquo; 评论 Feed" href="/comments/feed" />
+    <script src="/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript">
+
+        /* <![CDATA[ */
+        window._wpemojiSettings = {
+            "baseUrl": "https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/72x72\/",
+            "ext": ".png",
+            "svgUrl": "https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/svg\/",
+            "svgExt": ".svg",
+            "source": {
+                "concatemoji": "https:\/\/shareziyuan.email\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.7"
+            }
+        };
+        /*! This file is auto-generated */
+        ! function(i, n) {
+            var o, s, e;
+
+            function c(e) {
+                try {
+                    var t = {
+                        supportTests: e,
+                        timestamp: (new Date).valueOf()
+                    };
+                    sessionStorage.setItem(o, JSON.stringify(t))
+                } catch (e) {}
+            }
+
+            function p(e, t, n) {
+                e.clearRect(0, 0, e.canvas.width, e.canvas.height), e.fillText(t, 0, 0);
+                var t = new Uint32Array(e.getImageData(0, 0, e.canvas.width, e.canvas.height).data),
+                    r = (e.clearRect(0, 0, e.canvas.width, e.canvas.height), e.fillText(n, 0, 0), new Uint32Array(e.getImageData(0, 0, e.canvas.width, e.canvas.height).data));
+                return t.every(function(e, t) {
+                    return e === r[t]
+                })
+            }
+
+            function u(e, t, n) {
+                switch (t) {
+                    case "flag":
+                        return n(e, "\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f", "\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f") ? !1 : !n(e, "\ud83c\uddfa\ud83c\uddf3", "\ud83c\uddfa\u200b\ud83c\uddf3") && !n(e, "\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f", "\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");
+                    case "emoji":
+                        return !n(e, "\ud83d\udc26\u200d\u2b1b", "\ud83d\udc26\u200b\u2b1b")
+                }
+                return !1
+            }
+
+            function f(e, t, n) {
+                var r = "undefined" != typeof WorkerGlobalScope && self instanceof WorkerGlobalScope ? new OffscreenCanvas(300, 150) : i.createElement("canvas"),
+                    a = r.getContext("2d", {
+                        willReadFrequently: !0
+                    }),
+                    o = (a.textBaseline = "top", a.font = "600 32px Arial", {});
+                return e.forEach(function(e) {
+                    o[e] = t(a, e, n)
+                }), o
+            }
+
+            function t(e) {
+                var t = i.createElement("script");
+                t.src = e, t.defer = !0, i.head.appendChild(t)
+            }
+            "undefined" != typeof Promise && (o = "wpEmojiSettingsSupports", s = ["flag", "emoji"], n.supports = {
+                everything: !0,
+                everythingExceptFlag: !0
+            }, e = new Promise(function(e) {
+                i.addEventListener("DOMContentLoaded", e, {
+                    once: !0
+                })
+            }), new Promise(function(t) {
+                var n = function() {
+                    try {
+                        var e = JSON.parse(sessionStorage.getItem(o));
+                        if ("object" == typeof e && "number" == typeof e.timestamp && (new Date).valueOf() < e.timestamp + 604800 && "object" == typeof e.supportTests) return e.supportTests
+                    } catch (e) {}
+                    return null
+                }();
+                if (!n) {
+                    if ("undefined" != typeof Worker && "undefined" != typeof OffscreenCanvas && "undefined" != typeof URL && URL.createObjectURL && "undefined" != typeof Blob) try {
+                        var e = "postMessage(" + f.toString() + "(" + [JSON.stringify(s), u.toString(), p.toString()].join(",") + "));",
+                            r = new Blob([e], {
+                                type: "text/javascript"
+                            }),
+                            a = new Worker(URL.createObjectURL(r), {
+                                name: "wpTestEmojiSupports"
+                            });
+                        return void(a.onmessage = function(e) {
+                            c(n = e.data), a.terminate(), t(n)
+                        })
+                    } catch (e) {}
+                    c(n = f(s, u, p))
+                }
+                t(n)
+            }).then(function(e) {
+                for (var t in e) n.supports[t] = e[t], n.supports.everything = n.supports.everything && n.supports[t], "flag" !== t && (n.supports.everythingExceptFlag = n.supports.everythingExceptFlag && n.supports[t]);
+                n.supports.everythingExceptFlag = n.supports.everythingExceptFlag && !n.supports.flag, n.DOMReady = !1, n.readyCallback = function() {
+                    n.DOMReady = !0
+                }
+            }).then(function() {
+                return e
+            }).then(function() {
+                var e;
+                n.supports.everything || (n.readyCallback(), (e = n.source || {}).concatemoji ? t(e.concatemoji) : e.wpemoji && e.twemoji && (t(e.twemoji), t(e.wpemoji)))
+            }))
+        }((window, document), window._wpemojiSettings);
+        /* ]]> */
+    </script>
+    <style id='wp-emoji-styles-inline-css' type='text/css'>
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 0.07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+    </style>
+    <link rel='stylesheet' id='wp-block-library-css' href='/wp-includes/dist/block-library/style.min.css?ver=6.7' type='text/css' media='all' />
+    <style id='wp-block-library-theme-inline-css' type='text/css'>
+        .wp-block-audio :where(figcaption) {
+            color: #555;
+            font-size: 13px;
+            text-align: center
+        }
+
+        .is-dark-theme .wp-block-audio :where(figcaption) {
+            color: #ffffffa6
+        }
+
+        .wp-block-audio {
+            margin: 0 0 1em
+        }
+
+        .wp-block-code {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: Menlo, Consolas, monaco, monospace;
+            padding: .8em 1em
+        }
+
+        .wp-block-embed :where(figcaption) {
+            color: #555;
+            font-size: 13px;
+            text-align: center
+        }
+
+        .is-dark-theme .wp-block-embed :where(figcaption) {
+            color: #ffffffa6
+        }
+
+        .wp-block-embed {
+            margin: 0 0 1em
+        }
+
+        .blocks-gallery-caption {
+            color: #555;
+            font-size: 13px;
+            text-align: center
+        }
+
+        .is-dark-theme .blocks-gallery-caption {
+            color: #ffffffa6
+        }
+
+        :root :where(.wp-block-image figcaption) {
+            color: #555;
+            font-size: 13px;
+            text-align: center
+        }
+
+        .is-dark-theme :root :where(.wp-block-image figcaption) {
+            color: #ffffffa6
+        }
+
+        .wp-block-image {
+            margin: 0 0 1em
+        }
+
+        .wp-block-pullquote {
+            border-bottom: 4px solid;
+            border-top: 4px solid;
+            color: currentColor;
+            margin-bottom: 1.75em
+        }
+
+        .wp-block-pullquote cite,
+        .wp-block-pullquote footer,
+        .wp-block-pullquote__citation {
+            color: currentColor;
+            font-size: .8125em;
+            font-style: normal;
+            text-transform: uppercase
+        }
+
+        .wp-block-quote {
+            border-left: .25em solid;
+            margin: 0 0 1.75em;
+            padding-left: 1em
+        }
+
+        .wp-block-quote cite,
+        .wp-block-quote footer {
+            color: currentColor;
+            font-size: .8125em;
+            font-style: normal;
+            position: relative
+        }
+
+        .wp-block-quote:where(.has-text-align-right) {
+            border-left: none;
+            border-right: .25em solid;
+            padding-left: 0;
+            padding-right: 1em
+        }
+
+        .wp-block-quote:where(.has-text-align-center) {
+            border: none;
+            padding-left: 0
+        }
+
+        .wp-block-quote.is-large,
+        .wp-block-quote.is-style-large,
+        .wp-block-quote:where(.is-style-plain) {
+            border: none
+        }
+
+        .wp-block-search .wp-block-search__label {
+            font-weight: 700
+        }
+
+        .wp-block-search__button {
+            border: 1px solid #ccc;
+            padding: .375em .625em
+        }
+
+        :where(.wp-block-group.has-background) {
+            padding: 1.25em 2.375em
+        }
+
+        .wp-block-separator.has-css-opacity {
+            opacity: .4
+        }
+
+        .wp-block-separator {
+            border: none;
+            border-bottom: 2px solid;
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .wp-block-separator.has-alpha-channel-opacity {
+            opacity: 1
+        }
+
+        .wp-block-separator:not(.is-style-wide):not(.is-style-dots) {
+            width: 100px
+        }
+
+        .wp-block-separator.has-background:not(.is-style-dots) {
+            border-bottom: none;
+            height: 1px
+        }
+
+        .wp-block-separator.has-background:not(.is-style-wide):not(.is-style-dots) {
+            height: 2px
+        }
+
+        .wp-block-table {
+            margin: 0 0 1em
+        }
+
+        .wp-block-table td,
+        .wp-block-table th {
+            word-break: normal
+        }
+
+        .wp-block-table :where(figcaption) {
+            color: #555;
+            font-size: 13px;
+            text-align: center
+        }
+
+        .is-dark-theme .wp-block-table :where(figcaption) {
+            color: #ffffffa6
+        }
+
+        .wp-block-video :where(figcaption) {
+            color: #555;
+            font-size: 13px;
+            text-align: center
+        }
+
+        .is-dark-theme .wp-block-video :where(figcaption) {
+            color: #ffffffa6
+        }
+
+        .wp-block-video {
+            margin: 0 0 1em
+        }
+
+        :root :where(.wp-block-template-part.has-background) {
+            margin-bottom: 0;
+            margin-top: 0;
+            padding: 1.25em 2.375em
+        }
+    </style>
+    <style id='classic-theme-styles-inline-css' type='text/css'>
+        /*! This file is auto-generated */
+
+        .wp-block-button__link {
+            color: #fff;
+            background-color: #32373c;
+            border-radius: 9999px;
+            box-shadow: none;
+            text-decoration: none;
+            padding: calc(.667em + 2px) calc(1.333em + 2px);
+            font-size: 1.125em
+        }
+
+        .wp-block-file__button {
+            background: #32373c;
+            color: #fff;
+            text-decoration: none
+        }
+    </style>
+    <style id='global-styles-inline-css' type='text/css'>
+        :root {
+            --wp--preset--aspect-ratio--square: 1;
+            --wp--preset--aspect-ratio--4-3: 4/3;
+            --wp--preset--aspect-ratio--3-4: 3/4;
+            --wp--preset--aspect-ratio--3-2: 3/2;
+            --wp--preset--aspect-ratio--2-3: 2/3;
+            --wp--preset--aspect-ratio--16-9: 16/9;
+            --wp--preset--aspect-ratio--9-16: 9/16;
+            --wp--preset--color--black: #000000;
+            --wp--preset--color--cyan-bluish-gray: #abb8c3;
+            --wp--preset--color--white: #ffffff;
+            --wp--preset--color--pale-pink: #f78da7;
+            --wp--preset--color--vivid-red: #cf2e2e;
+            --wp--preset--color--luminous-vivid-orange: #ff6900;
+            --wp--preset--color--luminous-vivid-amber: #fcb900;
+            --wp--preset--color--light-green-cyan: #7bdcb5;
+            --wp--preset--color--vivid-green-cyan: #00d084;
+            --wp--preset--color--pale-cyan-blue: #8ed1fc;
+            --wp--preset--color--vivid-cyan-blue: #0693e3;
+            --wp--preset--color--vivid-purple: #9b51e0;
+            --wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg, rgba(6, 147, 227, 1) 0%, rgb(155, 81, 224) 100%);
+            --wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg, rgb(122, 220, 180) 0%, rgb(0, 208, 130) 100%);
+            --wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg, rgba(252, 185, 0, 1) 0%, rgba(255, 105, 0, 1) 100%);
+            --wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg, rgba(255, 105, 0, 1) 0%, rgb(207, 46, 46) 100%);
+            --wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg, rgb(238, 238, 238) 0%, rgb(169, 184, 195) 100%);
+            --wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg, rgb(74, 234, 220) 0%, rgb(151, 120, 209) 20%, rgb(207, 42, 186) 40%, rgb(238, 44, 130) 60%, rgb(251, 105, 98) 80%, rgb(254, 248, 76) 100%);
+            --wp--preset--gradient--blush-light-purple: linear-gradient(135deg, rgb(255, 206, 236) 0%, rgb(152, 150, 240) 100%);
+            --wp--preset--gradient--blush-bordeaux: linear-gradient(135deg, rgb(254, 205, 165) 0%, rgb(254, 45, 45) 50%, rgb(107, 0, 62) 100%);
+            --wp--preset--gradient--luminous-dusk: linear-gradient(135deg, rgb(255, 203, 112) 0%, rgb(199, 81, 192) 50%, rgb(65, 88, 208) 100%);
+            --wp--preset--gradient--pale-ocean: linear-gradient(135deg, rgb(255, 245, 203) 0%, rgb(182, 227, 212) 50%, rgb(51, 167, 181) 100%);
+            --wp--preset--gradient--electric-grass: linear-gradient(135deg, rgb(202, 248, 128) 0%, rgb(113, 206, 126) 100%);
+            --wp--preset--gradient--midnight: linear-gradient(135deg, rgb(2, 3, 129) 0%, rgb(40, 116, 252) 100%);
+            --wp--preset--font-size--small: 13px;
+            --wp--preset--font-size--medium: 20px;
+            --wp--preset--font-size--large: 36px;
+            --wp--preset--font-size--x-large: 42px;
+            --wp--preset--spacing--20: 0.44rem;
+            --wp--preset--spacing--30: 0.67rem;
+            --wp--preset--spacing--40: 1rem;
+            --wp--preset--spacing--50: 1.5rem;
+            --wp--preset--spacing--60: 2.25rem;
+            --wp--preset--spacing--70: 3.38rem;
+            --wp--preset--spacing--80: 5.06rem;
+            --wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);
+            --wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);
+            --wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);
+            --wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);
+            --wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);
+        }
+
+        :where(.is-layout-flex) {
+            gap: 0.5em;
+        }
+
+        :where(.is-layout-grid) {
+            gap: 0.5em;
+        }
+
+        body .is-layout-flex {
+            display: flex;
+        }
+
+        .is-layout-flex {
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .is-layout-flex> :is(*, div) {
+            margin: 0;
+        }
+
+        body .is-layout-grid {
+            display: grid;
+        }
+
+        .is-layout-grid> :is(*, div) {
+            margin: 0;
+        }
+
+        :where(.wp-block-columns.is-layout-flex) {
+            gap: 2em;
+        }
+
+        :where(.wp-block-columns.is-layout-grid) {
+            gap: 2em;
+        }
+
+        :where(.wp-block-post-template.is-layout-flex) {
+            gap: 1.25em;
+        }
+
+        :where(.wp-block-post-template.is-layout-grid) {
+            gap: 1.25em;
+        }
+
+        .has-black-color {
+            color: var(--wp--preset--color--black) !important;
+        }
+
+        .has-cyan-bluish-gray-color {
+            color: var(--wp--preset--color--cyan-bluish-gray) !important;
+        }
+
+        .has-white-color {
+            color: var(--wp--preset--color--white) !important;
+        }
+
+        .has-pale-pink-color {
+            color: var(--wp--preset--color--pale-pink) !important;
+        }
+
+        .has-vivid-red-color {
+            color: var(--wp--preset--color--vivid-red) !important;
+        }
+
+        .has-luminous-vivid-orange-color {
+            color: var(--wp--preset--color--luminous-vivid-orange) !important;
+        }
+
+        .has-luminous-vivid-amber-color {
+            color: var(--wp--preset--color--luminous-vivid-amber) !important;
+        }
+
+        .has-light-green-cyan-color {
+            color: var(--wp--preset--color--light-green-cyan) !important;
+        }
+
+        .has-vivid-green-cyan-color {
+            color: var(--wp--preset--color--vivid-green-cyan) !important;
+        }
+
+        .has-pale-cyan-blue-color {
+            color: var(--wp--preset--color--pale-cyan-blue) !important;
+        }
+
+        .has-vivid-cyan-blue-color {
+            color: var(--wp--preset--color--vivid-cyan-blue) !important;
+        }
+
+        .has-vivid-purple-color {
+            color: var(--wp--preset--color--vivid-purple) !important;
+        }
+
+        .has-black-background-color {
+            background-color: var(--wp--preset--color--black) !important;
+        }
+
+        .has-cyan-bluish-gray-background-color {
+            background-color: var(--wp--preset--color--cyan-bluish-gray) !important;
+        }
+
+        .has-white-background-color {
+            background-color: var(--wp--preset--color--white) !important;
+        }
+
+        .has-pale-pink-background-color {
+            background-color: var(--wp--preset--color--pale-pink) !important;
+        }
+
+        .has-vivid-red-background-color {
+            background-color: var(--wp--preset--color--vivid-red) !important;
+        }
+
+        .has-luminous-vivid-orange-background-color {
+            background-color: var(--wp--preset--color--luminous-vivid-orange) !important;
+        }
+
+        .has-luminous-vivid-amber-background-color {
+            background-color: var(--wp--preset--color--luminous-vivid-amber) !important;
+        }
+
+        .has-light-green-cyan-background-color {
+            background-color: var(--wp--preset--color--light-green-cyan) !important;
+        }
+
+        .has-vivid-green-cyan-background-color {
+            background-color: var(--wp--preset--color--vivid-green-cyan) !important;
+        }
+
+        .has-pale-cyan-blue-background-color {
+            background-color: var(--wp--preset--color--pale-cyan-blue) !important;
+        }
+
+        .has-vivid-cyan-blue-background-color {
+            background-color: var(--wp--preset--color--vivid-cyan-blue) !important;
+        }
+
+        .has-vivid-purple-background-color {
+            background-color: var(--wp--preset--color--vivid-purple) !important;
+        }
+
+        .has-black-border-color {
+            border-color: var(--wp--preset--color--black) !important;
+        }
+
+        .has-cyan-bluish-gray-border-color {
+            border-color: var(--wp--preset--color--cyan-bluish-gray) !important;
+        }
+
+        .has-white-border-color {
+            border-color: var(--wp--preset--color--white) !important;
+        }
+
+        .has-pale-pink-border-color {
+            border-color: var(--wp--preset--color--pale-pink) !important;
+        }
+
+        .has-vivid-red-border-color {
+            border-color: var(--wp--preset--color--vivid-red) !important;
+        }
+
+        .has-luminous-vivid-orange-border-color {
+            border-color: var(--wp--preset--color--luminous-vivid-orange) !important;
+        }
+
+        .has-luminous-vivid-amber-border-color {
+            border-color: var(--wp--preset--color--luminous-vivid-amber) !important;
+        }
+
+        .has-light-green-cyan-border-color {
+            border-color: var(--wp--preset--color--light-green-cyan) !important;
+        }
+
+        .has-vivid-green-cyan-border-color {
+            border-color: var(--wp--preset--color--vivid-green-cyan) !important;
+        }
+
+        .has-pale-cyan-blue-border-color {
+            border-color: var(--wp--preset--color--pale-cyan-blue) !important;
+        }
+
+        .has-vivid-cyan-blue-border-color {
+            border-color: var(--wp--preset--color--vivid-cyan-blue) !important;
+        }
+
+        .has-vivid-purple-border-color {
+            border-color: var(--wp--preset--color--vivid-purple) !important;
+        }
+
+        .has-vivid-cyan-blue-to-vivid-purple-gradient-background {
+            background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;
+        }
+
+        .has-light-green-cyan-to-vivid-green-cyan-gradient-background {
+            background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;
+        }
+
+        .has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background {
+            background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;
+        }
+
+        .has-luminous-vivid-orange-to-vivid-red-gradient-background {
+            background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;
+        }
+
+        .has-very-light-gray-to-cyan-bluish-gray-gradient-background {
+            background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;
+        }
+
+        .has-cool-to-warm-spectrum-gradient-background {
+            background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;
+        }
+
+        .has-blush-light-purple-gradient-background {
+            background: var(--wp--preset--gradient--blush-light-purple) !important;
+        }
+
+        .has-blush-bordeaux-gradient-background {
+            background: var(--wp--preset--gradient--blush-bordeaux) !important;
+        }
+
+        .has-luminous-dusk-gradient-background {
+            background: var(--wp--preset--gradient--luminous-dusk) !important;
+        }
+
+        .has-pale-ocean-gradient-background {
+            background: var(--wp--preset--gradient--pale-ocean) !important;
+        }
+
+        .has-electric-grass-gradient-background {
+            background: var(--wp--preset--gradient--electric-grass) !important;
+        }
+
+        .has-midnight-gradient-background {
+            background: var(--wp--preset--gradient--midnight) !important;
+        }
+
+        .has-small-font-size {
+            font-size: var(--wp--preset--font-size--small) !important;
+        }
+
+        .has-medium-font-size {
+            font-size: var(--wp--preset--font-size--medium) !important;
+        }
+
+        .has-large-font-size {
+            font-size: var(--wp--preset--font-size--large) !important;
+        }
+
+        .has-x-large-font-size {
+            font-size: var(--wp--preset--font-size--x-large) !important;
+        }
+
+        :where(.wp-block-post-template.is-layout-flex) {
+            gap: 1.25em;
+        }
+
+        :where(.wp-block-post-template.is-layout-grid) {
+            gap: 1.25em;
+        }
+
+        :where(.wp-block-columns.is-layout-flex) {
+            gap: 2em;
+        }
+
+        :where(.wp-block-columns.is-layout-grid) {
+            gap: 2em;
+        }
+
+        :root :where(.wp-block-pullquote) {
+            font-size: 1.5em;
+            line-height: 1.6;
+        }
+    </style>
+    <style id='dominant-color-styles-inline-css' type='text/css'>
+        img[data-dominant-color]:not(.has-transparency) {
+            background-color: var(--dominant-color);
+        }
+    </style>
+    <link rel='stylesheet' id='wbolt-style-css' href='/css/style_wbolt.css?ver=20240616' type='text/css' media='all' />
+    <script type="text/javascript" id="wb-cnf-inline-js-before">
+        /* <![CDATA[ */
+        var wb_base = {
+            "home_url": "https:\/\/shareziyuan.email",
+            "theme_url": "https:\/\/shareziyuan.email\/wp-content\/themes\/storeys",
+            "ajax_url": "https:\/\/shareziyuan.email\/wp-admin\/admin-ajax.php",
+            "theme_name": "storeys",
+            "assets_ver": "20240616",
+            "_wp_uid": 0,
+            "_pid": 2850
+        };
+        /* ]]> */
+    </script>
+    <link rel="https://api.w.org/" href="/wp-json/" />
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd" />
+    <meta name="generator" content="dominant-color-images 1.1.2">
+    <meta name="generator" content="performance-lab 3.6.1; plugins: dominant-color-images, webp-uploads">
+    <meta name="generator" content="webp-uploads 2.3.0">
+    <!-- Analytics by WP Statistics v14.11.3 - https://wp-statistics.com -->
+    <meta name="apple-mobile-web-app-title" content="夸克网盘社" />
+    <meta name="author" content="夸克网盘社">
+    <meta property="og:site_name" content="夸克网盘社">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="夸克网盘社">
+    <meta property="og:url" content="https://shareziyuan.email">
+    <meta property="og:description" content="一个很好用的夸克资源的网站，每天更新最新最热门的资源，包括电影、电视剧、综艺、动漫、纪录片、小说、短剧、学习资料等资源。" />
+    <meta property=”og:image” content=”/wp-content/uploads/2024/10/kuakes_logo-png.webp” />
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "夸克网盘社",
+            "alternateName": "夸克社",
+            "url": "/"
+        }
+    </script>
+    <link rel="icon" href="/wp-content/uploads/2024/09/cropped-kuakes-32x32.png" sizes="32x32" />
+    <link rel="icon" href="/wp-content/uploads/2024/09/cropped-kuakes-192x192.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/wp-content/uploads/2024/09/cropped-kuakes-180x180.png" />
+    <meta name="msapplication-TileImage" content="/wp-content/uploads/2024/09/cropped-kuakes-270x270.png" />
+    <noscript><style id="rocket-lazyload-nojs-css">.rll-youtube-player, [data-lazy-src]{display:none !important;}</style></noscript></head>
+
+<body class="home blog wp-custom-logo wp-embed-responsive">
+
+<header class="header header-b">
+    <div class="inner pw">
+        <a class="btn-nav j-btn-nav-m" id="J_btnNavMb"><i>Menu Explicit/Hidden</i></a>
+        <nav class="nav-top-m" id="J_navBar22">
+            <form class="search-form" id="searchform" action="https://shareziyuan.email/" method="get">
+                <button title="搜索" type="button" class="btn-search" id="searchsubmit"><svg class="wb-icon wbsico-search"><use xlink:href="#wbsico-search"></use></svg></button>
+                <input type="text" class="form-control" autocomplete="off" name="s" id="s" placeholder="Search">
+            </form>    <ul id="J_topNavMb" class="nav-m">
+            {{range .Cates}}
+            <li class="menu-item-has-children"><a href="/category/{{.Slug}}">{{.Name}}</a>
+                <strong>{{.Name}}</strong>
+                <!-- 子分类 -->
+                {{if .Children}}
+                <ul>
+                    {{range .Children}}
+                    <li><a href="/category/{{.Slug}}">{{.Name}}</a></li>
+
+                    {{end}}
+                </ul>
+                {{end}}
+            </li>
+            {{end}}
 
 
+<!--            <li class="menu-item-has-children"><a href="https://shareziyuan.email/dramas">电视剧</a>-->
+<!--            <i class="nav-arrow"></i><div class="sub-menu-m lv-0"><ul>	<li><a href="https://shareziyuan.email/dramas/korea_dramas">韩剧</a></li>-->
+<!--            	<li><a href="https://shareziyuan.email/dramas/jp_dramas">日剧</a></li>-->
+<!--            	<li><a href="https://shareziyuan.email/dramas/uk_dramas">英剧</a></li>-->
+<!--            	<li><a href="https://shareziyuan.email/dramas/us_dramas">美剧</a></li>-->
+<!--            	<li><a href="https://shareziyuan.email/dramas/national_dramas">国剧</a></li>-->
+<!--            	<li><a href="https://shareziyuan.email/dramas/hk_dramas">港剧</a></li>-->
+<!--            	<li><a href="https://shareziyuan.email/dramas/tw_dramas">台剧</a></li>-->
+<!--            	<li><a href="https://shareziyuan.email/sketch" aria-current="page">短剧</a></li>-->
+<!--            </ul>-->
+<!--            </div></li>-->
+            <!--<li><a href="https://shareziyuan.email/cartoon">动漫</a></li>-->
+            <!--<li class="menu-item-has-children"><a>其它资源</a>-->
+            <!--<i class="nav-arrow"></i><div class="sub-menu-m lv-0"><ul>	<li><a href="https://shareziyuan.email/variety">综艺</a></li>-->
+            <!--	<li><a href="https://shareziyuan.email/documentary">纪录片</a></li>-->
+            <!--	<li><a href="https://shareziyuan.email/ebook">电子书</a></li>-->
+            <!--	<li><a href="https://shareziyuan.email/novel">小说</a></li>-->
+            <!--	<li><a href="https://shareziyuan.email/music">音乐</a></li>-->
+            <!--	<li><a href="https://shareziyuan.email/information">资料</a></li>-->
+            <!--</ul>-->
+            <!--</div></li>-->
+            <li><a href="#">资源求助</a></li>
+        </ul>
+            <a class="btn-close" id="J_closeNav"><svg class="wb-icon wbsico-close"><use xlink:href="#wbsico-close"></use></svg></a>
+        </nav>
+        <h1 class="logo"><a href="/" rel="home"><img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="夸克网盘社" data-lazy-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTUzIiBoZWlnaHQ9IjMzIiB2aWV3Qm94PSIwIDAgMTUzIDMzIiBmaWxsPSJub25lIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjAiIGhlaWdodD0iMCIgZmlsbD0icmdiYSgyNDksIDI0OSwgMjQ5LCAxKSIgLz4KPHBhdGggZD0iTTE3LjY1NiA1QzIyLjIzNiA1IDI2LjA2OSA4LjQ2NSAyNi41ODMgMTMuMDA4TDI2LjU3NyAxMi45NjFMMjYuNjMyIDEyLjk4MUMyNi43OTM1IDEzLjA0MzUgMjYuOTUyNCAxMy4xMTE4IDI3LjEwODkgMTMuMTg2QzI3LjI2NTMgMTMuMjYwMSAyNy40MTg4IDEzLjMzOTkgMjcuNTY5NCAxMy40MjUzQzI3LjcyIDEzLjUxMDcgMjcuODY3MyAxMy42MDE1IDI4LjAxMTMgMTMuNjk3N0MyOC4xNTUyIDEzLjc5MzkgMjguMjk1NCAxMy44OTUyIDI4LjQzMTkgMTQuMDAxN0MyOC41Njg0IDE0LjEwODIgMjguNzAwOSAxNC4yMTk2IDI4LjgyOTIgMTQuMzM1OEMyOC45NTc1IDE0LjQ1MiAyOS4wODE0IDE0LjU3MjcgMjkuMjAwOSAxNC42OThDMjkuMzIwNCAxNC44MjMzIDI5LjQzNTIgMTQuOTUyOCAyOS41NDUxIDE1LjA4NjVDMjkuNjU1MSAxNS4yMjAyIDI5Ljc2MDEgMTUuMzU3OCAyOS44NiAxNS40OTkyQzI5Ljk1OTkgMTUuNjQwNiAzMC4wNTQ0IDE1Ljc4NTUgMzAuMTQzNyAxNS45MzM4QzMwLjIzMyAxNi4wODIxIDMwLjMxNjggMTYuMjMzNSAzMC4zOTQ5IDE2LjM4OEMzMC40NzMxIDE2LjU0MjUgMzAuNTQ1NSAxNi42OTk2IDMwLjYxMjEgMTYuODU5NEMzMC42Nzg4IDE3LjAxOTIgMzAuNzM5NSAxNy4xODEyIDMwLjc5NDMgMTcuMzQ1NUMzMC44NDkgMTcuNTA5NyAzMC44OTc3IDE3LjY3NTcgMzAuOTQwMyAxNy44NDM1QzMwLjk4MjkgMTguMDExNCAzMS4wMTkzIDE4LjE4MDUgMzEuMDQ5NCAxOC4zNTFDMzEuMDc5NiAxOC41MjE1IDMxLjEwMzUgMTguNjkyOCAzMS4xMjExIDE4Ljg2NTFDMzEuMTM4OCAxOS4wMzczIDMxLjE1MDEgMTkuMjA5OSAzMS4xNTUgMTkuMzgzTDMxLjE1OCAxOS40ODNMMzEuMTU4IDE5LjU5OEMzMS4xNTggMjMuNTA4IDI4LjAwOCAyNi42NzggMjQuMTIgMjYuNjc4TDIyLjEyIDI2LjY3OEMyMi4wNzAzIDI2LjY3NzkgMjIuMDIwNyAyNi42NzUzIDIxLjk3MTIgMjYuNjcwM0MyMS45MjE3IDI2LjY2NTMgMjEuODcyNiAyNi42NTc5IDIxLjgyMzkgMjYuNjQ4MUMyMS43NzUyIDI2LjYzODIgMjEuNzI3IDI2LjYyNiAyMS42Nzk1IDI2LjYxMTVDMjEuNjMyIDI2LjU5NjkgMjEuNTg1MyAyNi41OCAyMS41Mzk0IDI2LjU2MDlDMjEuNDkzNSAyNi41NDE4IDIxLjQ0ODcgMjYuNTIwNCAyMS40MDQ5IDI2LjQ5NjlDMjEuMzYxMSAyNi40NzMzIDIxLjMxODYgMjYuNDQ3NyAyMS4yNzczIDI2LjQyQzIxLjIzNiAyNi4zOTIzIDIxLjE5NjIgMjYuMzYyNiAyMS4xNTc5IDI2LjMzMDlDMjEuMTE5NiAyNi4yOTkyIDIxLjA4MjkgMjYuMjY1OCAyMS4wNDc4IDI2LjIzMDZDMjEuMDEyNyAyNi4xOTUzIDIwLjk3OTUgMjYuMTU4NCAyMC45NDggMjYuMTE5OUMyMC45MTY2IDI2LjA4MTQgMjAuODg3MSAyNi4wNDE1IDIwLjg1OTYgMjZDMjAuODMyMSAyNS45NTg2IDIwLjgwNjcgMjUuOTE2IDIwLjc4MzQgMjUuODcyMUMyMC43NjAxIDI1LjgyODIgMjAuNzM4OSAyNS43ODMyIDIwLjcyIDI1LjczNzJDMjAuNzAxMSAyNS42OTEyIDIwLjY4NDUgMjUuNjQ0NCAyMC42NzAyIDI1LjU5NjhDMjAuNjU1OSAyNS41NDkyIDIwLjY0MzkgMjUuNTAxIDIwLjYzNDQgMjUuNDUyMkMyMC42MjQ4IDI1LjQwMzQgMjAuNjE3NiAyNS4zNTQzIDIwLjYxMjkgMjUuMzA0OEMyMC42MDgyIDI1LjI1NTMgMjAuNjA1OSAyNS4yMDU3IDIwLjYwNiAyNS4xNTZDMjAuNjA2IDI0LjMxNiAyMS4yODQgMjMuNjM0IDIyLjExOSAyMy42MzRMMjQuMTE5IDIzLjYzNEMyNi4zMzYgMjMuNjM0IDI4LjEzMiAyMS44MjcgMjguMTMyIDE5LjU5OEMyOC4xMzIgMTcuMzY4IDI2LjMzNiAxNS41NjIgMjQuMTIgMTUuNTYyQzIzLjg2NCAxNS41NjIgMjMuNjY0IDE1LjU3OCAyMy41MiAxNS42MUMyMy41ODMgMTUuMjk2IDIzLjYxNSAxNC43NzIgMjMuNjE1IDE0LjA0QzIzLjYxNSAxMC43MjggMjAuOTQ3IDguMDQ1IDE3LjY1NSA4LjA0NUMxNC40NjIgOC4wNDUgMTEuODQgMTAuNTc3IDExLjcwMiAxMy43NzVMMTEuNjkgMTQuMDU3TDExLjQxNyAxMy45ODhMOC44OTk5OSAxMy4zNTNMOC43MjY5OSAxMy4zMDlMOC43MjY5OSAxMy4wMzJMOC43Mjc5OSAxMy4wMDZDOS4yMzU5OSA4LjUxOSAxMi45ODggNS4wNzYgMTcuNTA4IDUuMDAxTDE3LjY1NiA1LjAwMUwxNy42NTYgNVoiICAgZmlsbD0iIzBENTNGRiIgPgo8L3BhdGg+CjxwYXRoIGQ9Ik0xMS4wMTMgMTIuNTY0QzE0Ljg4NiAxMi41NjQgMTguMDI2IDE1LjcyMyAxOC4wMjYgMTkuNjE5QzE4LjAyNTkgMjAuMjEyMSAxNy45NTI5IDIwLjc5NjEgMTcuODA3IDIxLjM3MUMxNy43OTQ5IDIxLjQxOTEgMTcuNzgwNSAyMS40NjY1IDE3Ljc2MzggMjEuNTEzM0MxNy43NDcxIDIxLjU1OTkgMTcuNzI4MSAyMS42MDU3IDE3LjcwNjkgMjEuNjUwNkMxNy42ODU2IDIxLjY5NTQgMTcuNjYyMiAyMS43MzkxIDE3LjYzNjcgMjEuNzgxN0MxNy42MTEyIDIxLjgyNDIgMTcuNTgzNiAyMS44NjU0IDE3LjU1NCAyMS45MDUyQzE3LjUyNDQgMjEuOTQ1IDE3LjQ5MjkgMjEuOTgzMyAxNy40NTk1IDIyLjAyQzE3LjQyNjIgMjIuMDU2NyAxNy4zOTExIDIyLjA5MTcgMTcuMzU0MiAyMi4xMjVDMTcuMzE3NCAyMi4xNTgyIDE3LjI3OTEgMjIuMTg5NiAxNy4yMzkyIDIyLjIxOTFDMTcuMTk5MyAyMi4yNDg2IDE3LjE1OCAyMi4yNzYxIDE3LjExNTQgMjIuMzAxNUMxNy4wNzI3IDIyLjMyNjkgMTcuMDI5IDIyLjM1MDEgMTYuOTg0MSAyMi4zNzEzQzE2LjkzOTIgMjIuMzkyNCAxNi44OTMzIDIyLjQxMTIgMTYuODQ2NiAyMi40Mjc4QzE2Ljc5OTggMjIuNDQ0NCAxNi43NTIzIDIyLjQ1ODYgMTYuNzA0MiAyMi40NzA2QzE2LjY1NiAyMi40ODI1IDE2LjYwNzQgMjIuNDkyIDE2LjU1ODMgMjIuNDk5MkMxNi41MDkyIDIyLjUwNjMgMTYuNDU5OCAyMi41MTEgMTYuNDEwMyAyMi41MTMzQzE2LjM2MDcgMjIuNTE1NSAxNi4zMTExIDIyLjUxNTMgMTYuMjYxNiAyMi41MTI3QzE2LjIxMjEgMjIuNTEwMSAxNi4xNjI4IDIyLjUwNSAxNi4xMTM3IDIyLjQ5NzZDMTYuMDY0NiAyMi40OTAxIDE2LjAxNjEgMjIuNDgwMiAxNS45NjggMjIuNDY4QzE1LjkxOTkgMjIuNDU1NCAxNS44NzI2IDIyLjQ0MDYgMTUuODI1OSAyMi40MjM1QzE1Ljc3OTIgMjIuNDA2MyAxNS43MzM1IDIyLjM4NjggMTUuNjg4OCAyMi4zNjUyQzE1LjY0NDEgMjIuMzQzNiAxNS42MDA1IDIyLjMxOTggMTUuNTU4MSAyMi4yOTM5QzE1LjUxNTcgMjIuMjY3OSAxNS40NzQ3IDIyLjI0IDE1LjQzNSAyMi4yMTAxQzE1LjM5NTMgMjIuMTgwMSAxNS4zNTcyIDIyLjE0ODMgMTUuMzIwNiAyMi4xMTQ3QzE1LjI4NDEgMjIuMDgwOSAxNS4yNDkzIDIyLjA0NTUgMTUuMjE2MiAyMi4wMDg1QzE1LjE4MzEgMjEuOTcxNCAxNS4xNTE5IDIxLjkzMjggMTUuMTIyNiAyMS44OTI2QzE1LjA5MzMgMjEuODUyNCAxNS4wNjYxIDIxLjgxMSAxNS4wNDA4IDIxLjc2ODJDMTUuMDE1NiAyMS43MjU0IDE0Ljk5MjUgMjEuNjgxNCAxNC45NzE2IDIxLjYzNjNDMTQuOTUwNyAyMS41OTEyIDE0LjkzMiAyMS41NDUyIDE0LjkxNTYgMjEuNDk4M0MxNC44OTkyIDIxLjQ1MTQgMTQuODg1MSAyMS40MDM4IDE0Ljg3MzMgMjEuMzU1NUMxNC44NjE2IDIxLjMwNzIgMTQuODUyMiAyMS4yNTg0IDE0Ljg0NTMgMjEuMjA5MkMxNC44MzgzIDIxLjE2IDE0LjgzMzcgMjEuMTEwNSAxNC44MzE2IDIxLjA2MDlDMTQuODI5NSAyMS4wMTEzIDE0LjgyOTkgMjAuOTYxNiAxNC44MzI2IDIwLjkxMkMxNC44MzUzIDIwLjg2MjQgMTQuODQwNSAyMC44MTMgMTQuODQ4MSAyMC43NjM5QzE0Ljg1NTcgMjAuNzE0NyAxNC44NjU3IDIwLjY2NjEgMTQuODc4IDIwLjYxOEMxNC45NjE3IDIwLjI4OTkgMTUuMDAzIDE5Ljk1NjYgMTUuMDAyIDE5LjYxOEMxNS4wMDIgMTcuNDAyIDEzLjIxNiAxNS42MDYgMTEuMDEyIDE1LjYwNkM4LjgxIDE1LjYwNiA3LjAyMyAxNy40MDIgNy4wMjMgMTkuNjE5QzcuMDIzIDIxLjgzNSA4LjgxIDIzLjYzMiAxMS4wMTMgMjMuNjMyTDE3LjY4NSAyMy42MzJDMTguNTIgMjMuNjMyIDE5LjE5NyAyNC4zMTIgMTkuMTk3IDI1LjE1MkMxOS4xOTcgMjUuOTkyIDE4LjUyIDI2LjY3MyAxNy42ODUgMjYuNjczTDExLjAxMyAyNi42NzNDNy4xNCAyNi42NzMgNCAyMy41MTUgNCAxOS42MkM0IDE1LjcyNCA3LjE0IDEyLjU2NSAxMS4wMTMgMTIuNTY1TDExLjAxMyAxMi41NjRaIiAgIGZpbGw9InVybCgjbGluZWFyX2ZpbGxfZFhsNEhtb2Fib0NGcjFPQ0tJeXVSKSIgPgo8L3BhdGg+CjxnID4KPHBhdGggICAgIGZpbGw9IiMwMDAwMDAiICBkPSJNNTEuOTQ0IDExLjg0TDU2LjY3MiAxNS4yNzJMNTIuNjQgMTUuMjI0TDUxLjQ4OCAxNC4zODRMNTEuNDg4IDE1LjA4TDQwLjQgMTUuMDhMNDAuNCAxNC4xOTJMMzkuMTc2IDE1LjJMMzUuNDA4IDE1LjJMMzkuNDQgMTEuODRMMzUuNDU2IDExLjg0TDM1LjQ1NiA5LjQ2NEw0NC40OCA5LjQ2NEw0NC40OCA4LjMxMkw0Ny4zODQgOC4zMTJMNDcuMzg0IDkuNDY0TDU2LjQwOCA5LjQ2NEw1Ni40MDggMTEuODRMNTEuOTQ0IDExLjg0Wk00Ny45NiAxMS44NEw0My4yMDggMTEuODRMNDEuODg4IDEyLjk0NEw0OS40OTYgMTIuOTQ0TDQ3Ljk2IDExLjg0Wk00MC42NCAxOC41Nkw0MC4zNzYgMTkuODhMNTQuNDg4IDE5Ljg4TDU0LjQ4OCAyMy40MDhRNTQuNDg4IDIzLjg4OCA1NC4zMDggMjQuMjk2UTU0LjEyOCAyNC43MDQgNTMuODI4IDI1LjAwNFE1My41MjggMjUuMzA0IDUzLjEwOCAyNS40ODRRNTIuNjg4IDI1LjY2NCA1Mi4yMzIgMjUuNjY0TDQxLjA0OCAyNS42NjRMNDEuODY0IDIzLjQ1Nkw1MS4xMjggMjMuNDU2UTUxLjQ0IDIzLjQ1NiA1MS42NTYgMjMuMjRRNTEuODcyIDIzLjAyNCA1MS44NzIgMjIuNzEyTDUxLjg3MiAyMi4wODhMMzYuOTQ0IDIyLjA4OEwzNy43MzYgMTguNTZMMzUuNDU2IDE4LjU2TDM1LjQ1NiAxNi4xODRMNTYuNDA4IDE2LjE4NEw1Ni40MDggMTguNTZMNDAuNjQgMTguNTZaTTY5Ljc3NiA5LjU4NEw3OC42NTYgOS41ODRMNzguNjU2IDExLjc5Mkw2OS43NzYgMTEuNzkyTDY5Ljc3NiAxMy4wNjRMNzcuOTYgMTMuMDY0TDc3Ljk2IDE3Ljk4NFE3Ny45NiAxOC41MzYgNzcuNzU2IDE5LjAwNFE3Ny41NTIgMTkuNDcyIDc3LjE5MiAxOS44MzJRNzYuODMyIDIwLjE5MiA3Ni4zNTIgMjAuMzk2UTc1Ljg3MiAyMC42IDc1LjMyIDIwLjZMNzQuMDI0IDIwLjZMNzQuMDI0IDIyLjUyUTc0LjAyNCAyMi44MzIgNzQuMjQgMjMuMDQ4UTc0LjQ1NiAyMy4yNjQgNzQuNzY4IDIzLjI2NEw3OC41NiAyMy4yNjRMNzcuNTI4IDI1LjY0TDczLjU5MiAyNS42NFE3My4wNCAyNS42NCA3Mi41NiAyNS40MzZRNzIuMDggMjUuMjMyIDcxLjcyIDI0Ljg3MlE3MS4zNiAyNC41MTIgNzEuMTU2IDI0LjAzMlE3MC45NTIgMjMuNTUyIDcwLjk1MiAyM0w3MC45NTIgMjAuNkw2NC43NiAyMC42TDYzLjEwNCAyNS42NEw1OS41MjggMjUuNjRMNjEuMTYgMjAuNkw1OC4yNTYgMjAuNkw1OC4yNTYgMTMuMDY0TDY2LjQ0IDEzLjA2NEw2Ni40NCAxMS43OTJMNTcuNTYgMTEuNzkyTDU3LjU2IDkuNTg0TDY2LjQ0IDkuNTg0TDY2LjQ0IDguMzM2TDY5Ljc3NiA4LjMzNkw2OS43NzYgOS41ODRaTTc0LjYyNCAxNS4yNzJMNjEuNTkyIDE1LjI3Mkw2MS41OTIgMTguMzkyTDczLjg4IDE4LjM5MlE3NC4xOTIgMTguMzkyIDc0LjQwOCAxOC4xNzZRNzQuNjI0IDE3Ljk2IDc0LjYyNCAxNy42NDhMNzQuNjI0IDE1LjI3MlpNODkuNzkyIDEyLjAzMlE4OS42IDEzLjExMiA4OS4yNjQgMTQuMTU2UTg4LjkyOCAxNS4yIDg4LjU5MiAxNi4wNFE4OC4xODQgMTcgODcuNzUyIDE3Ljg4OFE4OC4xMTIgMTguNDY0IDg4LjU1NiAxOS4wNFE4OSAxOS42MTYgODkuNTI4IDIwLjE2OEw4OS41MjggMjMuMDI0UTg4LjU5MiAyMi40IDg3LjgyNCAyMS42MzJRODcuMDU2IDIwLjg2NCA4Ni40MzIgMjAuMDI0UTg1LjgwOCAyMC44NjQgODUuMDQgMjEuNjMyUTg0LjI3MiAyMi40IDgzLjMxMiAyMy4wMjRMODMuMzEyIDIwLjE2OFE4My44NjQgMTkuNjE2IDg0LjI5NiAxOS4wNFE4NC43MjggMTguNDY0IDg1LjExMiAxNy44ODhRODQuNjggMTcgODQuMjcyIDE2LjA0UTgzLjkzNiAxNS4yIDgzLjYgMTQuMTU2UTgzLjI2NCAxMy4xMTIgODMuMDcyIDEyLjAzMkw4NS4zNTIgMTIuMDMyUTg1LjQ0OCAxMi41ODQgODUuNjI4IDEzLjE4NFE4NS44MDggMTMuNzg0IDg2IDE0LjI2NFE4Ni4yMTYgMTQuODQgODYuNDMyIDE1LjM5MlE4Ni42NDggMTQuODQgODYuODY0IDE0LjI2NFE4Ny4wNTYgMTMuNzg0IDg3LjIyNCAxMy4xODRRODcuMzkyIDEyLjU4NCA4Ny40ODggMTIuMDMyTDg5Ljc5MiAxMi4wMzJaTTkwLjQ0IDIwLjE2OFE5MC45NjggMTkuNjE2IDkxLjQxMiAxOS4wNFE5MS44NTYgMTguNDY0IDkyLjIxNiAxNy44ODhROTEuNzg0IDE3IDkxLjM3NiAxNi4wNFE5MS4wNCAxNS4yIDkwLjcwNCAxNC4xNTZROTAuMzY4IDEzLjExMiA5MC4xNzYgMTIuMDMyTDkyLjQ4IDEyLjAzMlE5Mi41NzYgMTIuNTg0IDkyLjc0NCAxMy4xODRROTIuOTEyIDEzLjc4NCA5My4xMDQgMTQuMjY0UTkzLjMyIDE0Ljg0IDkzLjUzNiAxNS4zOTJROTMuNzc2IDE0Ljg0IDkzLjk5MiAxNC4yNjRROTQuMTg0IDEzLjc4NCA5NC4zNTIgMTMuMTg0UTk0LjUyIDEyLjU4NCA5NC42MTYgMTIuMDMyTDk2Ljg5NiAxMi4wMzJROTYuNzA0IDEzLjExMiA5Ni4zNjggMTQuMTU2UTk2LjAzMiAxNS4yIDk1LjY5NiAxNi4wNFE5NS4yODggMTcgOTQuODU2IDE3Ljg4OFE5NS4yNCAxOC40NjQgOTUuNjcyIDE5LjA0UTk2LjEwNCAxOS42MTYgOTYuNjU2IDIwLjE2OEw5Ni42NTYgMjMuMDI0UTk1LjcyIDIyLjQgOTQuOTQgMjEuNjMyUTk0LjE2IDIwLjg2NCA5My41MzYgMjAuMDI0UTkyLjkxMiAyMC44NjQgOTIuMTQ0IDIxLjYzMlE5MS4zNzYgMjIuNCA5MC40NCAyMy4wMjRMOTAuNDQgMjAuMTY4Wk0xMDAuNzM2IDIzLjAyNFExMDAuNzM2IDIzLjU3NiAxMDAuNTMyIDI0LjA0NFExMDAuMzI4IDI0LjUxMiA5OS45NjggMjQuODcyUTk5LjYwOCAyNS4yMzIgOTkuMTI4IDI1LjQzNlE5OC42NDggMjUuNjQgOTguMDk2IDI1LjY0TDk1LjM4NCAyNS42NEw5Ni4zNjggMjMuMjY0TDk2Ljg3MiAyMy4yNjRROTcuMjA4IDIzLjI2NCA5Ny40MjQgMjMuMDQ4UTk3LjY0IDIyLjgzMiA5Ny42NCAyMi41Mkw5Ny42NCAxMS40NTZROTcuNjQgMTEuMTQ0IDk3LjQyNCAxMC45MjhROTcuMjA4IDEwLjcxMiA5Ni44NzIgMTAuNzEyTDgyLjczNiAxMC43MTJMODIuNzM2IDI1LjY0TDc5LjY0IDI1LjY0TDc5LjY0IDguMzM2TDk4LjA5NiA4LjMzNlE5OC42NDggOC4zMzYgOTkuMTI4IDguNTRROTkuNjA4IDguNzQ0IDk5Ljk2OCA5LjEwNFExMDAuMzI4IDkuNDY0IDEwMC41MzIgOS45NDRRMTAwLjczNiAxMC40MjQgMTAwLjczNiAxMC45NzZMMTAwLjczNiAyMy4wMjRaTTEwNCAxNS4yNDhMMTAyLjY1NiAxNS4yNDhMMTAyLjY1NiAxMy4yNTZMMTA0IDEzLjI1NkwxMDQgOS4yNDhMMTA3LjMzNiA5LjI0OEwxMDguMTc2IDguMzEyTDExMS44NzIgOC4zMTJMMTExLjA4IDkuMjQ4TDEyMC40MTYgOS4yNDhRMTIxLjMwNCA5LjI0OCAxMjEuOTE2IDkuODcyUTEyMi41MjggMTAuNDk2IDEyMi41MjggMTEuMzg0TDEyMi41MjggMTMuMjU2TDEyMy44MjQgMTMuMjU2TDEyMy44MjQgMTUuMjQ4TDEyMi41MjggMTUuMjQ4TDEyMi41MjggMTUuOTQ0UTEyMi41MjggMTYuNDcyIDEyMi4zNiAxNi44MzJRMTIyLjE0NCAxNy4yODggMTIxLjg1NiAxNy41NTJRMTIxLjU0NCAxNy44NjQgMTIxLjEzNiAxOC4wNTZRMTIwLjc1MiAxOC4yNDggMTIwLjI0OCAxOC4yNDhMMTE2LjMzNiAxOC4yNDhMMTE3LjY4IDE2LjEzNkwxMTguNjQgMTYuMTM2UTExOC44OCAxNi4xMzYgMTE5LjA0OCAxNS45OTJRMTE5LjE5MiAxNS44MjQgMTE5LjE5MiAxNS42MDhMMTE5LjE5MiAxNS4yNDhMMTA3LjMzNiAxNS4yNDhMMTA3LjMzNiAxNi40NzJMMTA2LjQ5NiAxOC4yNDhMMTAzLjE2IDE4LjI0OEwxMDQgMTYuNDcyTDEwNCAxNS4yNDhaTTEyMy44MjQgMjUuNjY0TDEwMi42NTYgMjUuNjY0TDEwMi42NTYgMjMuMjg4TDEwMy40MjQgMjMuMjg4TDEwMy40MjQgMTguNzUyTDEyMC40MTYgMTguNzUyUTEyMC45NDQgMTguNzUyIDEyMS40MjQgMTguOTkyUTEyMS42ODggMTkuMDg4IDEyMS44OCAxOS4yMzJRMTIyLjA3MiAxOS4zNzYgMTIyLjI4OCAxOS41NjhRMTIyLjYgMTkuODggMTIyLjg0IDIwLjM4NFExMjMuMDU2IDIwLjg0IDEyMy4wNTYgMjEuMzkyTDEyMy4wNTYgMjMuMjg4TDEyMy44MjQgMjMuMjg4TDEyMy44MjQgMjUuNjY0Wk0xMDcuMzM2IDEzLjI1NkwxMTEuNDQgMTMuMjU2TDExMC44ODggMTEuNzkyTDExNC4yNDggMTEuNzkyTDExNC44MjQgMTMuMjU2TDExOS4xOTIgMTMuMjU2TDExOS4xOTIgMTEuOTZRMTE5LjE5MiAxMS42IDExOS4wNiAxMS40NTZRMTE4LjkyOCAxMS4zMTIgMTE4LjQ5NiAxMS4zMTJMMTA3LjMzNiAxMS4zMTJMMTA3LjMzNiAxMy4yNTZaTTExMC44ODggMTUuNjhMMTE0LjI0OCAxNS42OEwxMTUuMDg4IDE3Ljk4NEwxMTEuNzUyIDE3Ljk4NEwxMTAuODg4IDE1LjY4Wk0xMTQuMjcyIDIxLjEyOEwxMTIuMTM2IDIxLjEyOEwxMTIuMTM2IDIzLjI4OEwxMTQuMjcyIDIzLjI4OEwxMTQuMjcyIDIxLjEyOFpNMTE5LjcyIDIxLjkyUTExOS43MiAyMS41ODQgMTE5LjUwNCAyMS4zNjhRMTE5LjI2NCAyMS4xMjggMTE4Ljk1MiAyMS4xMjhMMTE3LjYwOCAyMS4xMjhMMTE3LjYwOCAyMy4yODhMMTE5LjcyIDIzLjI4OEwxMTkuNzIgMjEuOTJaTTEwNi43ODQgMjMuMjg4TDEwOC44IDIzLjI4OEwxMDguOCAyMS4xMjhMMTA2Ljc4NCAyMS4xMjhMMTA2Ljc4NCAyMy4yODhaTTE0My44MTYgMTQuOTZMMTQzLjgxNiAyMy4yMTZMMTQ3LjcwNCAyMy4yMTZMMTQ3LjcwNCAyNS41OTJMMTM2LjUyIDI1LjU5MkwxMzYuNTIgMjMuMjE2TDE0MC40OCAyMy4yMTZMMTQwLjQ4IDE0Ljk2TDEzNi41MiAxNC45NkwxMzYuNTIgMTIuNTg0TDE0MC40OCAxMi41ODRMMTQwLjQ4IDguMzg0TDE0My44MTYgOC4zODRMMTQzLjgxNiAxMi41ODRMMTQ3LjcwNCAxMi41ODRMMTQ3LjcwNCAxNC45NkwxNDMuODE2IDE0Ljk2Wk0xMzUuOTIgMjAuNkwxMzMuMzA0IDIwLjZMMTMyLjQ2NCAxOC4wMDhMMTMyLjQ2NCAyNS41OTJMMTI5LjM0NCAyNS41OTJMMTI5LjM0NCAyMC4wNDhMMTI2Ljc1MiAyMC4wNDhMMTMxIDEyLjU4NEwxMjcuMjggMTIuNTg0TDEyNy4yOCAxMC4yMzJMMTI5LjEwNCAxMC4yNTZMMTI4LjI4OCA4LjM4NEwxMzEuNzQ0IDguMzg0TDEzMi41NiAxMC4yMzJMMTM1Ljc1MiAxMC4yMzJMMTMyLjkyIDE1LjQ2NEwxMzQuMjY0IDE1LjQ2NEwxMzUuOTIgMjAuNloiPgo8L3BhdGg+CjwvZz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyX2ZpbGxfZFhsNEhtb2Fib0NGcjFPQ0tJeXVSIiB4MT0iMTkuMTY5OTUyMzkyNTc4MTI1IiB5MT0iMjQuOTAyNTg3ODkwNjI1IiB4Mj0iOC41NjQxMTc0MzE2NDA2MjUiIHkyPSIxNi42NDk1MzYxMzI4MTI1IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzAwRkYyRSIgIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQkRGRiIgIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg=="/><noscript><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTUzIiBoZWlnaHQ9IjMzIiB2aWV3Qm94PSIwIDAgMTUzIDMzIiBmaWxsPSJub25lIj4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjAiIGhlaWdodD0iMCIgZmlsbD0icmdiYSgyNDksIDI0OSwgMjQ5LCAxKSIgLz4KPHBhdGggZD0iTTE3LjY1NiA1QzIyLjIzNiA1IDI2LjA2OSA4LjQ2NSAyNi41ODMgMTMuMDA4TDI2LjU3NyAxMi45NjFMMjYuNjMyIDEyLjk4MUMyNi43OTM1IDEzLjA0MzUgMjYuOTUyNCAxMy4xMTE4IDI3LjEwODkgMTMuMTg2QzI3LjI2NTMgMTMuMjYwMSAyNy40MTg4IDEzLjMzOTkgMjcuNTY5NCAxMy40MjUzQzI3LjcyIDEzLjUxMDcgMjcuODY3MyAxMy42MDE1IDI4LjAxMTMgMTMuNjk3N0MyOC4xNTUyIDEzLjc5MzkgMjguMjk1NCAxMy44OTUyIDI4LjQzMTkgMTQuMDAxN0MyOC41Njg0IDE0LjEwODIgMjguNzAwOSAxNC4yMTk2IDI4LjgyOTIgMTQuMzM1OEMyOC45NTc1IDE0LjQ1MiAyOS4wODE0IDE0LjU3MjcgMjkuMjAwOSAxNC42OThDMjkuMzIwNCAxNC44MjMzIDI5LjQzNTIgMTQuOTUyOCAyOS41NDUxIDE1LjA4NjVDMjkuNjU1MSAxNS4yMjAyIDI5Ljc2MDEgMTUuMzU3OCAyOS44NiAxNS40OTkyQzI5Ljk1OTkgMTUuNjQwNiAzMC4wNTQ0IDE1Ljc4NTUgMzAuMTQzNyAxNS45MzM4QzMwLjIzMyAxNi4wODIxIDMwLjMxNjggMTYuMjMzNSAzMC4zOTQ5IDE2LjM4OEMzMC40NzMxIDE2LjU0MjUgMzAuNTQ1NSAxNi42OTk2IDMwLjYxMjEgMTYuODU5NEMzMC42Nzg4IDE3LjAxOTIgMzAuNzM5NSAxNy4xODEyIDMwLjc5NDMgMTcuMzQ1NUMzMC44NDkgMTcuNTA5NyAzMC44OTc3IDE3LjY3NTcgMzAuOTQwMyAxNy44NDM1QzMwLjk4MjkgMTguMDExNCAzMS4wMTkzIDE4LjE4MDUgMzEuMDQ5NCAxOC4zNTFDMzEuMDc5NiAxOC41MjE1IDMxLjEwMzUgMTguNjkyOCAzMS4xMjExIDE4Ljg2NTFDMzEuMTM4OCAxOS4wMzczIDMxLjE1MDEgMTkuMjA5OSAzMS4xNTUgMTkuMzgzTDMxLjE1OCAxOS40ODNMMzEuMTU4IDE5LjU5OEMzMS4xNTggMjMuNTA4IDI4LjAwOCAyNi42NzggMjQuMTIgMjYuNjc4TDIyLjEyIDI2LjY3OEMyMi4wNzAzIDI2LjY3NzkgMjIuMDIwNyAyNi42NzUzIDIxLjk3MTIgMjYuNjcwM0MyMS45MjE3IDI2LjY2NTMgMjEuODcyNiAyNi42NTc5IDIxLjgyMzkgMjYuNjQ4MUMyMS43NzUyIDI2LjYzODIgMjEuNzI3IDI2LjYyNiAyMS42Nzk1IDI2LjYxMTVDMjEuNjMyIDI2LjU5NjkgMjEuNTg1MyAyNi41OCAyMS41Mzk0IDI2LjU2MDlDMjEuNDkzNSAyNi41NDE4IDIxLjQ0ODcgMjYuNTIwNCAyMS40MDQ5IDI2LjQ5NjlDMjEuMzYxMSAyNi40NzMzIDIxLjMxODYgMjYuNDQ3NyAyMS4yNzczIDI2LjQyQzIxLjIzNiAyNi4zOTIzIDIxLjE5NjIgMjYuMzYyNiAyMS4xNTc5IDI2LjMzMDlDMjEuMTE5NiAyNi4yOTkyIDIxLjA4MjkgMjYuMjY1OCAyMS4wNDc4IDI2LjIzMDZDMjEuMDEyNyAyNi4xOTUzIDIwLjk3OTUgMjYuMTU4NCAyMC45NDggMjYuMTE5OUMyMC45MTY2IDI2LjA4MTQgMjAuODg3MSAyNi4wNDE1IDIwLjg1OTYgMjZDMjAuODMyMSAyNS45NTg2IDIwLjgwNjcgMjUuOTE2IDIwLjc4MzQgMjUuODcyMUMyMC43NjAxIDI1LjgyODIgMjAuNzM4OSAyNS43ODMyIDIwLjcyIDI1LjczNzJDMjAuNzAxMSAyNS42OTEyIDIwLjY4NDUgMjUuNjQ0NCAyMC42NzAyIDI1LjU5NjhDMjAuNjU1OSAyNS41NDkyIDIwLjY0MzkgMjUuNTAxIDIwLjYzNDQgMjUuNDUyMkMyMC42MjQ4IDI1LjQwMzQgMjAuNjE3NiAyNS4zNTQzIDIwLjYxMjkgMjUuMzA0OEMyMC42MDgyIDI1LjI1NTMgMjAuNjA1OSAyNS4yMDU3IDIwLjYwNiAyNS4xNTZDMjAuNjA2IDI0LjMxNiAyMS4yODQgMjMuNjM0IDIyLjExOSAyMy42MzRMMjQuMTE5IDIzLjYzNEMyNi4zMzYgMjMuNjM0IDI4LjEzMiAyMS44MjcgMjguMTMyIDE5LjU5OEMyOC4xMzIgMTcuMzY4IDI2LjMzNiAxNS41NjIgMjQuMTIgMTUuNTYyQzIzLjg2NCAxNS41NjIgMjMuNjY0IDE1LjU3OCAyMy41MiAxNS42MUMyMy41ODMgMTUuMjk2IDIzLjYxNSAxNC43NzIgMjMuNjE1IDE0LjA0QzIzLjYxNSAxMC43MjggMjAuOTQ3IDguMDQ1IDE3LjY1NSA4LjA0NUMxNC40NjIgOC4wNDUgMTEuODQgMTAuNTc3IDExLjcwMiAxMy43NzVMMTEuNjkgMTQuMDU3TDExLjQxNyAxMy45ODhMOC44OTk5OSAxMy4zNTNMOC43MjY5OSAxMy4zMDlMOC43MjY5OSAxMy4wMzJMOC43Mjc5OSAxMy4wMDZDOS4yMzU5OSA4LjUxOSAxMi45ODggNS4wNzYgMTcuNTA4IDUuMDAxTDE3LjY1NiA1LjAwMUwxNy42NTYgNVoiICAgZmlsbD0iIzBENTNGRiIgPgo8L3BhdGg+CjxwYXRoIGQ9Ik0xMS4wMTMgMTIuNTY0QzE0Ljg4NiAxMi41NjQgMTguMDI2IDE1LjcyMyAxOC4wMjYgMTkuNjE5QzE4LjAyNTkgMjAuMjEyMSAxNy45NTI5IDIwLjc5NjEgMTcuODA3IDIxLjM3MUMxNy43OTQ5IDIxLjQxOTEgMTcuNzgwNSAyMS40NjY1IDE3Ljc2MzggMjEuNTEzM0MxNy43NDcxIDIxLjU1OTkgMTcuNzI4MSAyMS42MDU3IDE3LjcwNjkgMjEuNjUwNkMxNy42ODU2IDIxLjY5NTQgMTcuNjYyMiAyMS43MzkxIDE3LjYzNjcgMjEuNzgxN0MxNy42MTEyIDIxLjgyNDIgMTcuNTgzNiAyMS44NjU0IDE3LjU1NCAyMS45MDUyQzE3LjUyNDQgMjEuOTQ1IDE3LjQ5MjkgMjEuOTgzMyAxNy40NTk1IDIyLjAyQzE3LjQyNjIgMjIuMDU2NyAxNy4zOTExIDIyLjA5MTcgMTcuMzU0MiAyMi4xMjVDMTcuMzE3NCAyMi4xNTgyIDE3LjI3OTEgMjIuMTg5NiAxNy4yMzkyIDIyLjIxOTFDMTcuMTk5MyAyMi4yNDg2IDE3LjE1OCAyMi4yNzYxIDE3LjExNTQgMjIuMzAxNUMxNy4wNzI3IDIyLjMyNjkgMTcuMDI5IDIyLjM1MDEgMTYuOTg0MSAyMi4zNzEzQzE2LjkzOTIgMjIuMzkyNCAxNi44OTMzIDIyLjQxMTIgMTYuODQ2NiAyMi40Mjc4QzE2Ljc5OTggMjIuNDQ0NCAxNi43NTIzIDIyLjQ1ODYgMTYuNzA0MiAyMi40NzA2QzE2LjY1NiAyMi40ODI1IDE2LjYwNzQgMjIuNDkyIDE2LjU1ODMgMjIuNDk5MkMxNi41MDkyIDIyLjUwNjMgMTYuNDU5OCAyMi41MTEgMTYuNDEwMyAyMi41MTMzQzE2LjM2MDcgMjIuNTE1NSAxNi4zMTExIDIyLjUxNTMgMTYuMjYxNiAyMi41MTI3QzE2LjIxMjEgMjIuNTEwMSAxNi4xNjI4IDIyLjUwNSAxNi4xMTM3IDIyLjQ5NzZDMTYuMDY0NiAyMi40OTAxIDE2LjAxNjEgMjIuNDgwMiAxNS45NjggMjIuNDY4QzE1LjkxOTkgMjIuNDU1NCAxNS44NzI2IDIyLjQ0MDYgMTUuODI1OSAyMi40MjM1QzE1Ljc3OTIgMjIuNDA2MyAxNS43MzM1IDIyLjM4NjggMTUuNjg4OCAyMi4zNjUyQzE1LjY0NDEgMjIuMzQzNiAxNS42MDA1IDIyLjMxOTggMTUuNTU4MSAyMi4yOTM5QzE1LjUxNTcgMjIuMjY3OSAxNS40NzQ3IDIyLjI0IDE1LjQzNSAyMi4yMTAxQzE1LjM5NTMgMjIuMTgwMSAxNS4zNTcyIDIyLjE0ODMgMTUuMzIwNiAyMi4xMTQ3QzE1LjI4NDEgMjIuMDgwOSAxNS4yNDkzIDIyLjA0NTUgMTUuMjE2MiAyMi4wMDg1QzE1LjE4MzEgMjEuOTcxNCAxNS4xNTE5IDIxLjkzMjggMTUuMTIyNiAyMS44OTI2QzE1LjA5MzMgMjEuODUyNCAxNS4wNjYxIDIxLjgxMSAxNS4wNDA4IDIxLjc2ODJDMTUuMDE1NiAyMS43MjU0IDE0Ljk5MjUgMjEuNjgxNCAxNC45NzE2IDIxLjYzNjNDMTQuOTUwNyAyMS41OTEyIDE0LjkzMiAyMS41NDUyIDE0LjkxNTYgMjEuNDk4M0MxNC44OTkyIDIxLjQ1MTQgMTQuODg1MSAyMS40MDM4IDE0Ljg3MzMgMjEuMzU1NUMxNC44NjE2IDIxLjMwNzIgMTQuODUyMiAyMS4yNTg0IDE0Ljg0NTMgMjEuMjA5MkMxNC44MzgzIDIxLjE2IDE0LjgzMzcgMjEuMTEwNSAxNC44MzE2IDIxLjA2MDlDMTQuODI5NSAyMS4wMTEzIDE0LjgyOTkgMjAuOTYxNiAxNC44MzI2IDIwLjkxMkMxNC44MzUzIDIwLjg2MjQgMTQuODQwNSAyMC44MTMgMTQuODQ4MSAyMC43NjM5QzE0Ljg1NTcgMjAuNzE0NyAxNC44NjU3IDIwLjY2NjEgMTQuODc4IDIwLjYxOEMxNC45NjE3IDIwLjI4OTkgMTUuMDAzIDE5Ljk1NjYgMTUuMDAyIDE5LjYxOEMxNS4wMDIgMTcuNDAyIDEzLjIxNiAxNS42MDYgMTEuMDEyIDE1LjYwNkM4LjgxIDE1LjYwNiA3LjAyMyAxNy40MDIgNy4wMjMgMTkuNjE5QzcuMDIzIDIxLjgzNSA4LjgxIDIzLjYzMiAxMS4wMTMgMjMuNjMyTDE3LjY4NSAyMy42MzJDMTguNTIgMjMuNjMyIDE5LjE5NyAyNC4zMTIgMTkuMTk3IDI1LjE1MkMxOS4xOTcgMjUuOTkyIDE4LjUyIDI2LjY3MyAxNy42ODUgMjYuNjczTDExLjAxMyAyNi42NzNDNy4xNCAyNi42NzMgNCAyMy41MTUgNCAxOS42MkM0IDE1LjcyNCA3LjE0IDEyLjU2NSAxMS4wMTMgMTIuNTY1TDExLjAxMyAxMi41NjRaIiAgIGZpbGw9InVybCgjbGluZWFyX2ZpbGxfZFhsNEhtb2Fib0NGcjFPQ0tJeXVSKSIgPgo8L3BhdGg+CjxnID4KPHBhdGggICAgIGZpbGw9IiMwMDAwMDAiICBkPSJNNTEuOTQ0IDExLjg0TDU2LjY3MiAxNS4yNzJMNTIuNjQgMTUuMjI0TDUxLjQ4OCAxNC4zODRMNTEuNDg4IDE1LjA4TDQwLjQgMTUuMDhMNDAuNCAxNC4xOTJMMzkuMTc2IDE1LjJMMzUuNDA4IDE1LjJMMzkuNDQgMTEuODRMMzUuNDU2IDExLjg0TDM1LjQ1NiA5LjQ2NEw0NC40OCA5LjQ2NEw0NC40OCA4LjMxMkw0Ny4zODQgOC4zMTJMNDcuMzg0IDkuNDY0TDU2LjQwOCA5LjQ2NEw1Ni40MDggMTEuODRMNTEuOTQ0IDExLjg0Wk00Ny45NiAxMS44NEw0My4yMDggMTEuODRMNDEuODg4IDEyLjk0NEw0OS40OTYgMTIuOTQ0TDQ3Ljk2IDExLjg0Wk00MC42NCAxOC41Nkw0MC4zNzYgMTkuODhMNTQuNDg4IDE5Ljg4TDU0LjQ4OCAyMy40MDhRNTQuNDg4IDIzLjg4OCA1NC4zMDggMjQuMjk2UTU0LjEyOCAyNC43MDQgNTMuODI4IDI1LjAwNFE1My41MjggMjUuMzA0IDUzLjEwOCAyNS40ODRRNTIuNjg4IDI1LjY2NCA1Mi4yMzIgMjUuNjY0TDQxLjA0OCAyNS42NjRMNDEuODY0IDIzLjQ1Nkw1MS4xMjggMjMuNDU2UTUxLjQ0IDIzLjQ1NiA1MS42NTYgMjMuMjRRNTEuODcyIDIzLjAyNCA1MS44NzIgMjIuNzEyTDUxLjg3MiAyMi4wODhMMzYuOTQ0IDIyLjA4OEwzNy43MzYgMTguNTZMMzUuNDU2IDE4LjU2TDM1LjQ1NiAxNi4xODRMNTYuNDA4IDE2LjE4NEw1Ni40MDggMTguNTZMNDAuNjQgMTguNTZaTTY5Ljc3NiA5LjU4NEw3OC42NTYgOS41ODRMNzguNjU2IDExLjc5Mkw2OS43NzYgMTEuNzkyTDY5Ljc3NiAxMy4wNjRMNzcuOTYgMTMuMDY0TDc3Ljk2IDE3Ljk4NFE3Ny45NiAxOC41MzYgNzcuNzU2IDE5LjAwNFE3Ny41NTIgMTkuNDcyIDc3LjE5MiAxOS44MzJRNzYuODMyIDIwLjE5MiA3Ni4zNTIgMjAuMzk2UTc1Ljg3MiAyMC42IDc1LjMyIDIwLjZMNzQuMDI0IDIwLjZMNzQuMDI0IDIyLjUyUTc0LjAyNCAyMi44MzIgNzQuMjQgMjMuMDQ4UTc0LjQ1NiAyMy4yNjQgNzQuNzY4IDIzLjI2NEw3OC41NiAyMy4yNjRMNzcuNTI4IDI1LjY0TDczLjU5MiAyNS42NFE3My4wNCAyNS42NCA3Mi41NiAyNS40MzZRNzIuMDggMjUuMjMyIDcxLjcyIDI0Ljg3MlE3MS4zNiAyNC41MTIgNzEuMTU2IDI0LjAzMlE3MC45NTIgMjMuNTUyIDcwLjk1MiAyM0w3MC45NTIgMjAuNkw2NC43NiAyMC42TDYzLjEwNCAyNS42NEw1OS41MjggMjUuNjRMNjEuMTYgMjAuNkw1OC4yNTYgMjAuNkw1OC4yNTYgMTMuMDY0TDY2LjQ0IDEzLjA2NEw2Ni40NCAxMS43OTJMNTcuNTYgMTEuNzkyTDU3LjU2IDkuNTg0TDY2LjQ0IDkuNTg0TDY2LjQ0IDguMzM2TDY5Ljc3NiA4LjMzNkw2OS43NzYgOS41ODRaTTc0LjYyNCAxNS4yNzJMNjEuNTkyIDE1LjI3Mkw2MS41OTIgMTguMzkyTDczLjg4IDE4LjM5MlE3NC4xOTIgMTguMzkyIDc0LjQwOCAxOC4xNzZRNzQuNjI0IDE3Ljk2IDc0LjYyNCAxNy42NDhMNzQuNjI0IDE1LjI3MlpNODkuNzkyIDEyLjAzMlE4OS42IDEzLjExMiA4OS4yNjQgMTQuMTU2UTg4LjkyOCAxNS4yIDg4LjU5MiAxNi4wNFE4OC4xODQgMTcgODcuNzUyIDE3Ljg4OFE4OC4xMTIgMTguNDY0IDg4LjU1NiAxOS4wNFE4OSAxOS42MTYgODkuNTI4IDIwLjE2OEw4OS41MjggMjMuMDI0UTg4LjU5MiAyMi40IDg3LjgyNCAyMS42MzJRODcuMDU2IDIwLjg2NCA4Ni40MzIgMjAuMDI0UTg1LjgwOCAyMC44NjQgODUuMDQgMjEuNjMyUTg0LjI3MiAyMi40IDgzLjMxMiAyMy4wMjRMODMuMzEyIDIwLjE2OFE4My44NjQgMTkuNjE2IDg0LjI5NiAxOS4wNFE4NC43MjggMTguNDY0IDg1LjExMiAxNy44ODhRODQuNjggMTcgODQuMjcyIDE2LjA0UTgzLjkzNiAxNS4yIDgzLjYgMTQuMTU2UTgzLjI2NCAxMy4xMTIgODMuMDcyIDEyLjAzMkw4NS4zNTIgMTIuMDMyUTg1LjQ0OCAxMi41ODQgODUuNjI4IDEzLjE4NFE4NS44MDggMTMuNzg0IDg2IDE0LjI2NFE4Ni4yMTYgMTQuODQgODYuNDMyIDE1LjM5MlE4Ni42NDggMTQuODQgODYuODY0IDE0LjI2NFE4Ny4wNTYgMTMuNzg0IDg3LjIyNCAxMy4xODRRODcuMzkyIDEyLjU4NCA4Ny40ODggMTIuMDMyTDg5Ljc5MiAxMi4wMzJaTTkwLjQ0IDIwLjE2OFE5MC45NjggMTkuNjE2IDkxLjQxMiAxOS4wNFE5MS44NTYgMTguNDY0IDkyLjIxNiAxNy44ODhROTEuNzg0IDE3IDkxLjM3NiAxNi4wNFE5MS4wNCAxNS4yIDkwLjcwNCAxNC4xNTZROTAuMzY4IDEzLjExMiA5MC4xNzYgMTIuMDMyTDkyLjQ4IDEyLjAzMlE5Mi41NzYgMTIuNTg0IDkyLjc0NCAxMy4xODRROTIuOTEyIDEzLjc4NCA5My4xMDQgMTQuMjY0UTkzLjMyIDE0Ljg0IDkzLjUzNiAxNS4zOTJROTMuNzc2IDE0Ljg0IDkzLjk5MiAxNC4yNjRROTQuMTg0IDEzLjc4NCA5NC4zNTIgMTMuMTg0UTk0LjUyIDEyLjU4NCA5NC42MTYgMTIuMDMyTDk2Ljg5NiAxMi4wMzJROTYuNzA0IDEzLjExMiA5Ni4zNjggMTQuMTU2UTk2LjAzMiAxNS4yIDk1LjY5NiAxNi4wNFE5NS4yODggMTcgOTQuODU2IDE3Ljg4OFE5NS4yNCAxOC40NjQgOTUuNjcyIDE5LjA0UTk2LjEwNCAxOS42MTYgOTYuNjU2IDIwLjE2OEw5Ni42NTYgMjMuMDI0UTk1LjcyIDIyLjQgOTQuOTQgMjEuNjMyUTk0LjE2IDIwLjg2NCA5My41MzYgMjAuMDI0UTkyLjkxMiAyMC44NjQgOTIuMTQ0IDIxLjYzMlE5MS4zNzYgMjIuNCA5MC40NCAyMy4wMjRMOTAuNDQgMjAuMTY4Wk0xMDAuNzM2IDIzLjAyNFExMDAuNzM2IDIzLjU3NiAxMDAuNTMyIDI0LjA0NFExMDAuMzI4IDI0LjUxMiA5OS45NjggMjQuODcyUTk5LjYwOCAyNS4yMzIgOTkuMTI4IDI1LjQzNlE5OC42NDggMjUuNjQgOTguMDk2IDI1LjY0TDk1LjM4NCAyNS42NEw5Ni4zNjggMjMuMjY0TDk2Ljg3MiAyMy4yNjRROTcuMjA4IDIzLjI2NCA5Ny40MjQgMjMuMDQ4UTk3LjY0IDIyLjgzMiA5Ny42NCAyMi41Mkw5Ny42NCAxMS40NTZROTcuNjQgMTEuMTQ0IDk3LjQyNCAxMC45MjhROTcuMjA4IDEwLjcxMiA5Ni44NzIgMTAuNzEyTDgyLjczNiAxMC43MTJMODIuNzM2IDI1LjY0TDc5LjY0IDI1LjY0TDc5LjY0IDguMzM2TDk4LjA5NiA4LjMzNlE5OC42NDggOC4zMzYgOTkuMTI4IDguNTRROTkuNjA4IDguNzQ0IDk5Ljk2OCA5LjEwNFExMDAuMzI4IDkuNDY0IDEwMC41MzIgOS45NDRRMTAwLjczNiAxMC40MjQgMTAwLjczNiAxMC45NzZMMTAwLjczNiAyMy4wMjRaTTEwNCAxNS4yNDhMMTAyLjY1NiAxNS4yNDhMMTAyLjY1NiAxMy4yNTZMMTA0IDEzLjI1NkwxMDQgOS4yNDhMMTA3LjMzNiA5LjI0OEwxMDguMTc2IDguMzEyTDExMS44NzIgOC4zMTJMMTExLjA4IDkuMjQ4TDEyMC40MTYgOS4yNDhRMTIxLjMwNCA5LjI0OCAxMjEuOTE2IDkuODcyUTEyMi41MjggMTAuNDk2IDEyMi41MjggMTEuMzg0TDEyMi41MjggMTMuMjU2TDEyMy44MjQgMTMuMjU2TDEyMy44MjQgMTUuMjQ4TDEyMi41MjggMTUuMjQ4TDEyMi41MjggMTUuOTQ0UTEyMi41MjggMTYuNDcyIDEyMi4zNiAxNi44MzJRMTIyLjE0NCAxNy4yODggMTIxLjg1NiAxNy41NTJRMTIxLjU0NCAxNy44NjQgMTIxLjEzNiAxOC4wNTZRMTIwLjc1MiAxOC4yNDggMTIwLjI0OCAxOC4yNDhMMTE2LjMzNiAxOC4yNDhMMTE3LjY4IDE2LjEzNkwxMTguNjQgMTYuMTM2UTExOC44OCAxNi4xMzYgMTE5LjA0OCAxNS45OTJRMTE5LjE5MiAxNS44MjQgMTE5LjE5MiAxNS42MDhMMTE5LjE5MiAxNS4yNDhMMTA3LjMzNiAxNS4yNDhMMTA3LjMzNiAxNi40NzJMMTA2LjQ5NiAxOC4yNDhMMTAzLjE2IDE4LjI0OEwxMDQgMTYuNDcyTDEwNCAxNS4yNDhaTTEyMy44MjQgMjUuNjY0TDEwMi42NTYgMjUuNjY0TDEwMi42NTYgMjMuMjg4TDEwMy40MjQgMjMuMjg4TDEwMy40MjQgMTguNzUyTDEyMC40MTYgMTguNzUyUTEyMC45NDQgMTguNzUyIDEyMS40MjQgMTguOTkyUTEyMS42ODggMTkuMDg4IDEyMS44OCAxOS4yMzJRMTIyLjA3MiAxOS4zNzYgMTIyLjI4OCAxOS41NjhRMTIyLjYgMTkuODggMTIyLjg0IDIwLjM4NFExMjMuMDU2IDIwLjg0IDEyMy4wNTYgMjEuMzkyTDEyMy4wNTYgMjMuMjg4TDEyMy44MjQgMjMuMjg4TDEyMy44MjQgMjUuNjY0Wk0xMDcuMzM2IDEzLjI1NkwxMTEuNDQgMTMuMjU2TDExMC44ODggMTEuNzkyTDExNC4yNDggMTEuNzkyTDExNC44MjQgMTMuMjU2TDExOS4xOTIgMTMuMjU2TDExOS4xOTIgMTEuOTZRMTE5LjE5MiAxMS42IDExOS4wNiAxMS40NTZRMTE4LjkyOCAxMS4zMTIgMTE4LjQ5NiAxMS4zMTJMMTA3LjMzNiAxMS4zMTJMMTA3LjMzNiAxMy4yNTZaTTExMC44ODggMTUuNjhMMTE0LjI0OCAxNS42OEwxMTUuMDg4IDE3Ljk4NEwxMTEuNzUyIDE3Ljk4NEwxMTAuODg4IDE1LjY4Wk0xMTQuMjcyIDIxLjEyOEwxMTIuMTM2IDIxLjEyOEwxMTIuMTM2IDIzLjI4OEwxMTQuMjcyIDIzLjI4OEwxMTQuMjcyIDIxLjEyOFpNMTE5LjcyIDIxLjkyUTExOS43MiAyMS41ODQgMTE5LjUwNCAyMS4zNjhRMTE5LjI2NCAyMS4xMjggMTE4Ljk1MiAyMS4xMjhMMTE3LjYwOCAyMS4xMjhMMTE3LjYwOCAyMy4yODhMMTE5LjcyIDIzLjI4OEwxMTkuNzIgMjEuOTJaTTEwNi43ODQgMjMuMjg4TDEwOC44IDIzLjI4OEwxMDguOCAyMS4xMjhMMTA2Ljc4NCAyMS4xMjhMMTA2Ljc4NCAyMy4yODhaTTE0My44MTYgMTQuOTZMMTQzLjgxNiAyMy4yMTZMMTQ3LjcwNCAyMy4yMTZMMTQ3LjcwNCAyNS41OTJMMTM2LjUyIDI1LjU5MkwxMzYuNTIgMjMuMjE2TDE0MC40OCAyMy4yMTZMMTQwLjQ4IDE0Ljk2TDEzNi41MiAxNC45NkwxMzYuNTIgMTIuNTg0TDE0MC40OCAxMi41ODRMMTQwLjQ4IDguMzg0TDE0My44MTYgOC4zODRMMTQzLjgxNiAxMi41ODRMMTQ3LjcwNCAxMi41ODRMMTQ3LjcwNCAxNC45NkwxNDMuODE2IDE0Ljk2Wk0xMzUuOTIgMjAuNkwxMzMuMzA0IDIwLjZMMTMyLjQ2NCAxOC4wMDhMMTMyLjQ2NCAyNS41OTJMMTI5LjM0NCAyNS41OTJMMTI5LjM0NCAyMC4wNDhMMTI2Ljc1MiAyMC4wNDhMMTMxIDEyLjU4NEwxMjcuMjggMTIuNTg0TDEyNy4yOCAxMC4yMzJMMTI5LjEwNCAxMC4yNTZMMTI4LjI4OCA4LjM4NEwxMzEuNzQ0IDguMzg0TDEzMi41NiAxMC4yMzJMMTM1Ljc1MiAxMC4yMzJMMTMyLjkyIDE1LjQ2NEwxMzQuMjY0IDE1LjQ2NEwxMzUuOTIgMjAuNloiPgo8L3BhdGg+CjwvZz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyX2ZpbGxfZFhsNEhtb2Fib0NGcjFPQ0tJeXVSIiB4MT0iMTkuMTY5OTUyMzkyNTc4MTI1IiB5MT0iMjQuOTAyNTg3ODkwNjI1IiB4Mj0iOC41NjQxMTc0MzE2NDA2MjUiIHkyPSIxNi42NDk1MzYxMzI4MTI1IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzAwRkYyRSIgIC8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwQkRGRiIgIC8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+Cg==" alt="夸克网盘社"/></noscript></a></h1>
+        <nav class="nav-top cf" id="J_navBar">
+            <ul id="J_topNav" class="nav">
+                {{range .Cates}}
+                    {{if .Children}}
+                    <li class="menu-item-has-children"><a href="/category/{{.Slug}}">{{.Name}}</a>
+                        <div class="sub-menu lv-0">
+                            <ul>
 
-<div class="content-body">
-    <div class="container">
-        <div class="row">
-            <div class="overflow-x-hidden bg-gray-100">
-                <nav class="px-6 py-4 bg-white shadow">
-                    <div class="container flex flex-col mx-auto md:flex-row md:items-center md:justify-between">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <a href="#" class="text-xl font-bold text-gray-800 md:text-2xl">所有资源</a>
-                            </div>
-                            <div>
-                                <a href="https://shareziyuan.email/storage/local/apk/app-release.aPk" class="text-xl font-bold text-gray-800 md:text-2xl">本站安卓app</a>
-                            </div>
 
-                        </div>
+                                    {{range .Children}}
+                                    <li><a href="/category/{{.Slug}}">{{.Name}}</a></li>
 
-                    </div>
-                </nav>
-
-                <div class="px-6 py-8">
-                    <div class="container flex justify-between mx-auto">
-                        <div class="w-full lg:w-8/12">
-<!--                            <div class="flex items-center justify-between">-->
-<!--                                <h1 class="text-xl font-bold text-gray-700 md:text-2xl">Post</h1>-->
-<!--                                <div>-->
-<!--                                    <select class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">-->
-<!--                                        <option>Latest</option>-->
-<!--                                        <option>Last Week</option>-->
-<!--                                    </select>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-                            {{ $cateName := .cateName }}
-                            {{range .blogItems}}
-                            <div class="mt-6">
-                                <div class="max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md">
-                                    <div class="flex items-center justify-between"><span class="font-light text-gray-600">{{.CreateTimeStr}}</span><a href="#"
-                                              class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">{{$cateName}}</a>
-                                    </div>
-                                    <div class="mt-2"><a href="{{.Url}}" class="text-2xl font-bold text-gray-700 hover:underline">{{.Title}}</a>
-
-                                    </div>
-                                    <div class="flex items-center justify-between mt-4">
-                                        <a href="{{.Url}}"
-                                                                                           class="text-blue-500 hover:underline">查看</a>
-                                        <div><a href="{{.Url}}" class="flex items-center"><img
-                                                src="https://images.unsplash.com/photo-1500757810556-5d600d9b737d?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=735&amp;q=80"
-                                                alt="avatar" class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block">
-                                            <h1 class="font-bold text-gray-700 hover:underline">点击数 {{.Views}}</h1>
-                                        </a></div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{end}}
-                            {{ $categoryId := .CategoryId }}
-
-                            <div class="mt-8">
-                                <div class="flex">
-                                    {{if gt .CurrentPage  1}}
-                                    <a href="#" class="px-3 py-2 mx-1 font-medium text-gray-500 bg-white rounded-md cursor-not-allowed">
-                                        上页
-                                    </a>{{end}}
-                                    {{range $i := .TotalPageArray}}
-                                        {{if ne $i  "..."}}
-                                        <a href="/category/{{$categoryId}}/{{ $i }}" class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-blue-500 hover:text-white">
-                                            {{ $i }}
-                                        </a>
-                                        {{end}}
-
-                                        {{if eq $i  "..."}}
-                                        <a href="javascript:void()" class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-blue-500 hover:text-white">
-                                            {{ $i }}
-                                        </a>
                                     {{end}}
-                                    {{end}}
 
-                                    {{if lt .CurrentPage  .TotalPages}}
-                                    <a href="#" class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-blue-500 hover:text-white">
-                                        下页
-                                    </a>{{end}}
-                                </div>
-                            </div>
+
+
+
+                            </ul>
                         </div>
+                    </li>
+                {{else}}
+                <li><a href="/category/{{.Slug}}">{{.Name}}</a></li>-->
+                {{end}}
+                    {{end}}
 
-                    </div>
+
+
+                <!--<li class="menu-item-has-children"><a href="/dramas">电视剧</a>-->
+                <!--    <div class="sub-menu lv-0">-->
+                <!--        <ul>-->
+                <!--            <li><a href="/dramas/korea_dramas">韩剧</a></li>-->
+                <!--            <li><a href="/dramas/jp_dramas">日剧</a></li>-->
+                <!--            <li><a href="/dramas/uk_dramas">英剧</a></li>-->
+                <!--            <li><a href="/dramas/us_dramas">美剧</a></li>-->
+                <!--            <li><a href="/dramas/national_dramas">短剧</a></li>-->
+                <!--            <li><a href="/dramas/hk_dramas">港剧</a></li>-->
+                <!--            <li><a href="/dramas/tw_dramas">台剧</a></li>-->
+                <!--            <li><a href="/sketch">短剧</a></li>-->
+                <!--        </ul>-->
+                <!--    </div>-->
+                <!--</li>-->
+                <!--<li><a href="/cartoon">动漫</a></li>-->
+                <!--<li class="menu-item-has-children"><a>其它资源</a>-->
+                <!--    <div class="sub-menu lv-0">-->
+                <!--        <ul>-->
+                <!--            <li><a href="/variety">综艺</a></li>-->
+                <!--            <li><a href="/documentary">纪录片</a></li>-->
+                <!--            <li><a href="/ebook">电子书</a></li>-->
+                <!--            <li><a href="/novel">小说</a></li>-->
+                <!--            <li><a href="/music">音乐</a></li>-->
+                <!--            <li><a href="/information">资料</a></li>-->
+                <!--        </ul>-->
+                <!--    </div>-->
+                <!--</li>-->
+                <li><a href="#">资源求助</a></li>
+            </ul>
+        </nav>
+
+        <!--<div class="top-links">-->
+        <!--    <a class="link link-search" id="J_topSearchBtn"><svg class="wb-icon wbsico-search"><use xlink:href="#wbsico-search"></use></svg></a>-->
+        <!--    <a class="link link-login user-login" data-sign="0" id="user-login" rel="nofollow" href="/wp-login.php?redirect_to=%2F">登录</a>-->
+        <!--    <a class="link link-reg" id="user-reg" href="/wp-login.php?action=register">注册</a> </div>-->
+    </div>
+
+    <div class="search-top-bar" id="J_topSearchBar">
+        <form class="search-form" id="J_searchformTop" action="/" method="get" onsubmit="return checkSearch();">
+            <button type="button" title="搜索" class="btn-search" id="J_searchsubmitTop" onclick="checkSearch()">
+                <svg class="wb-icon wbsico-search"><use xlink:href="#wbsico-search"></use></svg>        </button>
+            <input type="text" class="form-control" name="s" id="J_sTop" autocomplete="off" placeholder="导演" />
+        </form>
+    </div>
+    <script>
+        function checkSearch() {
+            var searchInput = document.getElementById('J_sTop');
+            if (searchInput.value.trim() === '') {
+                // 如果输入框为空，获取占位符值
+                searchInput.value = searchInput.placeholder;
+            }
+            return true; // 继续提交表单
+        }
+    </script>
+</header>
+<div class="container container-index">
+    <div class="banner-panel">
+        <div class="swiper-wrapper">
+            <div class="item search-box" style="">
+                <div class="inner">
+                    <form class="search-form" id="searchform" action="/" method="get">
+                        <button title="搜索" type="button" class="btn-search" id="searchsubmit"><svg class="wb-icon wbsico-search"><use xlink:href="#wbsico-search"></use></svg></button>
+                        <input type="text" class="form-control" autocomplete="off" name="s" id="s" placeholder="Search" />
+                    </form>
                 </div>
 
             </div>
+        </div>
+    </div>
 
-            <div class="overflow-x-hidden bg-gray-100">
-                <nav class="px-6 py-4 bg-white shadow">
-                    <div class="container flex flex-col mx-auto md:flex-row md:items-center md:justify-between">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <a href="#" class="text-xl font-bold text-gray-800 md:text-2xl">最新资源</a>
+
+    <div class="index-main pw">
+        {{ $cateName := .cateName }}
+        <div class="hl-rb-head cf">
+            <h2><a href="/films" title="夸克电影资源"> {{ $cateName}}</a></h2>
+<!--            <a class="hl-rb-more hl-text-muted" href="/films" title="获取更多夸克电影资源">-->
+<!--                更多<i class="hl-icon-jiantouyou"></i>-->
+<!--            </a>-->
+            <!--      <span class="hl-rb-type-child">-->
+            <!--  <a href="/tag/4">动作</a>-->
+            <!--  <a href="/tag/15">喜剧</a>-->
+            <!--  <a href="/tag/11">爱情</a>-->
+            <!--  <a href="/tag/21">科幻</a>-->
+            <!--  <a href="/tag/102">剧情</a>-->
+            <!--  <a href="/tag/20">恐怖</a>-->
+            <!--  <a href="/tag/24">冒险</a>-->
+            <!--  <a href="/tag/13">奇幻</a>-->
+            <!--  <a href="/tag/6">战争</a>-->
+            <!--  <a href="/tag/17">犯罪</a>-->
+            <!--  <a href="/tag/12">悬疑</a>-->
+            <!--  <a href="/tag/31">传记</a>-->
+            <!--  <a href="/tag/5">历史</a>-->
+            <!--</span>-->
+        </div>
+
+        <div class="articles-list mb">
+
+            {{range .blogNew}}
+            <article class="post">
+                <div class="inner">
+                    <a class="media-pic" href="{{.Url}}">
+                        <img class="auto-cover" src="/images/nocover.jpg" decoding="async" alt="婚内婚外 (2024)" data-lazy-src=""><noscript><img class="auto-cover" src="/wp-content/uploads/2024/11/image-330-png.webp" loading="lazy" decoding="async" alt="{{.Title}}"></noscript>    </a>
+                    <div class="media-body">
+                        <a class="post-title" title="婚内婚外 (2024)" href="{{.Url}}">{{.Title}}</a>
+                        <div class="post-metas">
+                            <div class="meta-item primary post-cate">
+                                <svg class="wb-icon wbsico-circle sico-sm"><use xlink:href="#wbsico-circle"></use></svg>
+                                <a class="cate-tag" href="/dramas/national_dramas">短剧</a>
                             </div>
-
+                            <span class="meta-item meta-date">
+          <svg class="wb-icon wbsico-time sico-sm"><use xlink:href="#wbsico-time"></use></svg>          <em>{{.CreateTimeStr}}</em>
+        </span>
                         </div>
-
-                    </div>
-                </nav>
-
-                <div class="px-6 py-8">
-                    <div class="container flex justify-between mx-auto">
-                        <div class="w-full lg:w-8/12">
-
-
-                            {{ $cateName := .cateName }}
-                            {{range .blogNew}}
-                            <div class="mt-6">
-                                <div class="max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md">
-                                    <div class="flex items-center justify-between"><span class="font-light text-gray-600">{{.CreateTimeStr}}</span><a href="#"
-                                                                                                                                                      class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">{{$cateName}}</a>
-                                    </div>
-                                    <div class="mt-2"><a href="{{.Url}}" class="text-2xl font-bold text-gray-700 hover:underline">{{.Title}}</a>
-
-                                    </div>
-                                    <div class="flex items-center justify-between mt-4">
-                                        <a href="{{.Url}}"
-                                           class="text-blue-500 hover:underline">查看</a>
-                                        <div><a href="{{.Url}}" class="flex items-center"><img
-                                                src="https://images.unsplash.com/photo-1500757810556-5d600d9b737d?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=735&amp;q=80"
-                                                alt="avatar" class="hidden object-cover w-10 h-10 mx-4 rounded-full sm:block">
-                                            <h1 class="font-bold text-gray-700 hover:underline">点击数 {{.Views}}</h1>
-                                        </a></div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{end}}
-                            {{ $categoryId := .CategoryId }}
-
-
-                        </div>
-
                     </div>
                 </div>
-                <footer class="px-6 py-2 text-gray-100 bg-gray-800">
-                    <div class="container flex flex-col items-center justify-between mx-auto md:flex-row"><a href="#"
-                                                                                                             class="text-2xl font-bold">最新资源</a>
-                        <p class="mt-2 md:mt-0">资源来自网友分享.</p>
-                        <div class="flex mt-4 mb-2 -mx-2 md:mt-0 md:mb-0"><a href="#"
-                                                                             class="mx-2 text-gray-100 hover:text-gray-400"><svg viewBox="0 0 512 512"
-                                                                                                                                 class="w-4 h-4 fill-current">
-                            <path
-                                    d="M444.17,32H70.28C49.85,32,32,46.7,32,66.89V441.61C32,461.91,49.85,480,70.28,480H444.06C464.6,480,480,461.79,480,441.61V66.89C480.12,46.7,464.6,32,444.17,32ZM170.87,405.43H106.69V205.88h64.18ZM141,175.54h-.46c-20.54,0-33.84-15.29-33.84-34.43,0-19.49,13.65-34.42,34.65-34.42s33.85,14.82,34.31,34.42C175.65,160.25,162.35,175.54,141,175.54ZM405.43,405.43H341.25V296.32c0-26.14-9.34-44-32.56-44-17.74,0-28.24,12-32.91,23.69-1.75,4.2-2.22,9.92-2.22,15.76V405.43H209.38V205.88h64.18v27.77c9.34-13.3,23.93-32.44,57.88-32.44,42.13,0,74,27.77,74,87.64Z">
-                            </path>
-                        </svg></a><a href="#" class="mx-2 text-gray-100 hover:text-gray-400"><svg viewBox="0 0 512 512"
-                                                                                                  class="w-4 h-4 fill-current">
-                            <path
-                                    d="M455.27,32H56.73A24.74,24.74,0,0,0,32,56.73V455.27A24.74,24.74,0,0,0,56.73,480H256V304H202.45V240H256V189c0-57.86,40.13-89.36,91.82-89.36,24.73,0,51.33,1.86,57.51,2.68v60.43H364.15c-28.12,0-33.48,13.3-33.48,32.9V240h67l-8.75,64H330.67V480h124.6A24.74,24.74,0,0,0,480,455.27V56.73A24.74,24.74,0,0,0,455.27,32Z">
-                            </path>
-                        </svg></a><a href="#" class="mx-2 text-gray-100 hover:text-gray-400"><svg viewBox="0 0 512 512"
-                                                                                                  class="w-4 h-4 fill-current">
-                            <path
-                                    d="M496,109.5a201.8,201.8,0,0,1-56.55,15.3,97.51,97.51,0,0,0,43.33-53.6,197.74,197.74,0,0,1-62.56,23.5A99.14,99.14,0,0,0,348.31,64c-54.42,0-98.46,43.4-98.46,96.9a93.21,93.21,0,0,0,2.54,22.1,280.7,280.7,0,0,1-203-101.3A95.69,95.69,0,0,0,36,130.4C36,164,53.53,193.7,80,211.1A97.5,97.5,0,0,1,35.22,199v1.2c0,47,34,86.1,79,95a100.76,100.76,0,0,1-25.94,3.4,94.38,94.38,0,0,1-18.51-1.8c12.51,38.5,48.92,66.5,92.05,67.3A199.59,199.59,0,0,1,39.5,405.6,203,203,0,0,1,16,404.2,278.68,278.68,0,0,0,166.74,448c181.36,0,280.44-147.7,280.44-275.8,0-4.2-.11-8.4-.31-12.5A198.48,198.48,0,0,0,496,109.5Z">
-                            </path>
-                        </svg></a>
-                        </div>
-                    </div>
-                </footer>
+            </article>
+            {{end}}
+
+
+
+        </div>
+        {{ $categoryId := .CategoryId }}
+        {{ $cPage := .cPage }}
+        <div class="wb-navigation pagination" role="navigation">
+            {{if gt .CurrentPage  1}}
+            <span aria-current="page" class="page-numbers current">上页</span>{{end}}
+
+            <p>Page: {{$cPage}}, Type: {{printf "%T" $cPage}}</p>
+            {{range $i := .TotalPageArray}}
+            {{if ne $i  "..."}}
+
+
+                {{if ne  $i $cPage}}
+
+                <a class="page-numbers" href="/category/{{$categoryId}}/{{ $i }}"> {{ $i }}</a>
+
+                {{else}}
+            <span aria-current="page" class="page-numbers current">{{ $i }}</span>
+                {{end}}
+
+            {{end}}
+
+            {{if eq $i  "..."}}
+            <a class="page-numbers" href="https://shareziyuan.email/dramas/korea_dramas/page/2"> {{ $i }}</a>
+
+            {{end}}
+            {{end}}
+
+            {{if lt .CurrentPage  .TotalPages}}
+            <a href="#" class="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-blue-500 hover:text-white">
+                下页
+            </a>
+
+            {{end}}
+
+        </div>
+
+
+
+
+        <footer class="footer">
+            <div class="ft-links pw">
+                <div class="links-items">
+                    <strong class="ftl-hd">友情链接: </strong>
+                </div>
             </div>
 
+            <div class="ft-inner pw">
+                <div class="copyright">
 
-            <aside class="col-md-4">
+                    <span class="ib">Copyright &copy; 2024 <a href="/" rel="home">夸克网盘社</a></span>
+                    <span class="ib sppd-h">All Rights Reserved</span>
+                </div>
 
-                <div class="widget widget-archives">
-                    <h3 class="widget-title">归档</h3>
-                    <ul>
-                        <!--                        <li>-->
-                        <!--                            <a href="#">2017 年 5 月</a>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <a href="#">2017 年 4 月</a>-->
-                        <!--                        </li>-->
-                        <!--                        <li>-->
-                        <!--                            <a href="#">2017 年 3 月</a>-->
-                        <!--                        </li>-->
+
+                <nav class="nav-footer">
+                    <ul id="J_footerNav" class="nav-ft">
+                        <li><a href="/sitemap.xml">网站地图</a></li>
+                        <li><a rel="privacy-policy" href="/privacy-policy">隐私政策</a></li>
+                        <li><a href="/banquantousu">版权投诉</a></li>
                     </ul>
-                </div>
-
-                <!--                <div class="widget widget-category">-->
-                <!--                    <h3 class="widget-title">分类</h3>-->
-                <!--                    <ul>-->
-                <!--                        <li>-->
-                <!--                            <a href="#">Django 博客教程 <span class="post-count">(13)</span></a>-->
-                <!--                        </li>-->
-                <!--                        <li>-->
-                <!--                            <a href="#">Python 教程 <span class="post-count">(11)</span></a>-->
-                <!--                        </li>-->
-                <!--                        <li>-->
-                <!--                            <a href="#">Django 用户认证 <span class="post-count">(8)</span></a>-->
-                <!--                        </li>-->
-                <!--                    </ul>-->
-                <!--                </div>-->
-
-                <div class="widget widget-tag-cloud">
-                    <h3 class="widget-title">标签云</h3>
-                    <!--                    <ul>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">Django</a>-->
-                    <!--                        </li>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">Python</a>-->
-                    <!--                        </li>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">Java</a>-->
-                    <!--                        </li>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">笔记</a>-->
-                    <!--                        </li>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">文档</a>-->
-                    <!--                        </li>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">AngularJS</a>-->
-                    <!--                        </li>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">CSS</a>-->
-                    <!--                        </li>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">JavaScript</a>-->
-                    <!--                        </li>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">Snippet</a>-->
-                    <!--                        </li>-->
-                    <!--                        <li>-->
-                    <!--                            <a href="#">jQuery</a>-->
-                    <!--                        </li>-->
-                    <!--                    </ul>-->
-                </div>
-                <div class="rss">
-                    <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
-                </div>
-            </aside>
-        </div>
-    </div>
-</div>
-<footer id="site-footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
+                </nav>
 
             </div>
-        </div>
-    </div>
-</footer>
-
-<!-- Mobile Menu -->
-{{template "menu.html" .}}
-<script>
-    var script = document.createElement('script');
-    script.src = '/js/script.js?v=' + new Date().getTime();
-    document.head.appendChild(script);
-</script>
+        </footer>
 
 
+        <script type="text/javascript" id="wp-statistics-tracker-js-extra">
+            /* <![CDATA[ */
+            var WP_Statistics_Tracker_Object = {
+                "requestUrl": "https:\/\/shareziyuan.email\/wp-json\/wp-statistics\/v2",
+                "ajaxUrl": "https:\/\/shareziyuan.email\/wp-admin\/admin-ajax.php",
+                "hitParams": {
+                    "wp_statistics_hit": 1,
+                    "source_type": "home",
+                    "source_id": 0,
+                    "search_query": "",
+                    "signature": "5ca802a351f1f9cbb127f6a3936af248",
+                    "endpoint": "hit"
+                },
+                "onlineParams": {
+                    "wp_statistics_hit": 1,
+                    "source_type": "home",
+                    "source_id": 0,
+                    "search_query": "",
+                    "signature": "5ca802a351f1f9cbb127f6a3936af248",
+                    "endpoint": "online"
+                },
+                "option": {
+                    "userOnline": "1",
+                    "consentLevel": "",
+                    "dntEnabled": "",
+                    "bypassAdBlockers": "",
+                    "isWpConsentApiActive": false,
+                    "trackAnonymously": false,
+                    "isPreview": false
+                },
+                "jsCheckTime": "60000"
+            };
+            /* ]]> */
+        </script>
 
+        <script type="text/javascript" src="/css/js/base.js?ver=20240616" id="wbolt-base-js"></script>
+        <script>
+            window.lazyLoadOptions = [{
+                elements_selector: "img[data-lazy-src],.rocket-lazyload",
+                data_src: "lazy-src",
+                data_srcset: "lazy-srcset",
+                data_sizes: "lazy-sizes",
+                class_loading: "lazyloading",
+                class_loaded: "lazyloaded",
+                threshold: 300,
+                callback_loaded: function(element) {
+                    if (element.tagName === "IFRAME" && element.dataset.rocketLazyload == "fitvidscompatible") {
+                        if (element.classList.contains("lazyloaded")) {
+                            if (typeof window.jQuery != "undefined") {
+                                if (jQuery.fn.fitVids) {
+                                    jQuery(element).parent().fitVids();
+                                }
+                            }
+                        }
+                    }
+                }
+            }, {
+                elements_selector: ".rocket-lazyload",
+                data_src: "lazy-src",
+                data_srcset: "lazy-srcset",
+                data_sizes: "lazy-sizes",
+                class_loading: "lazyloading",
+                class_loaded: "lazyloaded",
+                threshold: 300,
+            }];
+            window.addEventListener('LazyLoad::Initialized', function(e) {
+                var lazyLoadInstance = e.detail.instance;
+
+                if (window.MutationObserver) {
+                    var observer = new MutationObserver(function(mutations) {
+                        var image_count = 0;
+                        var iframe_count = 0;
+                        var rocketlazy_count = 0;
+
+                        mutations.forEach(function(mutation) {
+                            for (var i = 0; i < mutation.addedNodes.length; i++) {
+                                if (typeof mutation.addedNodes[i].getElementsByTagName !== 'function') {
+                                    continue;
+                                }
+
+                                if (typeof mutation.addedNodes[i].getElementsByClassName !== 'function') {
+                                    continue;
+                                }
+
+                                images = mutation.addedNodes[i].getElementsByTagName('img');
+                                is_image = mutation.addedNodes[i].tagName == "IMG";
+                                iframes = mutation.addedNodes[i].getElementsByTagName('iframe');
+                                is_iframe = mutation.addedNodes[i].tagName == "IFRAME";
+                                rocket_lazy = mutation.addedNodes[i].getElementsByClassName('rocket-lazyload');
+
+                                image_count += images.length;
+                                iframe_count += iframes.length;
+                                rocketlazy_count += rocket_lazy.length;
+
+                                if (is_image) {
+                                    image_count += 1;
+                                }
+
+                                if (is_iframe) {
+                                    iframe_count += 1;
+                                }
+                            }
+                        });
+
+                        if (image_count > 0 || iframe_count > 0 || rocketlazy_count > 0) {
+                            lazyLoadInstance.update();
+                        }
+                    });
+
+                    var b = document.getElementsByTagName("body")[0];
+                    var config = {
+                        childList: true,
+                        subtree: true
+                    };
+
+                    observer.observe(b, config);
+                }
+            }, false);
+        </script>
+        <script>
+
+            $('#J_btnNavMb').click(function(){
+                console.log("xxx")
+                $('.home').addClass('wp-embed-responsive wb-is-mobile display-nav-m');
+            })
+        </script>
+        <a class="bktop" id="J_backTop" href="javascript:;" rel="nofollow" title="Back to top"><svg xmlns="http://www.w3.org/2000/svg" width="23" height="12">
+            <path fill-rule="evenodd" d="M21.58 12L11.5 2.33 1.42 12 0 10.63 10.79.28c.4-.37 1.03-.37 1.42 0L23 10.63 21.58 12z" />
+        </svg></a>
 
 </body>
+
 </html>

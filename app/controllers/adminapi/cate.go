@@ -1,6 +1,7 @@
 package adminapi
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jassue/jassue-gin/app/common/response"
 	"github.com/jassue/jassue-gin/app/models"
@@ -26,13 +27,28 @@ func (uc *CateController) AllCateList(c *gin.Context) {
 	response.Success(c, res)
 }
 
+func (uc *CateController) AllWithChildList(c *gin.Context) {
+	err, data, total := services.CategoryService.GetWithChildList()
+	if err != nil {
+		response.BusinessFail(c, err.Error())
+		return
+	}
+	var res = gin.H{
+		"list":  data,
+		"total": total,
+	}
+	response.Success(c, res)
+}
+
 func (uc *CateController) GetList(c *gin.Context) {
 	var users []models.Category
 	var totalUsers int64
 	pageStr := c.DefaultQuery("page", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
-	keyword := c.DefaultQuery("keyword", "")
+	keyword := c.DefaultQuery("keywords", "")
 	status := c.DefaultQuery("status", "")
+	startTime := c.DefaultQuery("createAt[0]", "")
+	endTime := c.DefaultQuery("createAt[1]", "")
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
@@ -54,6 +70,11 @@ func (uc *CateController) GetList(c *gin.Context) {
 	}
 	if status != "" {
 		query.Or("status = ?", status)
+	}
+
+	if startTime != "" {
+		startstamp, endstamp := services.CrudService.ParseStartEndTime(startTime, endTime)
+		query.Where("created_at between ? and ?", startstamp, endstamp)
 	}
 
 	query.Find(&users).Count(&totalUsers).Limit(limit).Offset(offset)
@@ -110,7 +131,7 @@ func (uc *CateController) Update(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	fmt.Println(input.ParentID)
 	// Save data to database
 	result := db.Save(&input)
 	if result.Error != nil {

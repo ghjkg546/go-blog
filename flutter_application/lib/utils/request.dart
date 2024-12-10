@@ -28,9 +28,9 @@ class Request {
   static Dio _dio = Dio();
 
   // String baseUrl = 'https://api.shareziyuan.email/api';
-    String baseUrl = 'http://127.0.0.1:8080/api';
+    // String baseUrl = 'http://127.0.0.1:8080/api';
   //  String baseUrl = 'http://192.168.2.236:8080/api';
-    //  String baseUrl = 'http://47.106.155.179:8080/api';
+     String baseUrl = 'http://47.106.155.179:8080/api';
 
 
 

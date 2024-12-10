@@ -124,7 +124,6 @@ func (uc *ResourceController) GetDetail(c *gin.Context) {
 	var user models.ResourceItem
 	db := global.App.DB
 	db.Model(models.ResourceItem{}).First(&user, id)
-	//var netItems models.NetDiskItem
 	err := json.Unmarshal([]byte(user.DiskItems), &user.DiskItemsArray)
 	if err != nil {
 		fmt.Println("Error decoding JSON:", err)

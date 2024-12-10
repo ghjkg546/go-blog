@@ -361,7 +361,7 @@ func (bc *ResController) GetFrontReasouceItems(c *gin.Context) {
 		return
 	}
 
-	pageSize := 10 // Number of items per page
+	pageSize := 12 // Number of items per page
 	pageStr := c.Param("page")
 	page, err1 := strconv.Atoi(pageStr)
 	if err1 != nil {
@@ -375,16 +375,18 @@ func (bc *ResController) GetFrontReasouceItems(c *gin.Context) {
 		cid = cate.ID
 		cateName = cate.Name
 	}
+	err3, second_cates := services.CategoryService.GetListByPid(cid)
+	if err3 != nil {
+		response.BusinessFail(c, err.Error())
+		return
+	}
+
 	err, data, total := services.ResourceItemService.GetResList(page, pageSize, cid, keyword, "")
 	if err != nil {
 		response.BusinessFail(c, err.Error())
 		return
 	}
-	err, dataNew := services.ResourceItemService.GetNewResList(page, pageSize, cid)
-	if err != nil {
-		response.BusinessFail(c, err.Error())
-		return
-	}
+	
 	for i := range data {
 		res := &data[i]
 		tm1 := time.Unix(res.CreatedAt, 0)
@@ -405,17 +407,20 @@ func (bc *ResController) GetFrontReasouceItems(c *gin.Context) {
 	}
 
 	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
+	fmt.Println(totalPages, float64(total), pageSize)
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"CategoryId":     slug,
 		"Cates":          cates,
 		"blogItems":      subItems,
 		"cateName":       cateName,
-		"blogNew":        dataNew,
+		"blogNew":        data,
 		"CurrentPage":    page,
 		"Keyword":        keyword,
+		"SecondCates":    second_cates,
 		"TotalPages":     totalPages,
 		"TotalPageArray": generatePages(totalPages, page),
 		"PrevPage":       page - 1,
+		"cPage":          strconv.Itoa(page), // 转换为字符串
 		"NextPage":       page + 1,
 	})
 }
