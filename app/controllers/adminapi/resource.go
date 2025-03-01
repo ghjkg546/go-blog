@@ -1,7 +1,6 @@
 package adminapi
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -11,7 +10,6 @@ import (
 	"github.com/jassue/jassue-gin/app/services"
 	"github.com/jassue/jassue-gin/global"
 	"github.com/jassue/jassue-gin/utils"
-	client "github.com/zinclabs/sdk-go-zincsearch"
 	"gorm.io/gorm"
 	"io"
 	"io/ioutil"
@@ -149,46 +147,46 @@ func (uc *ResourceController) Create(c *gin.Context) {
 
 		return
 	}
-	index := "resource_item" // string | Index
-	err1 := json.Unmarshal([]byte(input.DiskItems), &input.DiskItemsArray)
-	if err1 != nil {
-		fmt.Println("Error decoding JSON:", err1)
-		return
-	}
+	//index := "resource_item" // string | Index
+	//err1 := json.Unmarshal([]byte(input.DiskItems), &input.DiskItemsArray)
+	//if err1 != nil {
+	//	fmt.Println("Error decoding JSON:", err1)
+	//	return
+	//}
 
-	typeStr := ","
-	for i := range input.DiskItemsArray {
-		menu := input.DiskItemsArray[i]
-		typeStr = typeStr + strconv.Itoa(menu.Type)
-	}
-	typeStr = typeStr + ","
-	document := map[string]interface{}{
-		"_id":       input.GetUid(),
-		"disk_type": typeStr,
-		"title":     input.Title,
-		"url":       input.DiskItems,
-	}
-
-	ctx := context.WithValue(context.Background(), client.ContextBasicAuth, client.BasicAuth{
-		UserName: global.App.Config.Search.UserName,
-		Password: global.App.Config.Search.Password,
-	})
-
-	configuration := client.NewConfiguration()
-	configuration.Servers = client.ServerConfigurations{
-		client.ServerConfiguration{
-			URL: global.App.Config.Search.Url,
-		},
-	}
-
-	apiClient := client.NewAPIClient(configuration)
-	resp, _, err := apiClient.Document.Index(ctx, index).Document(document).Execute()
-	if err != nil {
-		fmt.Println(err)
-		response.BusinessFail(c, err.Error())
-	}
-
-	global.App.DB.Model(&models.ResourceItem{}).Where("id = ?", input.GetUid()).Update("search_id", resp.GetId())
+	//typeStr := ","
+	//for i := range input.DiskItemsArray {
+	//	menu := input.DiskItemsArray[i]
+	//	typeStr = typeStr + strconv.Itoa(menu.Type)
+	//}
+	//typeStr = typeStr + ","
+	//document := map[string]interface{}{
+	//	"_id":       input.GetUid(),
+	//	"disk_type": typeStr,
+	//	"title":     input.Title,
+	//	"url":       input.DiskItems,
+	//}
+	//
+	//ctx := context.WithValue(context.Background(), client.ContextBasicAuth, client.BasicAuth{
+	//	UserName: global.App.Config.Search.UserName,
+	//	Password: global.App.Config.Search.Password,
+	//})
+	//
+	//configuration := client.NewConfiguration()
+	//configuration.Servers = client.ServerConfigurations{
+	//	client.ServerConfiguration{
+	//		URL: global.App.Config.Search.Url,
+	//	},
+	//}
+	//
+	//apiClient := client.NewAPIClient(configuration)
+	//resp, _, err := apiClient.Document.Index(ctx, index).Document(document).Execute()
+	//if err != nil {
+	//	fmt.Println(err)
+	//	response.BusinessFail(c, err.Error())
+	//}
+	//
+	//global.App.DB.Model(&models.ResourceItem{}).Where("id = ?", input.GetUid()).Update("search_id", resp.GetId())
 	response.Success(c, nil)
 }
 

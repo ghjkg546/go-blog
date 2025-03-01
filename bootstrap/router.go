@@ -54,7 +54,7 @@ func setupRouter() *gin.Engine {
 
 	ResController := app.ResController{}
 	router.GET("/", ResController.GetFrontReasouceItems)
-	//router.GET("/:cateid", ResController.GetFrontReasouceItems)
+
 	router.GET("/:keyword", ResController.GetFrontReasouceItems)
 	router.GET("/category/:category_id/:page", ResController.GetFrontReasouceItems)
 	router.GET("/category/:category_id", ResController.GetFrontReasouceItems)
@@ -74,17 +74,6 @@ func setupRouter() *gin.Engine {
 	//menuRoutes := NewResourceRoutes("/adminapi/menus", router, &adminapi2.MenuController{})
 	//menuRoutes.SetupRoutes()
 	//
-	//resourceRoutes := NewResourceRoutes("/adminapi/resource", router, &adminapi2.ResourceController{})
-	//resourceRoutes.SetupRoutes()
-	//
-	//crawlRoutes := NewResourceRoutes("/adminapi/crawl", router, &adminapi2.CrawlController{})
-	//crawlRoutes.SetupRoutes()
-	//
-	//dictRoutes := NewResourceRoutes("/adminapi/dict", router, &adminapi2.DictController{})
-	//dictRoutes.SetupRoutes()
-	//
-	//logRoutes := NewResourceRoutes("/adminapi/log", router, &adminapi2.LogController{})
-	//logRoutes.SetupRoutes()
 
 	ResourceController := adminapi2.ResourceController{}
 	router.GET("/adminapi/share/waitlist", ResourceController.WaitShareList)
@@ -117,6 +106,7 @@ func setupRouter() *gin.Engine {
 	{
 		authRouter.POST("/image_upload", common.ImageUpload)
 		authRouter.POST("/csv_upload", common.CsvUpload)
+
 		authRouter.POST("/user/password", func(ctx *gin.Context) {
 			hello := adminapi2.UserController{}
 			hello.ChangePass(ctx)
@@ -205,8 +195,9 @@ func setupRouter() *gin.Engine {
 		)
 
 	}
-	adminapi.Use(middleware.Cors())
 
+	adminapi.Use(middleware.Cors())
+	adminapi.POST("/info_upload", common.InfoUpload)
 	return router
 }
 

@@ -386,7 +386,7 @@ func (bc *ResController) GetFrontReasouceItems(c *gin.Context) {
 		response.BusinessFail(c, err.Error())
 		return
 	}
-	
+
 	for i := range data {
 		res := &data[i]
 		tm1 := time.Unix(res.CreatedAt, 0)
@@ -605,12 +605,60 @@ type WXTextMsg struct {
 	MsgId        int64
 }
 
+// WXEventMsg 微信事件结构体
+type WXEventMsg struct {
+	ToUserName   string
+	FromUserName string
+	CreateTime   int64
+	MsgType      string
+	Event        string
+}
+
+// 解析 MsgType 字段
+var msgType struct {
+	MsgType string `xml:"MsgType"`
+}
+
 // WXMsgReceive 微信消息接收
 func WXMsgReceive(c *gin.Context) {
-	var textMsg WXTextMsg
-	err := c.ShouldBindXML(&textMsg)
+
+	// 读取原始 XML 数据
+	body, err := c.GetRawData()
 	if err != nil {
-		log.Printf("[消息接收] - XML数据包解析失败: %v\n", err)
+		log.Printf("[消息接收] - 读取请求体失败: %v\n", err)
+		return
+	}
+
+	// 打印原始 XML 数据（调试用）
+	log.Printf("[消息接收] - 原始 XML 数据: %s\n", string(body))
+
+	err = xml.Unmarshal(body, &msgType)
+	if err != nil {
+		log.Printf("[消息接收] - 解析 MsgType 失败: %v\n", err)
+		return
+	}
+	log.Printf("type" + msgType.MsgType)
+	if msgType.MsgType == "event" {
+		var eventMsg WXEventMsg
+
+		err2 := xml.Unmarshal(body, &eventMsg)
+		if err2 != nil {
+			log.Printf("[消息接收] - 解析 event 失败: %v\n", err)
+			return
+		}
+
+		log.Printf("type1" + eventMsg.Event)
+		if eventMsg.Event == "subscribe" {
+			WXMsgReply(c, eventMsg.ToUserName, eventMsg.FromUserName, "欢迎关注我，回复【资源名】获得下载地址哦")
+		}
+
+		return
+	}
+
+	var textMsg WXTextMsg
+	err = xml.Unmarshal(body, &textMsg)
+	if err != nil {
+		log.Printf("[消息接收] - 解析事件消息失败: %v\n", err)
 		return
 	}
 

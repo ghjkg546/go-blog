@@ -14,7 +14,11 @@ import (
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
 	"gorm.io/gorm"
+	"io"
 	"io/ioutil"
+	"net/http"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 )
@@ -147,4 +151,87 @@ func CsvUpload(c *gin.Context) {
 		return
 	}
 	response.Success(c, outPut)
+}
+
+func InfoUpload(c *gin.Context) {
+	// 获取表单字段
+	id := c.PostForm("id")
+	content := c.PostForm("content")
+	fmt.Println(id, content)
+	// 获取上传的图片
+	file, header, err := c.Request.FormFile("img")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "无法读取上传的图片"})
+		return
+	}
+	defer file.Close()
+
+	// 确定图片保存路径
+	saveDir := `./storage/app/public/local/cover_img`
+	dbDir := `./storage/local/cover_img`
+	if err := os.MkdirAll(saveDir, os.ModePerm); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "无法创建目录"})
+		return
+	}
+
+	// 设置保存路径
+	savePath := filepath.Join(saveDir, header.Filename)
+	dbPath := filepath.Join(dbDir, header.Filename)
+
+	// 保存图片
+	out, err := os.Create(savePath)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "无法保存图片"})
+		return
+	}
+	defer out.Close()
+	_, err = io.Copy(out, file)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "保存图片失败"})
+		return
+	}
+	// 原始 HTML 字符串
+	originalHTML := content
+
+	// 定义正则表达式匹配 img 标签中的 src
+	re := regexp.MustCompile(`src="[^"]*"`) // 匹配 src 属性内容
+	finalPath := global.App.Config.App.AppUrl + "/" + dbPath
+	modifiedHTML := re.ReplaceAllString(originalHTML, fmt.Sprintf(`src="%s"`, finalPath))
+
+	// 输出结果
+	fmt.Println("修改后的HTML:", modifiedHTML)
+	err1 := updateResourceItem(id, modifiedHTML, finalPath)
+	if err1 != nil {
+		fmt.Println(err1.Error())
+	}
+	response.Success(c, "上传成功")
+
+}
+
+// 根据 ID 更新指定字段的内容
+func updateResourceItem(id string, content string, imgPath string) error {
+	// 使用 GORM 批量更新
+	db := global.App.DB
+	result := db.Model(&models.ResourceItem{}).Where("id = ?", id).Updates(map[string]interface{}{
+		"description": content,
+		"cover_img":   imgPath,
+	})
+	fmt.Println(result.RowsAffected)
+	// 检查是否有影响的行
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("未找到 ID 为 %d 的记录", id)
+	}
+	fmt.Println(result.Error)
+
+	return nil
+}
+
+// 辅助函数：解析 ID
+func parseID(id string) uint {
+	var parsedID uint
+	_, err := fmt.Sscanf(id, "%d", &parsedID)
+	if err != nil {
+		return 0
+	}
+	return parsedID
 }
